@@ -1,0 +1,111 @@
+/* ===================================================================
+   GYMPINK-CSS.css — vlastní CSS pro Shoptet
+   Verze: 0.1 (základ — designové tokeny, zatím bez zásahů do struktury)
+   Repo:  github.com/serbus-create/gympink-shoptet
+   Vzor:  exalted.com
+   ===================================================================
+
+   POZOR — pravidla pro tento soubor:
+   - Selektory se NIKDY nepíšou naslepo. Každý selektor musí vzejít
+     z diagnostiky reálného DOM (výpis z konzole prohlížeče).
+   - Do CSS nepatří žádný obsah (texty, cesty k obrázkům). Obsah plní
+     klientka z administrace Shoptetu. CSS řeší výhradně vzhled.
+   - Verzi v hlavičce zvyšovat při každé změně (usnadňuje audit).
+   =================================================================== */
+
+
+/* ===================================================================
+   1. DESIGNOVÉ TOKENY
+   Odvozeno ze schváleného HTML nástřelu homepage.
+   =================================================================== */
+
+:root {
+  /* --- barvy --- */
+  --gp-bg:          #ffffff;   /* hlavní pozadí */
+  --gp-tile:        #f7f5f2;   /* světlé dlaždice, patička */
+  --gp-ink:         #1a1a1a;   /* hlavní text */
+  --gp-ink-soft:    #6b6b6b;   /* sekundární text */
+  --gp-line:        #e6e3de;   /* linky, oddělovače */
+  --gp-accent:      #ff2d78;   /* značková růžová — používat střídmě */
+  --gp-on-photo:    #ffffff;   /* text ležící na fotografii */
+
+  /* --- typografie --- */
+  --gp-font: 'Helvetica Neue', Arial, sans-serif;
+
+  --gp-fs-nav:      15px;      /* navigace */
+  --gp-fs-body:     14px;      /* běžný text */
+  --gp-fs-small:    13px;      /* drobný text, patička */
+  --gp-fs-h1:       clamp(26px, 3.4vw, 44px);   /* hero nadpis */
+  --gp-fs-h2:       clamp(20px, 2.4vw, 32px);   /* nadpisy bannerů */
+
+  /* --- rozměry a poměry stran ---
+     Musí odpovídat rozměrům zadaným grafikovi
+     (viz gympink-zadani-grafika.xlsx). */
+  --gp-ratio-hero:      2.2;    /* 2560 × 1164 */
+  --gp-ratio-hero-mob:  0.75;   /* 1200 × 1600 */
+  --gp-ratio-duo:       1.36;   /* 1790 × 1320 */
+  --gp-ratio-wide:      1.92;   /* 2560 × 1335 */
+  --gp-ratio-wide-mob:  1;      /* 1200 × 1200 */
+  --gp-ratio-product:   0.75;   /* 1200 × 1600 */
+
+  /* --- rozestupy --- */
+  --gp-gap:         22px;       /* mezera mezi dlaždicemi */
+  --gp-pad-x:       38px;       /* boční odsazení sekcí */
+  --gp-pad-y:       44px;       /* svislé odsazení sekcí */
+
+  /* --- tlačítka (pilulka s obrysem, jako u vzoru) --- */
+  --gp-pill-pad:    13px 40px;
+  --gp-pill-radius: 999px;
+}
+
+
+/* ===================================================================
+   2. SDÍLENÉ KOMPONENTY
+   Zatím jen definice — připojení na konkrétní Shoptet selektory
+   proběhne až po diagnostice DOM.
+   =================================================================== */
+
+/* pilulkové tlačítko na fotografii */
+.gp-pill {
+  display: inline-block !important;
+  border: 1px solid rgba(255, 255, 255, .85) !important;
+  border-radius: var(--gp-pill-radius) !important;
+  padding: var(--gp-pill-pad) !important;
+  font-size: var(--gp-fs-nav) !important;
+  color: var(--gp-on-photo) !important;
+  background: transparent !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+.gp-pill:hover {
+  background: rgba(255, 255, 255, .18) !important;
+}
+
+/* pilulkové tlačítko na světlém pozadí */
+.gp-pill--dark {
+  border-color: var(--gp-ink) !important;
+  color: var(--gp-ink) !important;
+}
+
+.gp-pill--dark:hover {
+  background: var(--gp-ink) !important;
+  color: #fff !important;
+}
+
+
+/* ===================================================================
+   3. SEKCE — doplní se postupně po diagnostice
+   ===================================================================
+
+   [ ] 3.1  Horní informační lišta
+   [ ] 3.2  Hlavička (průhledná, ležící na hero fotografii)
+   [ ] 3.3  Hero banner / karusel
+   [ ] 3.4  Pruh se čtyřmi kategoriemi
+   [ ] 3.5  Dva bannery vedle sebe
+   [ ] 3.6  Široký banner
+   [ ] 3.7  Výpis produktů
+   [ ] 3.8  Patička
+   [ ] 3.9  Mobilní verze (breakpoint 900px)
+
+   =================================================================== */
