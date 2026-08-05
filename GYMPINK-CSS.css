@@ -156,8 +156,39 @@
    průhledně položené na fotce.
    =================================================================== */
 
-nav.fitted {
+/* ===================================================================
+   OPRAVA: selektor nav.fitted byl špatně — "fitted" je TŘÍDA, kterou
+   Shoptet dynamicky přidává/odebírá vlastním JS (data-collapsible),
+   podle toho, jestli se menu vejde do dostupné šířky. Náš grid
+   zmenšil sloupec natolik, že se JS rozhodl menu sbalit (třída zmizí,
+   ukáže se prázdný box). Řešení: použít stabilní #navigation a menu
+   natvrdo vynutit rozbalené, ať to JS nemůže znovu sbalit.
+   =================================================================== */
+
+#navigation {
   background: transparent !important;
+}
+
+#navigation .navigation-in.menu,
+#navigation .menu-level-1 {
+  display: flex !important;
+  visibility: visible !important;
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  background: transparent !important;
+  list-style: none !important;
+}
+
+#navigation .menu-level-1 {
+  flex-direction: row !important;
+  gap: 22px !important;
+  align-items: center !important;
+}
+
+#navigation .menu-level-1 li {
+  display: inline-flex !important;
 }
 
 .navigation-in.menu,
@@ -198,7 +229,7 @@ nav.fitted {
   display: none !important;
 }
 
-.navigation-wrapper > nav.fitted {
+.navigation-wrapper > #navigation {
   grid-column: 1 !important;
   justify-self: start !important;
 }
