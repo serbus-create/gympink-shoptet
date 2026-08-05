@@ -213,32 +213,12 @@
 
 
 /* ===================================================================
-   ČITELNOST HLAVIČKY BEZ OHLEDU NA SVĚTLOST FOTKY
-   Diagnostika: menu text byl technicky viditelný (display, opacity,
-   z-index vše OK), ale nekontrastní — aktuální hero fotka má v horní
-   části světlé (broskvové) pozadí a bílý text na něm téměř mizí.
-   Řešení: jemný tmavý přechod (scrim) v horní části hero fotky,
-   nezávislý na tom, jak světlá bude konkrétní fotka.
+   Scrim (tmavý přechod přes horní část hero fotky) byl na žádost
+   klienta odstraněn. Čitelnost menu teď spoléhá jen na text-shadow
+   výše u .menu-level-1 a. Pokud bude na světlejších fotkách text
+   špatně čitelný, řešit výběrem fotek s klidnou horní částí (viz
+   zadání grafikovi) místo tmavého přechodu přes celou fotku.
    =================================================================== */
-
-.wide-carousel {
-  position: relative !important;
-}
-
-.wide-carousel::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 480px;
-  background: linear-gradient(180deg,
-    rgba(0,0,0,.55) 0%,
-    rgba(0,0,0,.55) 70%,
-    rgba(0,0,0,0) 100%);
-  z-index: 5;
-  pointer-events: none;
-}
 
 
 /* ===================================================================
@@ -267,19 +247,26 @@
   display: none !important;
 }
 
+.navigation-wrapper {
+  grid-template-rows: 1fr !important;
+}
+
 .navigation-wrapper > #navigation {
   grid-column: 1 !important;
+  grid-row: 1 !important;
   justify-self: start !important;
 }
 
 .navigation-wrapper > .site-name {
   grid-column: 2 !important;
+  grid-row: 1 !important;
   justify-self: center !important;
   text-align: center !important;
 }
 
 .navigation-wrapper > .top-nav {
   grid-column: 3 !important;
+  grid-row: 1 !important;
   justify-content: flex-end !important;
   position: static !important;
   margin: 0 !important;
