@@ -101,6 +101,7 @@
    3. SEKCE — Tango
    ===================================================================
 
+   [x] 3.0  Hlavička — vynucená pozice (absolute, top:0)
    [x] 3.1  Hlavička — logo (omezení přemrštěné velikosti)
    [x] 3.2  Hlavička — menu kategorií (sjednocení do jednoho řádku)
    [ ] 3.3  Hero banner
@@ -111,6 +112,25 @@
    [ ] 3.8  Mobilní verze
 
    =================================================================== */
+
+
+/* ===================================================================
+   3.0  HLAVIČKA — vynucená pozice
+   Diagnostika: #header se choval nekonzistentně — jednou naměřeno
+   position:absolute, podruhé position:relative (Tango si to zjevně
+   přepíná samo, pravděpodobně podle šířky okna). Když je relative,
+   hlavička zabírá místo v toku a hero foto se odsune dolů — přesně
+   ta mezera, co jsme viděli na screenshotu.
+   Vynucujeme absolute napevno, ať se na to nedá spolehnout jinak.
+   =================================================================== */
+
+#header {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 100 !important;
+}
 
 
 /* ===================================================================
