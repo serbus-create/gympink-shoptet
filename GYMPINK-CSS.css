@@ -195,6 +195,10 @@
   display: inline-flex !important;
 }
 
+#navigation .menu-level-1 a {
+  visibility: visible !important;
+}
+
 .navigation-in.menu,
 .menu-helper,
 .menu-level-1 {
