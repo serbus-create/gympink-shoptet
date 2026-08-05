@@ -158,7 +158,6 @@
 
 nav.fitted {
   background: transparent !important;
-  overflow: visible !important;
 }
 
 .navigation-in.menu,
@@ -213,6 +212,10 @@ nav.fitted {
 .navigation-wrapper > .top-nav {
   grid-column: 3 !important;
   justify-content: flex-end !important;
+  position: static !important;
+  margin: 0 !important;
+  top: auto !important;
+  right: auto !important;
 }
 
 #header .top-nav-right a,
