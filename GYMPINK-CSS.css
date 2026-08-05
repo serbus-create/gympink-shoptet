@@ -1,6 +1,6 @@
 /* ===================================================================
    GYMPINK-CSS.css — vlastní CSS pro Shoptet
-   Verze: 0.3 (+ zprůhlednění .navigation-in — zdroj černého pruhu)
+   Verze: 0.4 (+ 3.3 hero, 3.4 kategorie, 3.7 produkty, 3.8 patička)
    Repo:  github.com/serbus-create/gympink-shoptet
    Vzor:  exalted.com
    ===================================================================
@@ -100,12 +100,13 @@
 
    [ ] 3.1  Horní informační lišta
    [x] 3.2  Hlavička (průhledná, ležící na hero fotografii)
-   [ ] 3.3  Hero banner / karusel
-   [ ] 3.4  Pruh se čtyřmi kategoriemi
-   [ ] 3.5  Dva bannery vedle sebe
-   [ ] 3.6  Široký banner
-   [ ] 3.7  Výpis produktů
-   [ ] 3.8  Patička
+   [x] 3.3  Hero banner / karusel
+   [x] 3.4  Pruh se čtyřmi kategoriemi
+   [x] 3.5  Dva bannery vedle sebe
+   [-] 3.6  Široký banner — v šabloně Step nativní slot NEEXISTUJE,
+            vynecháno po dohodě (viz poznámka v konverzaci)
+   [x] 3.7  Výpis produktů
+   [x] 3.8  Patička
    [ ] 3.9  Mobilní verze (breakpoint 900px)
 
    =================================================================== */
@@ -153,3 +154,194 @@
    pozadí zůstává text čitelný na fotografii bez dalšího zásahu.
    Pokud se po nasazení ukáže opak, doplní se zde explicitní
    barvy pro .site-name, .navigation-in a, .navigation-buttons. */
+
+
+/* ===================================================================
+   3.2b  ČITELNOST HLAVIČKY NA FOTOGRAFII
+   Diagnostika: .navigation-in a i .site-name a mají rgb(255,255,255).
+   Bílá zůstává (odpovídá vzoru), ale fotografie bývá místy světlá,
+   proto jemný stín pro jistotu čitelnosti. Bez ztmavení celé fotky.
+   =================================================================== */
+
+#header .navigation-in a,
+#header .site-name a,
+#header .navigation-buttons a,
+#header .navigation-buttons button {
+  color: #fff !important;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, .55) !important;
+}
+
+
+/* ===================================================================
+   3.3  HERO / KARUSEL
+   Diagnostika: .banners-row > .wide-carousel (#carousel) +
+   .next-to-carousel-banners. Obrázek je <img> uvnitř <a>.
+   =================================================================== */
+
+.wide-carousel #carousel .item img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 0 !important;
+}
+
+/* Šipky karuselu — decentní, kruhové, jako u vzoru */
+#carousel .carousel-control {
+  background: rgba(255, 255, 255, .18) !important;
+  border: 1px solid rgba(255, 255, 255, .6) !important;
+  border-radius: 999px !important;
+  width: 44px !important;
+  height: 44px !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+#carousel .carousel-control:hover {
+  background: rgba(255, 255, 255, .35) !important;
+}
+
+
+/* ===================================================================
+   3.5  DVA BANNERY VEDLE SEBE
+   Diagnostika: .next-to-carousel-banners > .banner-wrapper (2×)
+   =================================================================== */
+
+.next-to-carousel-banners .banner-wrapper img {
+  width: 100% !important;
+  height: auto !important;
+  border-radius: 0 !important;
+  display: block !important;
+}
+
+
+/* ===================================================================
+   3.4  PRUH SE ČTYŘMI KATEGORIEMI (benefitBanner)
+   Diagnostika: .container--bannersBenefit > .benefitBanner
+     > .benefitBanner__item > .benefitBanner__picture > .benefitBanner__img
+                            > .benefitBanner__content > .benefitBanner__title
+                                                      > .benefitBanner__data
+   =================================================================== */
+
+.container--bannersBenefit {
+  padding-top: var(--gp-pad-y) !important;
+  padding-bottom: var(--gp-pad-y) !important;
+}
+
+.benefitBanner__item {
+  background: var(--gp-tile) !important;
+  border-radius: 0 !important;
+  padding: 22px 26px !important;
+  gap: 14px !important;
+}
+
+.benefitBanner__img {
+  border-radius: 0 !important;
+}
+
+.benefitBanner__title {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: var(--gp-ink) !important;
+  letter-spacing: 0 !important;
+}
+
+.benefitBanner__data {
+  font-size: var(--gp-fs-body) !important;
+  color: var(--gp-ink-soft) !important;
+}
+
+
+/* ===================================================================
+   3.7  VÝPIS PRODUKTŮ
+   Diagnostika: .product > .p > a.image > img
+   Poměr fotografie 3:4 podle zadání grafikovi.
+   =================================================================== */
+
+.product .p {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.product .p a.image {
+  display: block !important;
+  aspect-ratio: 3 / 4 !important;
+  overflow: hidden !important;
+  background: var(--gp-tile) !important;
+  border-radius: 0 !important;
+}
+
+.product .p a.image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 0 !important;
+}
+
+.product .name,
+.product .name a {
+  font-size: var(--gp-fs-body) !important;
+  font-weight: 600 !important;
+  color: var(--gp-ink) !important;
+  text-align: left !important;
+}
+
+.product .price,
+.product .price-final {
+  font-size: var(--gp-fs-body) !important;
+  color: var(--gp-ink) !important;
+  text-align: left !important;
+}
+
+/* Tlačítko DETAIL — pilulka s obrysem, jako u vzoru */
+.product .p .btn {
+  border: 1px solid var(--gp-ink) !important;
+  border-radius: var(--gp-pill-radius) !important;
+  background: transparent !important;
+  color: var(--gp-ink) !important;
+  font-size: var(--gp-fs-small) !important;
+  letter-spacing: .06em !important;
+  padding: 11px 26px !important;
+}
+
+.product .p .btn:hover {
+  background: var(--gp-ink) !important;
+  color: #fff !important;
+}
+
+
+/* ===================================================================
+   3.8  PATIČKA
+   Diagnostika: footer.footer  bg rgb(246,246,246)
+     > .container.footer-rows / .container.footer-bottom
+   =================================================================== */
+
+footer.footer {
+  background: var(--gp-tile) !important;
+  padding-top: var(--gp-pad-y) !important;
+}
+
+footer.footer .footer-rows h4,
+footer.footer .footer-rows strong {
+  font-size: var(--gp-fs-body) !important;
+  font-weight: 700 !important;
+  color: var(--gp-ink) !important;
+  letter-spacing: 0 !important;
+}
+
+footer.footer .footer-rows a {
+  font-size: var(--gp-fs-body) !important;
+  color: var(--gp-ink) !important;
+}
+
+footer.footer .footer-rows a:hover {
+  text-decoration: underline !important;
+}
+
+footer.footer .footer-bottom {
+  border-top: 1px solid var(--gp-line) !important;
+  padding-top: 18px !important;
+  font-size: var(--gp-fs-small) !important;
+  color: var(--gp-ink-soft) !important;
+}
