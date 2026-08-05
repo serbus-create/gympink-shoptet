@@ -227,8 +227,11 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 340px;
-  background: linear-gradient(180deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 100%);
+  height: 480px;
+  background: linear-gradient(180deg,
+    rgba(0,0,0,.55) 0%,
+    rgba(0,0,0,.55) 70%,
+    rgba(0,0,0,0) 100%);
   z-index: 5;
   pointer-events: none;
 }
