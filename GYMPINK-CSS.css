@@ -1,6 +1,6 @@
 /* ===================================================================
    GYMPINK-CSS.css — vlastní CSS pro Shoptet
-   Verze: 0.1 (základ — designové tokeny, zatím bez zásahů do struktury)
+   Verze: 0.2 (+ 3.2 hlavička přes hero — šablona Step)
    Repo:  github.com/serbus-create/gympink-shoptet
    Vzor:  exalted.com
    ===================================================================
@@ -99,7 +99,7 @@
    ===================================================================
 
    [ ] 3.1  Horní informační lišta
-   [ ] 3.2  Hlavička (průhledná, ležící na hero fotografii)
+   [x] 3.2  Hlavička (průhledná, ležící na hero fotografii)
    [ ] 3.3  Hero banner / karusel
    [ ] 3.4  Pruh se čtyřmi kategoriemi
    [ ] 3.5  Dva bannery vedle sebe
@@ -109,3 +109,39 @@
    [ ] 3.9  Mobilní verze (breakpoint 900px)
 
    =================================================================== */
+
+
+/* ===================================================================
+   3.2  HLAVIČKA — průhledná, leží na hero fotografii
+   Diagnostika (šablona Step):
+     #header > .container.navigation-wrapper
+       > .site-name (logo) / nav.fitted.visible (menu) /
+         .menu-helper / .navigation-buttons (ikony)
+     #header  top=25  height=80
+     #carousel (ve .wide-carousel)  top=105   ← přesně header top+height,
+       tedy BEZ mezery. Díky tomu stačí header vyjmout z toku přes
+       position:absolute — carousel se sám posune nahoru na jeho místo
+       a header zůstane vizuálně navrchu jako průhledná vrstva.
+       ŽÁDNÝ přesun v JS není potřeba.
+   =================================================================== */
+
+#header {
+  position: absolute !important;
+  top: 25px !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 100 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-bottom: none !important;
+}
+
+#header .navigation-wrapper {
+  background: transparent !important;
+}
+
+/* Zatím ponecháváme barvu textu/log a beze změny — na aktuální šabloně
+   je hlavička nativně tmavá s bílým textem, takže po zprůhlednění
+   pozadí zůstává text čitelný na fotografii bez dalšího zásahu.
+   Pokud se po nasazení ukáže opak, doplní se zde explicitní
+   barvy pro .site-name, .navigation-in a, .navigation-buttons. */
