@@ -167,6 +167,10 @@
 
 #navigation {
   background: transparent !important;
+  width: auto !important;
+  max-width: none !important;
+  height: auto !important;
+  overflow: visible !important;
 }
 
 #navigation .navigation-in.menu,
