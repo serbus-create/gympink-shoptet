@@ -1,6 +1,6 @@
 /* ===================================================================
    GYMPINK-CSS.css — vlastní CSS pro Shoptet
-   Verze: 0.2 (+ 3.2 hlavička přes hero — šablona Step)
+   Verze: 0.3 (+ zprůhlednění .navigation-in — zdroj černého pruhu)
    Repo:  github.com/serbus-create/gympink-shoptet
    Vzor:  exalted.com
    ===================================================================
@@ -137,6 +137,14 @@
 }
 
 #header .navigation-wrapper {
+  background: transparent !important;
+}
+
+/* Diagnostikováno v konzoli: černý pruh nedrží #header ani
+   .navigation-wrapper (oba už rgba(0,0,0,0)), ale právě
+   .navigation-in, které mělo rgb(0,0,0). Toto je jediný prvek,
+   který ještě potřebuje zprůhlednit. */
+#header .navigation-in {
   background: transparent !important;
 }
 
