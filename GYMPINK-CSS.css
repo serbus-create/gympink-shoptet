@@ -142,6 +142,7 @@ body.type-index #header {
   right: 0 !important;
   z-index: 100 !important;
   transition: background-color .25s ease !important;
+  padding-bottom: 10px !important;
 }
 
 body.type-index #header.gp-scrolled {
