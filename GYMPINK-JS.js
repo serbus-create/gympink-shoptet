@@ -3,7 +3,7 @@
 
   /* ===================================================================
      GYMPINK-JS.js — vlastní JS pro Shoptet
-     Verze: 0.1 (kostra — zatím bez zásahů do struktury)
+     Verze: 0.2 (+ scroll efekt hlavičky na titulní straně)
      Repo:  github.com/serbus-create/gympink-shoptet
      Vzor:  exalted.com
      ===================================================================
@@ -98,12 +98,38 @@
 
   var upravy = [
 
-    // {
-    //   nazev: 'Hlavička nad hero fotografii',
-    //   spustit: function () {
-    //     ...
-    //   }
-    // },
+    {
+      nazev: 'Scroll efekt hlavičky (průhledná → bílá po 60% hero fotky)',
+      spustit: function () {
+        // Jen titulní strana — stejné omezení jako v CSS (body.type-index).
+        if (!document.body.classList.contains('type-index')) return;
+
+        var header = find('#header');
+        var hero = find('.wide-carousel');
+        if (!header || !hero) return;
+
+        var ticking = false;
+
+        function aktualizovat() {
+          var vyskaHero = hero.getBoundingClientRect().height;
+          var hranice = vyskaHero * 0.6;
+          var maZaScrollovano = window.scrollY > hranice;
+          header.classList.toggle('gp-scrolled', maZaScrollovano);
+          ticking = false;
+        }
+
+        window.addEventListener('scroll', function () {
+          if (!ticking) {
+            window.requestAnimationFrame(aktualizovat);
+            ticking = true;
+          }
+        }, { passive: true });
+
+        // Pojistka: stránka může být načtená už uprostřed scrollu
+        // (např. reload), ať se hlavička rovnou zobrazí ve správném stavu.
+        aktualizovat();
+      }
+    },
 
   ];
 
