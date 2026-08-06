@@ -105,8 +105,8 @@
    [x] 3.1  Hlavička — logo (omezení přemrštěné velikosti)
    [x] 3.2  Hlavička — menu kategorií (sjednocení do jednoho řádku)
    [ ] 3.3  Hero banner
-   [ ] 3.4  Pruh se čtyřmi kategoriemi
-   [ ] 3.5  Bannery
+   [x] 3.4  Blok se 4 ikonami (přesunut pod hero, kartičky se stylem)
+   [-] 3.5  Bannery — v Tangu nenativní slot, přeskočeno
    [ ] 3.6  Výpis produktů
    [ ] 3.7  Patička
    [ ] 3.8  Mobilní verze
@@ -320,4 +320,69 @@ body.type-index .navigation-wrapper > .top-nav {
 body.type-index #header .top-nav-right a,
 body.type-index #header .top-nav-right .btn-icon {
   color: #fff !important;
+}
+
+
+/* ===================================================================
+   3.4  BLOK SE 4 IKONAMI (benefitBanner) — přesunuto pod hero bannerem
+   Diagnostika: .benefitBanner.position--benefitHomepage
+     > .benefitBanner__item (4×)
+       > .benefitBanner__picture > .benefitBanner__img
+       > .benefitBanner__content > .benefitBanner__title (strong)
+                                  > .benefitBanner__data
+   JS (GYMPINK-JS.js) přesouvá celý blok hned za .wide-carousel.
+   Zde jen vizuál — kartičky s krémovým pozadím, ikona vlevo / text
+   vpravo, rovnoměrně přes celou šířku, vycentrováno (viz reference).
+   =================================================================== */
+
+body.type-index .benefitBanner.position--benefitHomepage {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: stretch !important;
+  gap: 20px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 32px !important;
+  background: #fff !important;
+}
+
+body.type-index .benefitBanner__item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  background: var(--gp-tile) !important;
+  padding: 30px 24px !important;
+  border-radius: 0 !important;
+}
+
+body.type-index .benefitBanner__picture {
+  flex: 0 0 auto !important;
+  width: 56px !important;
+}
+
+body.type-index .benefitBanner__img {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+}
+
+body.type-index .benefitBanner__content {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  min-width: 0 !important;
+}
+
+body.type-index .benefitBanner__title {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: var(--gp-ink) !important;
+}
+
+body.type-index .benefitBanner__data {
+  font-size: var(--gp-fs-body) !important;
+  color: var(--gp-ink-soft) !important;
 }
