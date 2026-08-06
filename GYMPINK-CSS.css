@@ -16,15 +16,6 @@
    - Verzi v hlavičce zvyšovat při každé změně (usnadňuje audit).
    =================================================================== */
 
-/* Import fontu pro navigaci — vizuální náhrada za font z Exalted
-   vzoru (Inter, volně dostupný na Google Fonts). Po přiblížení
-   referenčního screenshotu jde o čistý bezpatkový font s jemným
-   kontrastem tahů — Inter odpovídá lépe než dřív zvažovaný PT Serif
-   (patky byly jen rozostření z malého rozlišení) nebo Poppins (ten
-   je geometričtější, kulatější). */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-
 
 /* ===================================================================
    1. DESIGNOVÉ TOKENY
@@ -217,8 +208,6 @@
 
 .menu-level-1 a {
   color: #fff !important;
-  font-family: 'Inter', sans-serif !important;
-  font-weight: 400 !important;
   font-size: 15px !important;
   white-space: nowrap !important;
   text-shadow: 0 1px 12px rgba(0, 0, 0, .55) !important;
