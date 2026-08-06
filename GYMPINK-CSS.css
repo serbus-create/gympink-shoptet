@@ -137,7 +137,7 @@
 
 body.type-index #header {
   position: fixed !important;
-  top: 0 !important;
+  top: 30px !important;
   left: 0 !important;
   right: 0 !important;
   z-index: 100 !important;
