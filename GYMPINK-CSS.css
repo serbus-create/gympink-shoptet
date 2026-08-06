@@ -141,11 +141,12 @@ body.type-index #header {
   left: 0 !important;
   right: 0 !important;
   z-index: 100 !important;
-  transition: background-color .25s ease !important;
+  transition: background-color .25s ease, top .25s ease !important;
   padding-bottom: 0 !important;
 }
 
 body.type-index #header.gp-scrolled {
+  top: 0 !important;
   background: #fff !important;
   box-shadow: 0 1px 8px rgba(0, 0, 0, .08) !important;
 }
