@@ -142,8 +142,8 @@
 
 .site-name img {
   width: auto !important;
-  height: 56px !important;
-  max-height: 56px !important;
+  height: 32px !important;
+  max-height: 32px !important;
 }
 
 
@@ -188,7 +188,7 @@
 #navigation .menu-level-1 {
   flex-direction: row !important;
   flex-wrap: nowrap !important;
-  gap: 18px !important;
+  gap: 14px !important;
   align-items: center !important;
 }
 
@@ -239,6 +239,12 @@
   grid-template-columns: 1fr auto 1fr !important;
   align-items: center !important;
   gap: 20px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 32px !important;
+  padding-right: 32px !important;
 }
 
 #header .project-email {
