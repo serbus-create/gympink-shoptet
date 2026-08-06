@@ -170,6 +170,14 @@ body.type-index .site-name img {
   max-height: 32px !important;
 }
 
+/* Diagnostika: .site-name mělo nativní padding:40px 0 (navržený pro
+   původní velké logo), který po zmenšení loga zůstal a táhl výšku
+   celé hlavičky na 112px místo skutečných 32px loga. */
+body.type-index .site-name {
+  padding: 0 !important;
+  line-height: 0 !important;
+}
+
 
 /* ===================================================================
    3.2  MENU KATEGORIÍ — sjednocení do jednoho průhledného řádku
