@@ -3,7 +3,7 @@
 
   /* ===================================================================
      GYMPINK-JS.js — vlastní JS pro Shoptet
-     Verze: 0.2 (+ scroll efekt hlavičky na titulní straně)
+     Verze: 0.3 (+ přesun bloku 4 ikon pod hero banner)
      Repo:  github.com/serbus-create/gympink-shoptet
      Vzor:  exalted.com
      ===================================================================
@@ -128,6 +128,20 @@
         // Pojistka: stránka může být načtená už uprostřed scrollu
         // (např. reload), ať se hlavička rovnou zobrazí ve správném stavu.
         aktualizovat();
+      }
+    },
+
+    {
+      nazev: 'Přesun bloku se 4 ikonami (benefitBanner) hned pod hero banner',
+      spustit: function () {
+        // Jen titulní strana.
+        if (!document.body.classList.contains('type-index')) return;
+
+        var hero = find('.wide-carousel');
+        var benefity = find('.benefitBanner.position--benefitHomepage');
+        if (!hero || !benefity) return;
+
+        move(benefity, hero, 'after');
       }
     },
 
