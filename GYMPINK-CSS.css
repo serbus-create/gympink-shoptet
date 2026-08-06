@@ -111,6 +111,14 @@
    [ ] 3.7  Patička
    [ ] 3.8  Mobilní verze
 
+   OPRAVA (kritická): všechna pravidla v téhle sekci se dřív aplikovala
+   na CELÝ web, ne jen na titulní stránku. #header position:absolute
+   bez omezení na stránku vyjmulo hlavičku z toku i na stránkách
+   kategorií a detailu produktu, kde není hero fotka pod ní — hlavička
+   se tam jen položila přes obsah stránky a rozbila layout.
+   Diagnostika: body na titulní straně má třídu "type-index", na
+   kategorii "type-category". Všechny selektory v týhle sekci proto
+   teď mají prefix "body.type-index", ať platí jen na homepage.
    =================================================================== */
 
 
@@ -124,7 +132,7 @@
    Vynucujeme absolute napevno, ať se na to nedá spolehnout jinak.
    =================================================================== */
 
-#header {
+body.type-index #header {
   position: absolute !important;
   top: 0 !important;
   left: 0 !important;
@@ -140,7 +148,7 @@
    výšky a táhlo za sebou celou hlavičku na 452px.
    =================================================================== */
 
-.site-name img {
+body.type-index .site-name img {
   width: auto !important;
   height: 32px !important;
   max-height: 32px !important;
@@ -165,7 +173,7 @@
    natvrdo vynutit rozbalené, ať to JS nemůže znovu sbalit.
    =================================================================== */
 
-#navigation {
+body.type-index #navigation {
   background: transparent !important;
   width: auto !important;
   max-width: none !important;
@@ -173,8 +181,8 @@
   overflow: visible !important;
 }
 
-#navigation .navigation-in.menu,
-#navigation .menu-level-1 {
+body.type-index #navigation .navigation-in.menu,
+body.type-index #navigation .menu-level-1 {
   display: flex !important;
   visibility: visible !important;
   position: static !important;
@@ -185,28 +193,28 @@
   list-style: none !important;
 }
 
-#navigation .menu-level-1 {
+body.type-index #navigation .menu-level-1 {
   flex-direction: row !important;
   flex-wrap: nowrap !important;
   gap: 10px !important;
   align-items: center !important;
 }
 
-#navigation .menu-level-1 li {
+body.type-index #navigation .menu-level-1 li {
   display: inline-flex !important;
 }
 
-#navigation .menu-level-1 a {
+body.type-index #navigation .menu-level-1 a {
   visibility: visible !important;
 }
 
-.navigation-in.menu,
-.menu-helper,
-.menu-level-1 {
+body.type-index .navigation-in.menu,
+body.type-index .menu-helper,
+body.type-index .menu-level-1 {
   background: transparent !important;
 }
 
-.menu-level-1 a {
+body.type-index .menu-level-1 a {
   color: #fff !important;
   font-size: 12px !important;
   white-space: nowrap !important;
@@ -234,7 +242,7 @@
    není vidět — schováváme, zůstávají jen ikony.
    =================================================================== */
 
-.navigation-wrapper {
+body.type-index .navigation-wrapper {
   display: grid !important;
   grid-template-columns: 1fr auto 1fr !important;
   align-items: center !important;
@@ -247,32 +255,32 @@
   padding-right: 32px !important;
 }
 
-#header .project-email {
+body.type-index #header .project-email {
   display: none !important;
 }
 
-#header .menu-helper {
+body.type-index #header .menu-helper {
   display: none !important;
 }
 
-.navigation-wrapper {
+body.type-index .navigation-wrapper {
   grid-template-rows: 1fr !important;
 }
 
-.navigation-wrapper > #navigation {
+body.type-index .navigation-wrapper > #navigation {
   grid-column: 1 !important;
   grid-row: 1 !important;
   justify-self: start !important;
 }
 
-.navigation-wrapper > .site-name {
+body.type-index .navigation-wrapper > .site-name {
   grid-column: 2 !important;
   grid-row: 1 !important;
   justify-self: center !important;
   text-align: center !important;
 }
 
-.navigation-wrapper > .top-nav {
+body.type-index .navigation-wrapper > .top-nav {
   grid-column: 3 !important;
   grid-row: 1 !important;
   justify-content: flex-end !important;
@@ -282,7 +290,7 @@
   right: auto !important;
 }
 
-#header .top-nav-right a,
-#header .top-nav-right .btn-icon {
+body.type-index #header .top-nav-right a,
+body.type-index #header .top-nav-right .btn-icon {
   color: #fff !important;
 }
