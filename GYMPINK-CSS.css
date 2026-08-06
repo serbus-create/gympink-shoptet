@@ -187,7 +187,8 @@
 
 #navigation .menu-level-1 {
   flex-direction: row !important;
-  gap: 22px !important;
+  flex-wrap: nowrap !important;
+  gap: 18px !important;
   align-items: center !important;
 }
 
@@ -207,7 +208,9 @@
 
 .menu-level-1 a {
   color: #fff !important;
-  font-size: 14px !important;
+  font-family: var(--gp-font) !important;
+  font-size: 13px !important;
+  white-space: nowrap !important;
   text-shadow: 0 1px 12px rgba(0, 0, 0, .55) !important;
 }
 
