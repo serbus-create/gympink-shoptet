@@ -142,7 +142,7 @@ body.type-index #header {
   right: 0 !important;
   z-index: 100 !important;
   transition: background-color .25s ease !important;
-  padding-bottom: 10px !important;
+  padding-bottom: 0 !important;
 }
 
 body.type-index #header.gp-scrolled {
@@ -311,6 +311,7 @@ body.type-index .navigation-wrapper > .top-nav {
   justify-content: flex-end !important;
   position: static !important;
   margin: 0 !important;
+  padding: 0 !important;
   top: auto !important;
   right: auto !important;
 }
