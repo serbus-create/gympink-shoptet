@@ -123,21 +123,37 @@
 
 
 /* ===================================================================
-   3.0  HLAVIČKA — vynucená pozice
+   3.0  HLAVIČKA — vynucená pozice + scroll efekt
    Diagnostika: #header se choval nekonzistentně — jednou naměřeno
    position:absolute, podruhé position:relative (Tango si to zjevně
-   přepíná samo, pravděpodobně podle šířky okna). Když je relative,
-   hlavička zabírá místo v toku a hero foto se odsune dolů — přesně
-   ta mezera, co jsme viděli na screenshotu.
-   Vynucujeme absolute napevno, ať se na to nedá spolehnout jinak.
+   přepíná samo, pravděpodobně podle šířky okna). Vynucujeme napevno.
+
+   Změna: position:fixed místo :absolute, ať hlavička zůstává
+   připnutá nahoře i při scrollu (zadání: menu "jede spolu se
+   scrollem"). Stav .gp-scrolled přidává/odebírá JS podle scroll
+   pozice vůči hero fotce (viz GYMPINK-JS.js) — po 60 % výšky hero
+   fotky se pozadí změní na bílé a text na tmavý.
    =================================================================== */
 
 body.type-index #header {
-  position: absolute !important;
+  position: fixed !important;
   top: 0 !important;
   left: 0 !important;
   right: 0 !important;
   z-index: 100 !important;
+  transition: background-color .25s ease !important;
+}
+
+body.type-index #header.gp-scrolled {
+  background: #fff !important;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, .08) !important;
+}
+
+body.type-index #header.gp-scrolled .menu-level-1 a,
+body.type-index #header.gp-scrolled .top-nav-right a,
+body.type-index #header.gp-scrolled .top-nav-right .btn-icon {
+  color: var(--gp-ink) !important;
+  text-shadow: none !important;
 }
 
 
