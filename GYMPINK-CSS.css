@@ -16,6 +16,14 @@
    - Verzi v hlavičce zvyšovat při každé změně (usnadňuje audit).
    =================================================================== */
 
+/* Import fontu pro navigaci — vizuální náhrada za font z Exalted
+   vzoru (PT Serif, volně dostupný na Google Fonts, podobný charakter:
+   tenké patky, elegantní proporce). Nejde o identický font, jen
+   nejbližší volně dostupnou náhradu — pokud nebude po nasazení sedět
+   přesně, lze vyměnit za jiný podobný font. */
+
+@import url('https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap');
+
 
 /* ===================================================================
    1. DESIGNOVÉ TOKENY
@@ -208,8 +216,9 @@
 
 .menu-level-1 a {
   color: #fff !important;
-  font-family: var(--gp-font) !important;
-  font-size: 13px !important;
+  font-family: 'PT Serif', serif !important;
+  font-weight: 400 !important;
+  font-size: 15px !important;
   white-space: nowrap !important;
   text-shadow: 0 1px 12px rgba(0, 0, 0, .55) !important;
 }
