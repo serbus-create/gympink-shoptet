@@ -350,17 +350,17 @@ body.type-index .benefitBanner.position--benefitHomepage {
 body.type-index .benefitBanner__item {
   display: flex !important;
   align-items: center !important;
-  gap: 20px !important;
+  gap: 24px !important;
   flex: 1 1 0 !important;
   min-width: 0 !important;
   background: var(--gp-tile) !important;
-  padding: 30px 24px !important;
+  padding: 48px 40px !important;
   border-radius: 0 !important;
 }
 
 body.type-index .benefitBanner__picture {
   flex: 0 0 auto !important;
-  width: 56px !important;
+  width: 96px !important;
 }
 
 body.type-index .benefitBanner__img {
@@ -372,17 +372,17 @@ body.type-index .benefitBanner__img {
 body.type-index .benefitBanner__content {
   display: flex !important;
   flex-direction: column !important;
-  gap: 4px !important;
+  gap: 6px !important;
   min-width: 0 !important;
 }
 
 body.type-index .benefitBanner__title {
-  font-size: 16px !important;
+  font-size: 22px !important;
   font-weight: 700 !important;
   color: var(--gp-ink) !important;
 }
 
 body.type-index .benefitBanner__data {
-  font-size: var(--gp-fs-body) !important;
+  font-size: 15px !important;
   color: var(--gp-ink-soft) !important;
 }
