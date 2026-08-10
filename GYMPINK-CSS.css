@@ -106,7 +106,7 @@
    [x] 3.2  Hlavička — menu kategorií (sjednocení do jednoho řádku)
    [ ] 3.3  Hero banner
    [x] 3.4  Blok se 4 ikonami (přesunut pod hero, kartičky se stylem)
-   [-] 3.5  Bannery — v Tangu nenativní slot, přeskočeno
+   [x] 3.5  Bannery — funguje přes admin "Doplňkové bannery" (pozice Střed)
    [ ] 3.6  Výpis produktů
    [ ] 3.7  Patička
    [ ] 3.8  Mobilní verze
@@ -385,4 +385,42 @@ body.type-index .benefitBanner__title {
 body.type-index .benefitBanner__data {
   font-size: 15px !important;
   color: var(--gp-ink-soft) !important;
+}
+
+
+/* ===================================================================
+   3.5  DVA BANNERY VEDLE SEBE (footer-banners)
+   Diagnostika: .footer-banners.row.banner-wrapper
+     > .footer-banner.col-sm-12.col-lg-6 (2×)
+       > img (nahraný přes administraci — pozice "Střed")
+   JS přesouvá celý blok hned za .benefitBanner. Zde vynucujeme
+   poměr stran 1,36:1 (dle zadání grafikovi), nezávisle na tom,
+   v jakém poměru klientka fotku reálně nahraje — object-fit:cover
+   dokrojí obrázek na požadovaný tvar.
+   =================================================================== */
+
+body.type-index .footer-banners.row.banner-wrapper {
+  display: flex !important;
+  gap: 20px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 32px !important;
+}
+
+body.type-index .footer-banner {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+  padding: 0 !important;
+  aspect-ratio: 1.36 !important;
+  overflow: hidden !important;
+}
+
+body.type-index .footer-banner img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
 }
