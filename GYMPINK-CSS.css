@@ -413,6 +413,7 @@ body.type-index .footer-banner {
   min-width: 0 !important;
   width: auto !important;
   max-width: none !important;
+  margin: 0 !important;
   padding: 0 !important;
   aspect-ratio: 1.36 !important;
   overflow: hidden !important;
