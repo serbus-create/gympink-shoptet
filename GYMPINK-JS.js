@@ -3,7 +3,7 @@
 
   /* ===================================================================
      GYMPINK-JS.js — vlastní JS pro Shoptet
-     Verze: 0.3 (+ přesun bloku 4 ikon pod hero banner)
+     Verze: 0.4 (+ přesun dvou bannerů pod blok 4 ikon)
      Repo:  github.com/serbus-create/gympink-shoptet
      Vzor:  exalted.com
      ===================================================================
@@ -142,6 +142,20 @@
         if (!hero || !benefity) return;
 
         move(benefity, hero, 'after');
+      }
+    },
+
+    {
+      nazev: 'Přesun dvou bannerů (footer-banners) hned pod blok 4 ikon',
+      spustit: function () {
+        // Jen titulní strana.
+        if (!document.body.classList.contains('type-index')) return;
+
+        var benefity = find('.benefitBanner.position--benefitHomepage');
+        var bannery = find('.footer-banners.row.banner-wrapper');
+        if (!benefity || !bannery) return;
+
+        move(bannery, benefity, 'after');
       }
     },
 
