@@ -109,7 +109,9 @@
    [x] 3.5  Bannery — funguje přes admin "Doplňkové bannery" (pozice Střed)
    [~] 3.6  Výpis produktů — CSS hotovo, produkty pending (admin blok není nakonfigurovaný)
    [~] 3.7  Patička — základní stylizace, ověřit vizuálně po aktualizaci hashe
-   [ ] 3.8  Mobilní verze
+   [x] 3.8  Zápatí banner — plná šířka s textovým překryvem
+   [x] 3.9  Skryté bloky homepage (Nové články, Uvítací text)
+   [ ] 3.10 Mobilní verze
 
    OPRAVA (kritická): všechna pravidla v téhle sekci se dřív aplikovala
    na CELÝ web, ne jen na titulní stránku. #header position:absolute
@@ -619,4 +621,94 @@ footer.footer {
 .footer .copyright {
   font-size: var(--gp-fs-small) !important;
   color: var(--gp-ink-soft) !important;
+}
+
+
+/* ===================================================================
+   3.8  ZÁPATÍ BANNER — plná šířka s textovým překryvem
+   Diagnostika: .footer-banner:has(.extended-banner-texts) rozlišuje
+   zápatí banner (má native pole: bannerTitle / bannerText / linkText)
+   od čistě obrázkových bannerů Střed/Top (jen <img> bez wrapper textu).
+   Zápatí se roztáhne přes celou šířku, ostatní zůstávají 50/50 (3.5).
+   Struktura zápatí:
+     .footer-banner
+       > a[href] (position:relative pro overlay)
+           > img
+           > .extended-banner-texts
+               > .extended-banner-title
+               > .extended-banner-text
+               > .extended-banner-link
+   =================================================================== */
+
+body.type-index .footer-banners {
+  flex-wrap: wrap !important;
+}
+
+body.type-index .footer-banner:has(.extended-banner-texts) {
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+  aspect-ratio: var(--gp-ratio-wide) !important;
+}
+
+body.type-index .footer-banner:has(.extended-banner-texts) > a {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+body.type-index .footer-banner .extended-banner-texts {
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 48px !important;
+}
+
+body.type-index .footer-banner .extended-banner-title {
+  font-size: var(--gp-fs-h2) !important;
+  font-weight: 700 !important;
+  color: var(--gp-on-photo) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  margin-bottom: 16px !important;
+  display: block !important;
+}
+
+body.type-index .footer-banner .extended-banner-text {
+  font-size: var(--gp-fs-body) !important;
+  color: rgba(255, 255, 255, 0.88) !important;
+  margin-bottom: 28px !important;
+  display: block !important;
+}
+
+body.type-index .footer-banner .extended-banner-link {
+  display: inline-block !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  border-radius: var(--gp-pill-radius) !important;
+  padding: var(--gp-pill-pad) !important;
+  font-size: var(--gp-fs-nav) !important;
+  color: var(--gp-on-photo) !important;
+  background: transparent !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+
+/* ===================================================================
+   3.9  SKRYTÉ BLOKY HOMEPAGE
+   "Nové články" a "Uvítací text" nemají v Návrhář šablon nativní
+   vypínací přepínač. CSS hide je jediná možnost bez zásahu do kódu
+   šablony. Selektory ověřeny diagnostikou DOM 2025-08-17.
+   =================================================================== */
+
+body.type-index .homepage-blog-wrapper {
+  display: none !important;
+}
+
+body.type-index .welcome-wrapper {
+  display: none !important;
 }
