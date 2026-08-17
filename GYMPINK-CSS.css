@@ -104,11 +104,11 @@
    [x] 3.0  Hlavička — vynucená pozice (absolute, top:0)
    [x] 3.1  Hlavička — logo (omezení přemrštěné velikosti)
    [x] 3.2  Hlavička — menu kategorií (sjednocení do jednoho řádku)
-   [ ] 3.3  Hero banner
+   [x] 3.3  Hero banner — fix margin-bottom na .carousel.slide (40px mezera)
    [x] 3.4  Blok se 4 ikonami (přesunut pod hero, kartičky se stylem)
    [x] 3.5  Bannery — funguje přes admin "Doplňkové bannery" (pozice Střed)
-   [ ] 3.6  Výpis produktů
-   [ ] 3.7  Patička
+   [~] 3.6  Výpis produktů — CSS hotovo, produkty pending (admin blok není nakonfigurovaný)
+   [~] 3.7  Patička — základní stylizace, ověřit vizuálně po aktualizaci hashe
    [ ] 3.8  Mobilní verze
 
    OPRAVA (kritická): všechna pravidla v téhle sekci se dřív aplikovala
@@ -324,6 +324,19 @@ body.type-index #header .top-nav-right .btn-icon {
 
 
 /* ===================================================================
+   3.3  HERO CAROUSEL — odstranění nativního margin-bottom
+   Diagnostika: Bootstrap .carousel.slide (potomek .wide-carousel) má
+   nativně margin-bottom: 40px. Margin collapsuje ven přes kontejner
+   (který nemá BFC) a vytváří 40px bílou mezeru pod hero fotkou
+   mezi hero a USP blokem.
+   =================================================================== */
+
+body.type-index .wide-carousel .carousel.slide {
+  margin-bottom: 0 !important;
+}
+
+
+/* ===================================================================
    3.4  BLOK SE 4 IKONAMI (benefitBanner) — přesunuto pod hero bannerem
    Diagnostika: .benefitBanner.position--benefitHomepage
      > .benefitBanner__item (4×)
@@ -424,4 +437,186 @@ body.type-index .footer-banner img {
   height: 100% !important;
   object-fit: cover !important;
   display: block !important;
+}
+
+
+/* ===================================================================
+   3.6  VÝPIS PRODUKTŮ
+   Diagnostika (kategorie /leginy/, Tango):
+     .product.col-xs-12.col-sm-6.col-md-4
+       > .inner
+           > .img
+               > a (bez třídy!) > img
+               > .flags.flags-extra (position:absolute)
+           > .descr
+               > a.name > span
+               > .prices.row
+   Pozor: a.image je selektor footer loga, NE product obrázku na Tangu.
+   Tlačítko do košíku je v .tools-wrap (display:none na listingu) —
+   bude řešeno samostatně při hover efektu.
+   Bez body.type-index prefixu — platí na homepage i kategoriích.
+   =================================================================== */
+
+.product .img {
+  aspect-ratio: 0.75 !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+.product .img a {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.product .img img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+  display: block !important;
+}
+
+.product .descr {
+  padding: 10px 0 0 !important;
+}
+
+.product a.name {
+  font-size: var(--gp-fs-body) !important;
+  font-weight: 400 !important;
+  color: var(--gp-ink) !important;
+  text-decoration: none !important;
+  line-height: 1.4 !important;
+  display: block !important;
+}
+
+.product a.name:hover {
+  color: var(--gp-ink-soft) !important;
+}
+
+.product .price {
+  font-size: var(--gp-fs-small) !important;
+  color: var(--gp-ink-soft) !important;
+  margin-top: 4px !important;
+}
+
+
+/* ===================================================================
+   3.7  PATIČKA
+   Diagnostika: footer.footer
+     > h2.sr-only
+     > .container.footer-rows
+         > .row.custom-footer.elements-4
+             > .custom-footer__contact / __articles / __section2 / __onlinePayments
+               H3.pageElement__heading (fw=600, 14px — zmenšujeme na 11px uppercase)
+               a.project-email (bylo 18px/bold — zmenšeno)
+     > .container.footer-bottom
+         > span (a.image logo + a.title name) + span.copyright
+   Nativní: mt=80px → 40px. Bg=rgb(246,246,246) ≈ --gp-tile.
+   Referenční vzor: exalted.com — off-white bg, column headers uppercase,
+   linky šedé, footer-bottom s logem vlevo a copyright vpravo.
+   Bez body.type-index — patička je na všech stránkách.
+   =================================================================== */
+
+footer.footer {
+  margin-top: 40px !important;
+  background: var(--gp-tile) !important;
+}
+
+.footer .footer-rows,
+.footer .footer-bottom {
+  max-width: 100% !important;
+  padding-left: 32px !important;
+  padding-right: 32px !important;
+}
+
+.footer .footer-rows {
+  padding-top: 48px !important;
+  padding-bottom: 32px !important;
+}
+
+/* Nadpisy sloupců */
+.footer .pageElement__heading {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: var(--gp-ink) !important;
+  margin-bottom: 18px !important;
+}
+
+/* Email odkaz — původně 18px/bold */
+.footer .project-email {
+  font-size: var(--gp-fs-body) !important;
+  font-weight: 400 !important;
+  color: var(--gp-ink-soft) !important;
+  text-decoration: none !important;
+}
+
+.footer .project-email:hover {
+  color: var(--gp-ink) !important;
+}
+
+/* Všechny linky ve sloupcích */
+.footer .custom-footer a {
+  font-size: var(--gp-fs-small) !important;
+  color: var(--gp-ink-soft) !important;
+  text-decoration: none !important;
+}
+
+.footer .custom-footer a:hover {
+  color: var(--gp-ink) !important;
+}
+
+/* Seznamy odkazů */
+.footer .custom-footer ul {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.footer .custom-footer li {
+  margin-bottom: 10px !important;
+}
+
+/* Sociální ikony */
+.footer .social-icons {
+  margin-top: 12px !important;
+  display: flex !important;
+  gap: 16px !important;
+}
+
+/* Footer-bottom: logo vlevo, copyright vpravo */
+.footer .footer-bottom {
+  border-top: 1px solid var(--gp-line) !important;
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.footer .footer-bottom > span:first-child {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+/* Logo v patičce */
+.footer .footer-bottom a.image img {
+  height: 24px !important;
+  width: auto !important;
+}
+
+/* Název obchodu v patičce */
+.footer .footer-bottom a.title {
+  font-size: var(--gp-fs-small) !important;
+  color: var(--gp-ink-soft) !important;
+  text-decoration: none !important;
+}
+
+/* Copyright text */
+.footer .copyright {
+  font-size: var(--gp-fs-small) !important;
+  color: var(--gp-ink-soft) !important;
 }
