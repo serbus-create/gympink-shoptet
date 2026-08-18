@@ -671,11 +671,25 @@ footer.footer {
 
 body.type-index .footer-banners {
   flex-wrap: wrap !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 body.type-index .gp-banner-big {
   width: 100% !important;
+  max-width: 100% !important;
   aspect-ratio: var(--gp-ratio-wide) !important;
+}
+
+body.type-index .gp-banner-big img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
 }
 
 body.type-index .gp-banner-big > a {
