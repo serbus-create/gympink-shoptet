@@ -457,10 +457,18 @@ body.type-index .gp-banner-pair-item .extended-banner-texts {
 }
 
 body.type-index .gp-banner-pair-item .extended-banner-title {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  background: none !important;
   font-size: clamp(16px, 1.8vw, 22px) !important;
   font-weight: 700 !important;
   color: var(--gp-on-photo) !important;
   margin-bottom: 14px !important;
+  padding: 0 !important;
   display: block !important;
 }
 
@@ -469,6 +477,12 @@ body.type-index .gp-banner-pair-item .extended-banner-text {
 }
 
 body.type-index .gp-banner-pair-item .extended-banner-link {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
   display: inline-block !important;
   border: 1px solid rgba(255, 255, 255, 0.85) !important;
   border-radius: var(--gp-pill-radius) !important;
@@ -711,6 +725,14 @@ body.type-index .gp-banner-big .extended-banner-texts {
 }
 
 body.type-index .gp-banner-big .extended-banner-title {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  background: none !important;
+  padding: 0 !important;
   font-size: var(--gp-fs-h2) !important;
   font-weight: 700 !important;
   color: var(--gp-on-photo) !important;
@@ -721,6 +743,14 @@ body.type-index .gp-banner-big .extended-banner-title {
 }
 
 body.type-index .gp-banner-big .extended-banner-text {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  background: none !important;
+  padding: 0 !important;
   font-size: var(--gp-fs-body) !important;
   color: rgba(255, 255, 255, 0.88) !important;
   margin-bottom: 28px !important;
@@ -728,6 +758,12 @@ body.type-index .gp-banner-big .extended-banner-text {
 }
 
 body.type-index .gp-banner-big .extended-banner-link {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
   display: inline-block !important;
   border: 1px solid rgba(255, 255, 255, 0.85) !important;
   border-radius: var(--gp-pill-radius) !important;
