@@ -579,20 +579,59 @@ body.type-index .gp-banner-pair-item .extended-banner-link {
 
 /* ===================================================================
    3.6  VÝPIS PRODUKTŮ
-   Diagnostika (kategorie /leginy/, Tango):
-     .product.col-xs-12.col-sm-6.col-md-4
-       > .inner
-           > .img
-               > a (bez třídy!) > img
-               > .flags.flags-extra (position:absolute)
-           > .descr
-               > a.name > span
-               > .prices.row
-   Pozor: a.image je selektor footer loga, NE product obrázku na Tangu.
-   Tlačítko do košíku je v .tools-wrap (display:none na listingu) —
-   bude řešeno samostatně při hover efektu.
+   Diagnostika (kategorie /leginy/, Tango) — OVĚŘENO přímo v DevTools:
+     #products.products.products-page.products-block (flex, wrap)
+       > .product.col-xs-12.col-sm-6.col-md-4[data-testid="productItem"]
+           > .inner
+               > .img
+                   > a[href] (bez třídy) > img
+                   > .flags.flags-extra (badge NOVINKA, position:absolute)
+               > .descr
+                   > a.name[data-micro="url"] > span[data-micro="name"]
+                   > .prices.row[data-micro="offer"] (flex)
+                       > .col-xs-8.col-lg-12 > .price.price-final
+                       > .tools-wrap.col-xs-4.col-lg-12
+                           > a.product-link (jen &nbsp;, prázdný — ignorovat)
+                           > .tools > a.btn "Detail" + .availability "Skladem"
+   DŮLEŽITÉ: některé produkty mají navíc třídu .highlight-product
+   (nativní Shoptet "zvýrazněný produkt", dvojnásobná šířka
+   col-md-8) — to byl ten "rozbitý" řádek s textem bez obrázku.
+   Řešení: force stejná šířka jako běžné produkty, ať mřížka
+   zůstane jednotná (podle vzoru exalted.com nemá žádný produkt
+   zvýrazněnou/širší dlaždici).
    Bez body.type-index prefixu — platí na homepage i kategoriích.
    =================================================================== */
+
+.products.products-block {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 24px 20px !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.products.products-block .product {
+  flex: 0 0 calc(25% - 15px) !important;
+  max-width: calc(25% - 15px) !important;
+  width: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+@media (max-width: 900px) {
+  .products.products-block .product {
+    flex: 0 0 calc(50% - 10px) !important;
+    max-width: calc(50% - 10px) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .products.products-block .product {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+}
 
 .product .img {
   aspect-ratio: 0.75 !important;
@@ -615,7 +654,7 @@ body.type-index .gp-banner-pair-item .extended-banner-link {
 }
 
 .product .descr {
-  padding: 10px 0 0 !important;
+  padding: 14px 0 0 !important;
 }
 
 .product a.name {
@@ -623,6 +662,8 @@ body.type-index .gp-banner-pair-item .extended-banner-link {
   font-weight: 400 !important;
   color: var(--gp-ink) !important;
   text-decoration: none !important;
+  text-align: left !important;
+  text-transform: none !important;
   line-height: 1.4 !important;
   display: block !important;
 }
@@ -631,10 +672,53 @@ body.type-index .gp-banner-pair-item .extended-banner-link {
   color: var(--gp-ink-soft) !important;
 }
 
+.product .prices.row {
+  display: block !important;
+  margin: 0 !important;
+}
+
+.product .prices.row > .col-xs-8,
+.product .prices.row > [class*="col-"] {
+  padding: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+  float: none !important;
+}
+
 .product .price {
   font-size: var(--gp-fs-small) !important;
+  font-weight: 400 !important;
   color: var(--gp-ink-soft) !important;
+  text-align: left !important;
   margin-top: 4px !important;
+}
+
+/* "Detail" tlačítko a "Skladem" text — vzor (exalted.com) je na
+   listingu nezobrazuje, karta je čistě obrázek + jméno + cena. */
+.product .tools-wrap {
+  display: none !important;
+}
+
+/* Zvýrazněný produkt (.highlight-product, nativně dvojnásobná
+   šířka) — sjednoceno na stejnou šířku jako ostatní, ať mřížka
+   zůstane pravidelná. */
+.products.products-block .product.highlight-product {
+  flex: 0 0 calc(25% - 15px) !important;
+  max-width: calc(25% - 15px) !important;
+}
+
+@media (max-width: 900px) {
+  .products.products-block .product.highlight-product {
+    flex: 0 0 calc(50% - 10px) !important;
+    max-width: calc(50% - 10px) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .products.products-block .product.highlight-product {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
 }
 
 
