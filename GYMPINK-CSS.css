@@ -751,8 +751,8 @@ body.type-index .gp-banner-big .extended-banner-title {
   font-size: var(--gp-fs-h2) !important;
   font-weight: 700 !important;
   color: var(--gp-on-photo) !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
   margin-bottom: 16px !important;
   display: block !important;
 }
