@@ -404,6 +404,51 @@ body.type-index .benefitBanner__data {
   color: var(--gp-ink-soft) !important;
 }
 
+/* ---------------------------------------------------------------
+   3.4b RESPONZIVNÍ CHOVÁNÍ — tablet a mobil
+   Diagnostika: gap byl počítaný z 8vw (celá šířka obrazovky), ne
+   z šířky karty samotné. Na užších obrazovkách se 4 karty vedle
+   sebe hodně zúžily, ale gap se nezmenšoval úměrně — ikona (96px)
+   + gap (až 120px) + padding (80px) přesáhly celou šířku karty,
+   takže na text nezbylo místo a prohlížeč ho zalomil písmeno po
+   písmenu. Řešení: pod 900px přepnout na 2 karty na řádek s ikonou
+   NAD textem (ne vedle), pod 480px na 1 kartu na řádek.
+   --------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  body.type-index .benefitBanner.position--benefitHomepage {
+    flex-wrap: wrap !important;
+    gap: 16px !important;
+  }
+
+  body.type-index .benefitBanner__item {
+    flex: 1 1 calc(50% - 8px) !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    text-align: center !important;
+    gap: 16px !important;
+    padding: 32px 16px !important;
+  }
+
+  body.type-index .benefitBanner__picture {
+    width: 64px !important;
+  }
+
+  body.type-index .benefitBanner__content {
+    align-items: center !important;
+  }
+
+  body.type-index .benefitBanner__title {
+    font-size: 18px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body.type-index .benefitBanner__item {
+    flex: 1 1 100% !important;
+  }
+}
+
 
 /* ===================================================================
    3.5  PÁR MALÝCH BANNERŮ (Bestsellers / Novinky) — vedle sebe
