@@ -132,6 +132,25 @@
     },
 
     {
+      nazev: 'Přesun odkazu Blog z kategorií do pravého horního rohu hlavičky',
+      spustit: function () {
+        // Jen titulní strana — celá tahle úprava hlavičky (grid,
+        // průhlednost přes hero foto) je stylovaná jen pro homepage.
+        if (!document.body.classList.contains('type-index')) return;
+
+        var odkazBlog = find('#navigation .menu-level-1 a[href*="/blog"]');
+        var ikonyVpravo = find('.top-nav-right');
+        if (!odkazBlog || !ikonyVpravo) return;
+
+        var polozkaBlog = odkazBlog.closest('li') || odkazBlog;
+        if (polozkaBlog.classList.contains('gp-blog-moved')) return; // už přesunuto
+
+        polozkaBlog.classList.add('gp-blog-moved');
+        move(polozkaBlog, ikonyVpravo, 'before');
+      }
+    },
+
+    {
       nazev: 'Přesun bloku se 4 ikonami (benefitBanner) hned pod hero banner',
       spustit: function () {
         // Jen titulní strana.

@@ -324,6 +324,30 @@ body.type-index #header .top-nav-right .btn-icon {
   color: #fff !important;
 }
 
+/* Odkaz Blog přesunutý JS z kategorií do pravého horního rohu
+   (vedle ikon vyhledávání/účtu/košíku). Přesunuté <li> ztratilo
+   kontext #navigation .menu-level-1, proto potřebuje vlastní reset
+   a barvy — zrcadlí styl ostatních položek menu i chování při
+   scrollu (bílá/stín na hero fotce → tmavá po scrollu). */
+body.type-index .gp-blog-moved {
+  list-style: none !important;
+  display: flex !important;
+  align-items: center !important;
+  margin-right: 20px !important;
+}
+
+body.type-index .gp-blog-moved a {
+  color: #fff !important;
+  font-size: 12px !important;
+  white-space: nowrap !important;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, .55) !important;
+}
+
+body.type-index #header.gp-scrolled .gp-blog-moved a {
+  color: var(--gp-ink) !important;
+  text-shadow: none !important;
+}
+
 
 /* ===================================================================
    3.3  HERO CAROUSEL — odstranění nativního margin-bottom
