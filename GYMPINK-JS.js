@@ -171,6 +171,22 @@
         });
 
         move(wrap, benefity, 'after');
+
+        // Velký banner musí mít STEJNÉ zarovnání/šířku jako pár nad
+        // ním — to jde spolehlivě jen na stejné úrovni DOM (pár sedí
+        // mimo hluboko zanořený .container, který má na širokých
+        // obrazovkách vlastní pevnou šířku a centruje se jinak).
+        // Wrapper s identickým paddingem (0 32px) jako .gp-banner-pair
+        // zaručí stejné okraje.
+        var wrapVelky = document.createElement('div');
+        wrapVelky.className = 'gp-banner-big-wrap';
+        wrapVelky.appendChild(velky);
+        move(wrapVelky, wrap, 'after');
+
+        // Po přesunu obou skupin je .footer-banners prázdný — schovat,
+        // ať nezůstává jako neviditelný blok s případným nativním
+        // paddingem/výškou.
+        bannery.style.display = 'none';
       }
     },
 
