@@ -365,7 +365,7 @@ body.type-index .benefitBanner.position--benefitHomepage {
 body.type-index .benefitBanner__item {
   display: flex !important;
   align-items: center !important;
-  gap: 24px !important;
+  gap: clamp(28px, 4vw, 64px) !important;
   flex: 1 1 0 !important;
   min-width: 0 !important;
   background: var(--gp-tile) !important;
