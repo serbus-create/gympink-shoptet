@@ -171,20 +171,6 @@
         });
 
         move(wrap, benefity, 'after');
-
-        // Velký banner přesouváme MIMO .footer-banners a jeho hluboké
-        // zanoření v .container.content-wrapper — žádná šířka/margin
-        // nastavená přímo na banneru nešla přes viditelný okraj
-        // stránky, protože ho ořezával nějaký předek na cestě k
-        // #content-wrapper. Přesunem na stejnou úroveň jako hero a
-        // pár bannerů (kde full-bleed prokazatelně funguje) se tomu
-        // vyhneme úplně, místo dalšího dohadování CSS/JS triky.
-        move(velky, wrap, 'after');
-
-        // Po přesunu obou skupin je .footer-banners prázdný — schovat,
-        // ať nezůstává jako neviditelný blok s případným nativním
-        // paddingem/výškou.
-        bannery.style.display = 'none';
       }
     },
 
@@ -197,9 +183,10 @@
         var velky = find('.gp-banner-big');
         if (!velky) return;
 
-        // Doměřeno přímo (nezávisle na vw/scrollbaru) — teď už banner
-        // sedí mimo zanořený kontejner, takže tohle konečně sedí na
-        // pixel přesně.
+        // CSS trik s width:100vw + margin:calc(50% - 50vw) nechává na
+        // některých obrazovkách malou mezeru (scrollbar / vnořený
+        // kontejner). Tady to doměříme přímo — nezávislé na tom, jak
+        // hluboko je banner v DOM zanořený.
         function fullBleed() {
           var rect = velky.getBoundingClientRect();
           var sirkaViewportu = document.documentElement.clientWidth;
