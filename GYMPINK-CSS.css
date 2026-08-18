@@ -339,6 +339,7 @@ body.type-index .gp-blog-moved {
 body.type-index .gp-blog-moved a {
   color: #fff !important;
   font-size: 12px !important;
+  text-transform: uppercase !important;
   white-space: nowrap !important;
   text-shadow: 0 1px 12px rgba(0, 0, 0, .55) !important;
 }
