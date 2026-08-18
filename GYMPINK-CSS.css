@@ -448,12 +448,13 @@ body.type-index .gp-banner-pair-item > a {
 
 body.type-index .gp-banner-pair-item .extended-banner-texts {
   position: absolute !important;
-  left: 0 !important;
-  bottom: 0 !important;
+  inset: 0 !important;
   display: flex !important;
   flex-direction: column !important;
-  align-items: flex-start !important;
-  padding: 28px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 24px !important;
 }
 
 body.type-index .gp-banner-pair-item .extended-banner-title {

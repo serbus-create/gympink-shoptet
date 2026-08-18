@@ -174,6 +174,34 @@
       }
     },
 
+    {
+      nazev: 'Velký banner (Týmové oblečení) — přesné doměření celé šířky viewportu',
+      spustit: function () {
+        // Jen titulní strana.
+        if (!document.body.classList.contains('type-index')) return;
+
+        var velky = find('.gp-banner-big');
+        if (!velky) return;
+
+        // CSS trik s width:100vw + margin:calc(50% - 50vw) nechává na
+        // některých obrazovkách malou mezeru (scrollbar / vnořený
+        // kontejner). Tady to doměříme přímo — nezávislé na tom, jak
+        // hluboko je banner v DOM zanořený.
+        function fullBleed() {
+          var rect = velky.getBoundingClientRect();
+          var sirkaViewportu = document.documentElement.clientWidth;
+          velky.style.setProperty('width', sirkaViewportu + 'px', 'important');
+          velky.style.setProperty('max-width', sirkaViewportu + 'px', 'important');
+          velky.style.setProperty('margin-left', (-rect.left) + 'px', 'important');
+          velky.style.setProperty('margin-right', 'auto', 'important');
+        }
+
+        fullBleed();
+        window.addEventListener('resize', fullBleed);
+        window.addEventListener('load', fullBleed);
+      }
+    },
+
   ];
 
 
