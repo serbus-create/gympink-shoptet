@@ -358,6 +358,8 @@ body.type-index .benefitBanner.position--benefitHomepage {
   width: 100% !important;
   max-width: 100% !important;
   margin: 0 !important;
+  margin-top: 56px !important;
+  margin-bottom: 56px !important;
   padding: 0 32px !important;
   background: #fff !important;
 }
