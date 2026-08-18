@@ -146,16 +146,31 @@
     },
 
     {
-      nazev: 'Přesun dvou bannerů (footer-banners) hned pod blok 4 ikon',
+      nazev: 'Rozdělení bannerů Zápatí na pár (Bestsellers/Novinky) a velký (Týmové oblečení)',
       spustit: function () {
-        // Jen titulní strana.
         if (!document.body.classList.contains('type-index')) return;
 
         var benefity = find('.benefitBanner.position--benefitHomepage');
         var bannery = find('.footer-banners.row.banner-wrapper');
         if (!benefity || !bannery) return;
 
-        move(bannery, benefity, 'after');
+        var vsechny = findAll('.footer-banner', bannery);
+        if (vsechny.length < 2) return;
+
+        // Poslední banner v pořadí administrace = velký, zůstává dole u patičky.
+        var velky = vsechny[vsechny.length - 1];
+        velky.classList.add('gp-banner-big');
+
+        // Předchozí bannery = malý pár, přesune se pod blok ikon.
+        var par = vsechny.slice(0, -1);
+        var wrap = document.createElement('div');
+        wrap.className = 'gp-banner-pair';
+        par.forEach(function (el) {
+          el.classList.add('gp-banner-pair-item');
+          wrap.appendChild(el);
+        });
+
+        move(wrap, benefity, 'after');
       }
     },
 

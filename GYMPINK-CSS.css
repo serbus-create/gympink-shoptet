@@ -106,10 +106,10 @@
    [x] 3.2  Hlavička — menu kategorií (sjednocení do jednoho řádku)
    [x] 3.3  Hero banner — fix margin-bottom na .carousel.slide (40px mezera)
    [x] 3.4  Blok se 4 ikonami (přesunut pod hero, kartičky se stylem)
-   [x] 3.5  Bannery — funguje přes admin "Doplňkové bannery" (pozice Střed)
+   [~] 3.5  Pár bannerů (Bestsellers/Novinky) — přepracováno, NEOVĚŘENO na živém webu
    [~] 3.6  Výpis produktů — CSS hotovo, produkty pending (admin blok není nakonfigurovaný)
    [~] 3.7  Patička — základní stylizace, ověřit vizuálně po aktualizaci hashe
-   [x] 3.8  Zápatí banner — plná šířka s textovým překryvem
+   [~] 3.8  Velký banner (Týmové oblečení) — přepracováno, NEOVĚŘENO na živém webu
    [x] 3.9  Skryté bloky homepage (Nové články, Uvítací text)
    [ ] 3.10 Mobilní verze
 
@@ -404,17 +404,15 @@ body.type-index .benefitBanner__data {
 
 
 /* ===================================================================
-   3.5  DVA BANNERY VEDLE SEBE (footer-banners)
-   Diagnostika: .footer-banners.row.banner-wrapper
-     > .footer-banner.col-sm-12.col-lg-6 (2×)
-       > img (nahraný přes administraci — pozice "Střed")
-   JS přesouvá celý blok hned za .benefitBanner. Zde vynucujeme
-   poměr stran 1,36:1 (dle zadání grafikovi), nezávisle na tom,
-   v jakém poměru klientka fotku reálně nahraje — object-fit:cover
-   dokrojí obrázek na požadovaný tvar.
+   3.5  PÁR MALÝCH BANNERŮ (Bestsellers / Novinky) — vedle sebe
+   Nová architektura: všechny 3 bannery (Bestsellers, Novinky, Týmové
+   oblečení) jsou v administraci na pozici "Zápatí" — "Střed" na
+   tomhle templatu nikam nevykresluje. JS vezme první dva (pár) a
+   přesune je do vlastního wrapperu .gp-banner-pair pod blok ikon;
+   poslední zůstává jako .gp-banner-big u patičky (viz 3.8).
    =================================================================== */
 
-body.type-index .footer-banners.row.banner-wrapper {
+body.type-index .gp-banner-pair {
   display: flex !important;
   gap: 20px !important;
   width: 100% !important;
@@ -423,22 +421,61 @@ body.type-index .footer-banners.row.banner-wrapper {
   padding: 0 32px !important;
 }
 
-body.type-index .footer-banner {
+body.type-index .gp-banner-pair-item {
   flex: 1 1 0 !important;
   min-width: 0 !important;
   width: auto !important;
   max-width: none !important;
   margin: 0 !important;
   padding: 0 !important;
-  aspect-ratio: 1.36 !important;
+  aspect-ratio: var(--gp-ratio-duo) !important;
   overflow: hidden !important;
 }
 
-body.type-index .footer-banner img {
+body.type-index .gp-banner-pair-item img {
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
   display: block !important;
+}
+
+body.type-index .gp-banner-pair-item > a {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+body.type-index .gp-banner-pair-item .extended-banner-texts {
+  position: absolute !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  padding: 28px !important;
+}
+
+body.type-index .gp-banner-pair-item .extended-banner-title {
+  font-size: clamp(16px, 1.8vw, 22px) !important;
+  font-weight: 700 !important;
+  color: var(--gp-on-photo) !important;
+  margin-bottom: 14px !important;
+  display: block !important;
+}
+
+body.type-index .gp-banner-pair-item .extended-banner-text {
+  display: none !important; /* u malých bannerů podle vzoru bez podtextu */
+}
+
+body.type-index .gp-banner-pair-item .extended-banner-link {
+  display: inline-block !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  border-radius: var(--gp-pill-radius) !important;
+  padding: var(--gp-pill-pad) !important;
+  font-size: var(--gp-fs-nav) !important;
+  color: var(--gp-on-photo) !important;
+  background: transparent !important;
 }
 
 
@@ -625,39 +662,30 @@ footer.footer {
 
 
 /* ===================================================================
-   3.8  ZÁPATÍ BANNER — plná šířka s textovým překryvem
-   Diagnostika: .footer-banner:has(.extended-banner-texts) rozlišuje
-   zápatí banner (má native pole: bannerTitle / bannerText / linkText)
-   od čistě obrázkových bannerů Střed/Top (jen <img> bez wrapper textu).
-   Zápatí se roztáhne přes celou šířku, ostatní zůstávají 50/50 (3.5).
-   Struktura zápatí:
-     .footer-banner
-       > a[href] (position:relative pro overlay)
-           > img
-           > .extended-banner-texts
-               > .extended-banner-title
-               > .extended-banner-text
-               > .extended-banner-link
+   3.8  VELKÝ BANNER (Týmové oblečení) — plná šířka, zůstává u patičky
+   Nová architektura (viz 3.5): poslední banner v pořadí administrace
+   dostává od JS třídu .gp-banner-big a zůstává, kde je (u patičky),
+   místo dřívějšího :has() rozlišení podle přítomnosti textu (nebylo
+   spolehlivé — malé bannery mají text taky).
    =================================================================== */
 
 body.type-index .footer-banners {
   flex-wrap: wrap !important;
 }
 
-body.type-index .footer-banner:has(.extended-banner-texts) {
-  flex: 0 0 100% !important;
-  max-width: 100% !important;
+body.type-index .gp-banner-big {
+  width: 100% !important;
   aspect-ratio: var(--gp-ratio-wide) !important;
 }
 
-body.type-index .footer-banner:has(.extended-banner-texts) > a {
+body.type-index .gp-banner-big > a {
   position: relative !important;
   display: block !important;
   width: 100% !important;
   height: 100% !important;
 }
 
-body.type-index .footer-banner .extended-banner-texts {
+body.type-index .gp-banner-big .extended-banner-texts {
   position: absolute !important;
   inset: 0 !important;
   display: flex !important;
@@ -668,7 +696,7 @@ body.type-index .footer-banner .extended-banner-texts {
   padding: 48px !important;
 }
 
-body.type-index .footer-banner .extended-banner-title {
+body.type-index .gp-banner-big .extended-banner-title {
   font-size: var(--gp-fs-h2) !important;
   font-weight: 700 !important;
   color: var(--gp-on-photo) !important;
@@ -678,14 +706,14 @@ body.type-index .footer-banner .extended-banner-title {
   display: block !important;
 }
 
-body.type-index .footer-banner .extended-banner-text {
+body.type-index .gp-banner-big .extended-banner-text {
   font-size: var(--gp-fs-body) !important;
   color: rgba(255, 255, 255, 0.88) !important;
   margin-bottom: 28px !important;
   display: block !important;
 }
 
-body.type-index .footer-banner .extended-banner-link {
+body.type-index .gp-banner-big .extended-banner-link {
   display: inline-block !important;
   border: 1px solid rgba(255, 255, 255, 0.85) !important;
   border-radius: var(--gp-pill-radius) !important;
@@ -693,8 +721,6 @@ body.type-index .footer-banner .extended-banner-link {
   font-size: var(--gp-fs-nav) !important;
   color: var(--gp-on-photo) !important;
   background: transparent !important;
-  text-transform: none !important;
-  letter-spacing: 0 !important;
 }
 
 
