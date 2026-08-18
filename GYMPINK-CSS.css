@@ -596,7 +596,7 @@ footer.footer {
    podle něj logo dalo umístit). */
 .footer .gp-footer-logo {
   position: absolute !important;
-  top: 16px !important;
+  top: 32px !important;
   left: 32px !important;
   display: block !important;
   line-height: 0 !important;
@@ -616,7 +616,7 @@ footer.footer {
 }
 
 .footer .footer-rows {
-  padding-top: 48px !important;
+  padding-top: 72px !important;
   padding-bottom: 32px !important;
 }
 
