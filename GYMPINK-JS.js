@@ -175,30 +175,27 @@
     },
 
     {
-      nazev: 'Velký banner (Týmové oblečení) — přesné doměření celé šířky viewportu',
+      nazev: 'Logo GymPink v pravém horním rohu patičky (odkaz na domovskou stránku)',
       spustit: function () {
-        // Jen titulní strana.
-        if (!document.body.classList.contains('type-index')) return;
+        // Patička je na všech typech stránek — bez omezení na type-index.
+        var paticka = find('footer.footer');
+        var zdrojoveLogo = find('.site-name img');
+        if (!paticka || !zdrojoveLogo) return;
+        if (find('.gp-footer-logo', paticka)) return; // už tam je, neduplikovat
 
-        var velky = find('.gp-banner-big');
-        if (!velky) return;
+        // Znovupoužijeme existující logo z hlavičky (ne nový obsah —
+        // stejný obrázek, který klientka ovládá v administraci).
+        var odkaz = document.createElement('a');
+        odkaz.href = '/';
+        odkaz.className = 'gp-footer-logo';
+        odkaz.setAttribute('aria-label', 'GymPink — domů');
 
-        // CSS trik s width:100vw + margin:calc(50% - 50vw) nechává na
-        // některých obrazovkách malou mezeru (scrollbar / vnořený
-        // kontejner). Tady to doměříme přímo — nezávislé na tom, jak
-        // hluboko je banner v DOM zanořený.
-        function fullBleed() {
-          var rect = velky.getBoundingClientRect();
-          var sirkaViewportu = document.documentElement.clientWidth;
-          velky.style.setProperty('width', sirkaViewportu + 'px', 'important');
-          velky.style.setProperty('max-width', sirkaViewportu + 'px', 'important');
-          velky.style.setProperty('margin-left', (-rect.left) + 'px', 'important');
-          velky.style.setProperty('margin-right', 'auto', 'important');
-        }
+        var obrazek = document.createElement('img');
+        obrazek.src = zdrojoveLogo.currentSrc || zdrojoveLogo.src;
+        obrazek.alt = zdrojoveLogo.alt || 'GymPink';
 
-        fullBleed();
-        window.addEventListener('resize', fullBleed);
-        window.addEventListener('load', fullBleed);
+        odkaz.appendChild(obrazek);
+        paticka.insertBefore(odkaz, paticka.firstChild);
       }
     },
 

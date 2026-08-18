@@ -586,8 +586,26 @@ body.type-index .gp-banner-pair-item .extended-banner-link {
    =================================================================== */
 
 footer.footer {
+  position: relative !important;
   margin-top: 40px !important;
   background: var(--gp-tile) !important;
+}
+
+/* Logo GymPink v pravém horním rohu patičky — vkládá JS (přesná
+   diagnostika: footer.footer musí mít position:relative, aby se
+   podle něj logo dalo umístit). */
+.footer .gp-footer-logo {
+  position: absolute !important;
+  top: 24px !important;
+  right: 32px !important;
+  display: block !important;
+  line-height: 0 !important;
+}
+
+.footer .gp-footer-logo img {
+  height: 28px !important;
+  width: auto !important;
+  display: block !important;
 }
 
 .footer .footer-rows,
@@ -699,12 +717,10 @@ footer.footer {
 
 body.type-index .footer-banners {
   flex-wrap: wrap !important;
-  width: 100vw !important;
-  max-width: 100vw !important;
-  margin-left: calc(50% - 50vw) !important;
-  margin-right: calc(50% - 50vw) !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 32px !important;
 }
 
 body.type-index .gp-banner-big {
