@@ -191,7 +191,7 @@
     },
 
     {
-      nazev: 'Logo GymPink v pravém horním rohu patičky (odkaz na domovskou stránku)',
+      nazev: 'Logo GymPink v levém horním rohu patičky (odkaz na domovskou stránku)',
       spustit: function () {
         // Patička je na všech typech stránek — bez omezení na type-index.
         var paticka = find('footer.footer');
@@ -212,6 +212,20 @@
 
         odkaz.appendChild(obrazek);
         paticka.insertBefore(odkaz, paticka.firstChild);
+
+        // Zarovnání nalevo přesně podle prvního sloupce (Kontakt) —
+        // ten má svůj vlastní vnitřní odstup (Bootstrap gutter) navíc
+        // k paddingu patičky, takže pevná hodnota by seděla jen
+        // náhodou. Změřeno přímo, ne odhadem.
+        function zarovnat() {
+          var prvniSloupec = find('.custom-footer > *', paticka);
+          if (!prvniSloupec) return;
+          var offset = prvniSloupec.getBoundingClientRect().left - paticka.getBoundingClientRect().left;
+          odkaz.style.setProperty('left', offset + 'px', 'important');
+        }
+
+        zarovnat();
+        window.addEventListener('resize', zarovnat);
       }
     },
 
