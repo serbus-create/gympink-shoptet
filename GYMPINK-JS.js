@@ -146,7 +146,13 @@
         if (polozkaBlog.classList.contains('gp-blog-moved')) return; // už přesunuto
 
         polozkaBlog.classList.add('gp-blog-moved');
-        move(polozkaBlog, ikonyVpravo, 'before');
+
+        // .top-nav-right je pravděpodobně position:absolute (mimo
+        // normální tok), takže vložení JAKO SOUROZENEC před něj
+        // nefungovalo — Blog zůstával v normálním toku hned za
+        // logem. Řešení: vložit přímo DOVNITŘ, jako první prvek ve
+        // stejném řádku s ikonami.
+        ikonyVpravo.insertBefore(polozkaBlog, ikonyVpravo.firstChild);
       }
     },
 
