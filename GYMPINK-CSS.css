@@ -1032,3 +1032,116 @@ body.type-index .homepage-blog-wrapper {
 body.type-index .welcome-wrapper {
   display: none !important;
 }
+
+
+/* ===================================================================
+   3.10  DETAIL PRODUKTU — horní blok (galerie, název, cena, tlačítko)
+   Diagnostika (ověřeno v DevTools, plně zrekonstruováno na dva
+   pokusy — první verze měla špatný předpoklad o vztahu rodič/dítě):
+
+     .p-detail-inner
+       > .row
+           > .col-md-4              (jen H1 nadpis)
+           > .col-md-8.pull-right.detail-img.p-image-wrapper
+               > .row (flex)
+                   > .p-image.image.col-sm-10 > a.p-main-image > img
+                   > .col-sm-12.p-thumbnails-wrapper
+                       > .p-thumbnails.p-thumbnails-vertical
+       > .col-md-4.pull-left        (popis + CELÝ formulář: varianta,
+                                      cena, tlačítko Do košíku)
+       > .shp-tabs-wrapper.p-detail-tabs-wrapper   (POPIS/DISKUZE)
+
+   Nadpis a formulář byly DVA samostatné plovoucí sloupce (ne jeden
+   blok), proto mezi nimi vznikaly nepředvídatelné mezery/přesahy.
+   JS (GYMPINK-JS.js) je spojuje do jednoho wrapperu .gp-detail-left,
+   vedle obrázku. Záložky POPIS/DISKUZE (POBO obsah) beze změny.
+   Bez body.type-index prefixu — platí jen na stránce produktu.
+   =================================================================== */
+
+.p-detail-inner {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: flex-start !important;
+  gap: 48px !important;
+}
+
+.gp-detail-left {
+  flex: 1 1 40% !important;
+  max-width: 40% !important;
+  order: 1 !important;
+}
+
+.gp-detail-left > .col-md-4 {
+  float: none !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.detail-img.p-image-wrapper {
+  float: none !important;
+  flex: 1 1 55% !important;
+  max-width: 55% !important;
+  width: auto !important;
+  order: 2 !important;
+}
+
+@media (max-width: 900px) {
+  .gp-detail-left,
+  .detail-img.p-image-wrapper {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+  }
+
+  .detail-img.p-image-wrapper {
+    order: 1 !important;
+  }
+
+  .gp-detail-left {
+    order: 2 !important;
+  }
+}
+
+.detail-img.p-image-wrapper img {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+}
+
+.p-thumbnails .p-thumbnail {
+  border: 1px solid transparent !important;
+}
+
+.p-thumbnails .p-thumbnail.highlighted {
+  border: 1px solid var(--gp-ink) !important;
+}
+
+.gp-detail-left .p-short-description {
+  margin-top: 16px !important;
+  font-weight: 600 !important;
+}
+
+/* Varování "zvolte variantu" pod cenou — duplikovalo popisku
+   dropdownu nahoře, vypadalo jako chyba. Skryto natrvalo. */
+.variant-list.variant-not-chosen-anchor {
+  display: none !important;
+}
+
+.p-detail-inner .price.row {
+  margin: 24px 0 !important;
+}
+
+.p-final-price-wrapper .price {
+  font-size: 28px !important;
+  font-weight: 600 !important;
+  color: var(--gp-ink) !important;
+}
+
+.add-to-cart .btn.btn-conversion {
+  width: 100% !important;
+  background: var(--gp-ink) !important;
+  border-color: var(--gp-ink) !important;
+  color: #fff !important;
+  padding: 16px 24px !important;
+  font-size: 15px !important;
+  border-radius: 4px !important;
+}
