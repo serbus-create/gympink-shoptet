@@ -287,14 +287,27 @@
         // konkrétní prvky přes inline style + 'important' — to vždy
         // vyhraje nad jakýmkoliv externím CSS pravidlem bez ohledu
         // na jeho specificitu.
+        //
+        // DŮLEŽITÉ: hledání "prvního .row" bylo nespolehlivé — na
+        // některých produktech obsahuje krátký popis (POBO) vlastní
+        // .row dřív v DOM, než je ten se skutečným nadpisem/obrázkem,
+        // takže se JS chytil špatného .row a celý krok se přeskočil.
+        // Místo toho cílíme přímo na konkrétní prvky přes jejich
+        // vlastní specifické třídy — nezávisle na tom, kde přesně
+        // v DOM leží jejich obalující .row.
         var inner = find('.p-detail-inner');
         if (!inner) return;
 
-        var radek = find('.row', inner);
-        var nadpisSloupec = radek ? find('.col-md-4:not(.pull-left)', radek) : null;
-        var obrazekSloupec = radek ? find('.detail-img.p-image-wrapper', radek) : null;
-        var formSloupec = find('.col-md-4.pull-left', inner);
+        var obrazekSloupec = find('.detail-img.p-image-wrapper', inner);
+        var formSloupec = find(':scope > .col-md-4.pull-left', inner) || find('.col-md-4.pull-left', inner);
+        var nadpisElement = find('h1', inner);
+        var nadpisSloupec = nadpisElement ? nadpisElement.closest('.col-md-4') : null;
+        var radek = obrazekSloupec ? obrazekSloupec.parentElement : null;
+
         if (!radek || !nadpisSloupec || !obrazekSloupec || !formSloupec) return;
+        // Bezpečnostní pojistka: pokud "formSloupec" omylem vyšel
+        // jako potomek "radek" (špatná shoda), nic nedělat.
+        if (radek.contains(formSloupec)) return;
 
         function vynutit(el, styly) {
           if (!el) return;
