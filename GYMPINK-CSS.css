@@ -744,6 +744,21 @@ body.type-index .gp-banner-pair-item .extended-banner-link {
   }
 }
 
+/* Ověřeno v DevTools: .highlight-product má uvnitř .inner nativně
+   display:flex (obrázek a text VEDLE SEBE, ne pod sebou jako
+   u běžných karet) — proto vypadal stlačený/rozbitý. Přepsáno na
+   stejné rozložení jako standardní karta (obrázek nahoře přes
+   celou šířku, text pod ním). */
+.product.highlight-product .inner {
+  display: block !important;
+}
+
+.product.highlight-product .img,
+.product.highlight-product .descr {
+  width: 100% !important;
+  flex: none !important;
+}
+
 
 /* ===================================================================
    3.7  PATIČKA
