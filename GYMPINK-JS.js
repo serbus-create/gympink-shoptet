@@ -134,10 +134,8 @@
     {
       nazev: 'Přesun odkazu Blog z kategorií do pravého horního rohu hlavičky',
       spustit: function () {
-        // Jen titulní strana — celá tahle úprava hlavičky (grid,
-        // průhlednost přes hero foto) je stylovaná jen pro homepage.
-        if (!document.body.classList.contains('type-index')) return;
-
+        // Hlavička je teď kompaktní na celém webu (ne jen homepage),
+        // takže i tenhle přesun platí všude — bez omezení na type-index.
         var odkazBlog = find('#navigation .menu-level-1 a[href*="/blog"]');
         var ikonyVpravo = find('.top-nav-right');
         if (!odkazBlog || !ikonyVpravo) return;
@@ -153,6 +151,30 @@
         // logem. Řešení: vložit přímo DOVNITŘ, jako první prvek ve
         // stejném řádku s ikonami.
         ikonyVpravo.insertBefore(polozkaBlog, ikonyVpravo.firstChild);
+      }
+    },
+
+    {
+      nazev: 'Kompenzace pevné hlavičky na podstránkách (žádná hero fotka pod ní)',
+      spustit: function () {
+        // Na homepage leží hlavička nad hero fotkou, není potřeba
+        // nic odsazovat. Na ostatních stránkách (kategorie, produkt,
+        // košík…) by obsah bez odsazení zajel pod position:fixed
+        // hlavičku — odsazení měříme přímo, ne odhadem.
+        if (document.body.classList.contains('type-index')) return;
+
+        var hlavicka = find('#header');
+        var obsah = find('#content-wrapper') || find('main#content');
+        if (!hlavicka || !obsah) return;
+
+        function odsadit() {
+          var vyska = hlavicka.getBoundingClientRect().height;
+          obsah.style.setProperty('padding-top', (vyska + 16) + 'px', 'important');
+        }
+
+        odsadit();
+        window.addEventListener('resize', odsadit);
+        window.addEventListener('load', odsadit);
       }
     },
 

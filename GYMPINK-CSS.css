@@ -130,21 +130,32 @@
    position:absolute, podruhé position:relative (Tango si to zjevně
    přepíná samo, pravděpodobně podle šířky okna). Vynucujeme napevno.
 
-   Změna: position:fixed místo :absolute, ať hlavička zůstává
-   připnutá nahoře i při scrollu (zadání: menu "jede spolu se
-   scrollem"). Stav .gp-scrolled přidává/odebírá JS podle scroll
-   pozice vůči hero fotce (viz GYMPINK-JS.js) — po 60 % výšky hero
-   fotky se pozadí změní na bílé a text na tmavý.
+   ROZŠÍŘENO NA CELÝ WEB (ne jen homepage): na žádost klienta má být
+   tahle kompaktní "lišta" (logo zmenšené, jeden řádek, připnuté
+   nahoře, jede se scrollem) na všech stránkách — na homepage navíc
+   začíná průhledná přes hero fotku a zbělá po scrollu (řeší JS
+   scroll listener), na ostatních stránkách žádná hero fotka není,
+   takže je rovnou plná/bílá s tmavým textem (bez přechodu).
    =================================================================== */
 
-body.type-index #header {
+#header {
   position: fixed !important;
-  top: 30px !important;
+  top: 0 !important;
   left: 0 !important;
   right: 0 !important;
   z-index: 100 !important;
+  background: #fff !important;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, .08) !important;
   transition: background-color .25s ease, top .25s ease !important;
   padding-bottom: 0 !important;
+}
+
+/* Homepage — start průhledný nad hero fotkou, top:30px (nad ní),
+   zbělá a sedne na top:0 po scrollu (třída .gp-scrolled, viz JS). */
+body.type-index #header {
+  top: 30px !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 body.type-index #header.gp-scrolled {
@@ -153,11 +164,20 @@ body.type-index #header.gp-scrolled {
   box-shadow: 0 1px 8px rgba(0, 0, 0, .08) !important;
 }
 
-body.type-index #header.gp-scrolled .menu-level-1 a,
-body.type-index #header.gp-scrolled .top-nav-right a,
-body.type-index #header.gp-scrolled .top-nav-right .btn-icon {
+#header .menu-level-1 a,
+#header .top-nav-right a,
+#header .top-nav-right .btn-icon {
   color: var(--gp-ink) !important;
   text-shadow: none !important;
+}
+
+/* Homepage — bílý text se stínem, dokud je hlavička průhledná
+   přes hero fotku; po scrollu (.gp-scrolled) zpět na tmavý. */
+body.type-index #header:not(.gp-scrolled) .menu-level-1 a,
+body.type-index #header:not(.gp-scrolled) .top-nav-right a,
+body.type-index #header:not(.gp-scrolled) .top-nav-right .btn-icon {
+  color: #fff !important;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, .55) !important;
 }
 
 
@@ -168,7 +188,7 @@ body.type-index #header.gp-scrolled .top-nav-right .btn-icon {
    výšky a táhlo za sebou celou hlavičku na 452px.
    =================================================================== */
 
-body.type-index .site-name img {
+.site-name img {
   width: auto !important;
   height: 32px !important;
   max-height: 32px !important;
@@ -177,7 +197,7 @@ body.type-index .site-name img {
 /* Diagnostika: .site-name mělo nativní padding:40px 0 (navržený pro
    původní velké logo), který po zmenšení loga zůstal a táhl výšku
    celé hlavičky na 112px místo skutečných 32px loga. */
-body.type-index .site-name {
+.site-name {
   padding: 0 !important;
   line-height: 0 !important;
 }
@@ -188,8 +208,7 @@ body.type-index .site-name {
    Diagnostika: nav.fitted má nativně bg:#fff, overflow:hidden a stojí
    jako samostatný bílý box uprostřed hero fotky, oddělený od loga
    i od ikon vpravo (ty jsou úplně nahoře v .top-nav).
-   Cíl (viz reference Exalted): logo, menu a ikony v jedné rovině,
-   průhledně položené na fotce.
+   Cíl (viz reference Exalted): logo, menu a ikony v jedné rovině.
    =================================================================== */
 
 /* ===================================================================
@@ -201,7 +220,7 @@ body.type-index .site-name {
    natvrdo vynutit rozbalené, ať to JS nemůže znovu sbalit.
    =================================================================== */
 
-body.type-index #navigation {
+#navigation {
   background: transparent !important;
   width: auto !important;
   max-width: none !important;
@@ -209,8 +228,8 @@ body.type-index #navigation {
   overflow: visible !important;
 }
 
-body.type-index #navigation .navigation-in.menu,
-body.type-index #navigation .menu-level-1 {
+#navigation .navigation-in.menu,
+#navigation .menu-level-1 {
   display: flex !important;
   visibility: visible !important;
   position: static !important;
@@ -221,39 +240,37 @@ body.type-index #navigation .menu-level-1 {
   list-style: none !important;
 }
 
-body.type-index #navigation .menu-level-1 {
+#navigation .menu-level-1 {
   flex-direction: row !important;
   flex-wrap: nowrap !important;
   gap: 10px !important;
   align-items: center !important;
 }
 
-body.type-index #navigation .menu-level-1 li {
+#navigation .menu-level-1 li {
   display: inline-flex !important;
 }
 
-body.type-index #navigation .menu-level-1 a {
+#navigation .menu-level-1 a {
   visibility: visible !important;
 }
 
-body.type-index .navigation-in.menu,
-body.type-index .menu-helper,
-body.type-index .menu-level-1 {
+.navigation-in.menu,
+.menu-helper,
+.menu-level-1 {
   background: transparent !important;
 }
 
-body.type-index .menu-level-1 a {
-  color: #fff !important;
+.menu-level-1 a {
   font-size: 12px !important;
   white-space: nowrap !important;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, .55) !important;
 }
 
 
 /* ===================================================================
    Scrim (tmavý přechod přes horní část hero fotky) byl na žádost
-   klienta odstraněn. Čitelnost menu teď spoléhá jen na text-shadow
-   výše u .menu-level-1 a. Pokud bude na světlejších fotkách text
+   klienta odstraněn. Čitelnost menu na homepage teď spoléhá jen na
+   text-shadow (viz 3.0). Pokud bude na světlejších fotkách text
    špatně čitelný, řešit výběrem fotek s klidnou horní částí (viz
    zadání grafikovi) místo tmavého přechodu přes celou fotku.
    =================================================================== */
@@ -270,9 +287,10 @@ body.type-index .menu-level-1 a {
    není vidět — schováváme, zůstávají jen ikony.
    =================================================================== */
 
-body.type-index .navigation-wrapper {
+.navigation-wrapper {
   display: grid !important;
   grid-template-columns: 1fr auto 1fr !important;
+  grid-template-rows: 1fr !important;
   align-items: center !important;
   gap: 20px !important;
   width: 100% !important;
@@ -283,32 +301,28 @@ body.type-index .navigation-wrapper {
   padding-right: 32px !important;
 }
 
-body.type-index #header .project-email {
+#header .project-email {
   display: none !important;
 }
 
-body.type-index #header .menu-helper {
+#header .menu-helper {
   display: none !important;
 }
 
-body.type-index .navigation-wrapper {
-  grid-template-rows: 1fr !important;
-}
-
-body.type-index .navigation-wrapper > #navigation {
+.navigation-wrapper > #navigation {
   grid-column: 1 !important;
   grid-row: 1 !important;
   justify-self: start !important;
 }
 
-body.type-index .navigation-wrapper > .site-name {
+.navigation-wrapper > .site-name {
   grid-column: 2 !important;
   grid-row: 1 !important;
   justify-self: center !important;
   text-align: center !important;
 }
 
-body.type-index .navigation-wrapper > .top-nav {
+.navigation-wrapper > .top-nav {
   grid-column: 3 !important;
   grid-row: 1 !important;
   justify-content: flex-end !important;
@@ -319,34 +333,34 @@ body.type-index .navigation-wrapper > .top-nav {
   right: auto !important;
 }
 
-body.type-index #header .top-nav-right a,
-body.type-index #header .top-nav-right .btn-icon {
-  color: #fff !important;
-}
-
 /* Odkaz Blog přesunutý JS z kategorií do pravého horního rohu
    (vedle ikon vyhledávání/účtu/košíku). Přesunuté <li> ztratilo
    kontext #navigation .menu-level-1, proto potřebuje vlastní reset
    a barvy — zrcadlí styl ostatních položek menu i chování při
    scrollu (bílá/stín na hero fotce → tmavá po scrollu). */
-body.type-index .gp-blog-moved {
+/* Odkaz Blog přesunutý JS z kategorií do pravého horního rohu
+   (vedle ikon vyhledávání/účtu/košíku). Přesunuté <li> ztratilo
+   kontext #navigation .menu-level-1, proto potřebuje vlastní reset
+   a barvy — zrcadlí styl ostatních položek menu i chování při
+   scrollu (bílá/stín na hero fotce → tmavá po scrollu). */
+.gp-blog-moved {
   list-style: none !important;
   display: flex !important;
   align-items: center !important;
   margin-right: 20px !important;
 }
 
-body.type-index .gp-blog-moved a {
-  color: #fff !important;
+.gp-blog-moved a {
+  color: var(--gp-ink) !important;
   font-size: 12px !important;
   text-transform: uppercase !important;
   white-space: nowrap !important;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, .55) !important;
+  text-shadow: none !important;
 }
 
-body.type-index #header.gp-scrolled .gp-blog-moved a {
-  color: var(--gp-ink) !important;
-  text-shadow: none !important;
+body.type-index #header:not(.gp-scrolled) .gp-blog-moved a {
+  color: #fff !important;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, .55) !important;
 }
 
 
