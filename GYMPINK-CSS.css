@@ -647,6 +647,15 @@ body.type-index .gp-banner-pair-item .extended-banner-link {
   }
 }
 
+.product,
+.product .inner,
+.product .img,
+.product .descr {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
 .product .img {
   aspect-ratio: 0.75 !important;
   overflow: hidden !important;
