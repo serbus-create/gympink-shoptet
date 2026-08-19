@@ -1046,60 +1046,20 @@ body.type-index .welcome-wrapper {
        > .shp-tabs-wrapper.p-detail-tabs-wrapper  (POPIS/DISKUZE, POBO)
 
    Nadpis a formulář jsou DVA samostatné plovoucí sloupce, ne jeden
-   blok vedle obrázku — spojení do jednoho sloupce by vyžadovalo
-   přesouvat prvky přes JS (zkoušeno, výsledek byl křehký a při
-   pomalejším načtení JS vypadal rozbitě). Zvoleno robustnější řešení
-   čistě v CSS: nadpis a obrázek (skuteční sourozenci v .row) jsou
-   vedle sebe, formulář s cenou/tlačítkem je čistá karta pod nimi.
+   blok vedle obrázku. Několik CSS pokusů (flex/float/clearfix na
+   .row, různé úrovně specificity) se ukázalo nespolehlivých —
+   nativní styl šablony evidentně vyhrával nad pozičními pravidly,
+   zatímco kosmetická pravidla (cena, tlačítko) se aplikovala
+   normálně. Pozice teď řeší JS přímo přes inline style s
+   'important' prioritou (GYMPINK-JS.js) — to vyhraje nad jakýmkoliv
+   externím CSS pravidlem bez ohledu na jeho specificitu.
    Záložky POPIS/DISKUZE (POBO obsah) beze změny.
    Bez body.type-index prefixu — platí jen na stránce produktu.
    =================================================================== */
 
-/* KLÍČOVÁ OPRAVA: .p-detail-inner je sám nativně flex řádek —
-   proto se .row (nadpis+obrázek) a .col-md-4.pull-left (formulář)
-   řadily VEDLE SEBE jako dva sloupce, ne pod sebe. Vynucen normální
-   blokový tok, ať se děti řadí pod sebe; vnitřní .row necháváme
-   flex zvlášť (níže), aby nadpis a obrázek zůstaly vedle sebe.
-   Vyšší specificita (#content jako kotva) pro jistotu, kdyby
-   nativní pravidlo šablony mělo vyšší prioritu. */
-#content .p-detail-inner {
-  display: block !important;
-}
-
-#content .p-detail-inner > .row {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  align-items: flex-start !important;
-  gap: 32px !important;
-  margin: 0 !important;
-  overflow: hidden !important;
-}
-
-#content .p-detail-inner > .row::after {
-  content: "" !important;
-  display: table !important;
-  clear: both !important;
-}
-
-.p-detail-inner > .row > .col-md-4 {
-  float: none !important;
-  flex: 1 1 300px !important;
-  max-width: 340px !important;
-  width: auto !important;
-  padding: 0 !important;
-}
-
 .p-detail-inner > .row > .col-md-4 h1 {
   font-size: var(--gp-fs-h2) !important;
   line-height: 1.2 !important;
-}
-
-#content .p-detail-inner > .row > .detail-img.p-image-wrapper {
-  float: none !important;
-  flex: 3 1 500px !important;
-  width: auto !important;
-  max-width: 100% !important;
-  padding: 0 !important;
 }
 
 .detail-img.p-image-wrapper img {
@@ -1114,18 +1074,6 @@ body.type-index .welcome-wrapper {
 
 .p-thumbnails .p-thumbnail.highlighted {
   border: 1px solid var(--gp-ink) !important;
-}
-
-/* Popis + formulář (varianta, cena, tlačítko) — čistá karta pod
-   řádkem nadpis/obrázek, na šířku sloupce s nadpisem. */
-#content .p-detail-inner > .col-md-4.pull-left {
-  display: block !important;
-  clear: both !important;
-  float: none !important;
-  width: 100% !important;
-  max-width: 340px !important;
-  padding: 0 !important;
-  margin: 24px 0 0 !important;
 }
 
 .p-short-description {

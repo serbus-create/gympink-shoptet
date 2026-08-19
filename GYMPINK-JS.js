@@ -276,6 +276,68 @@
       }
     },
 
+    {
+      nazev: 'Detail produktu — layout nadpis/obrázek/formulář (inline !important, obchází CSS specificitu šablony)',
+      spustit: function () {
+        // Několik čistě CSS pokusů (flex/float/clearfix, i s vyšší
+        // specificitou #content jako kotvou) se ukázalo nespolehlivých
+        // — pozice se neměnila, i když se ostatní pravidla (cena,
+        // tlačítko) evidentně aplikovala. Nativní styl šablony na
+        // pozici zjevně vyhrával. Řešení: nastavit přímo na
+        // konkrétní prvky přes inline style + 'important' — to vždy
+        // vyhraje nad jakýmkoliv externím CSS pravidlem bez ohledu
+        // na jeho specificitu.
+        var inner = find('.p-detail-inner');
+        if (!inner) return;
+
+        var radek = find('.row', inner);
+        var nadpisSloupec = radek ? find('.col-md-4:not(.pull-left)', radek) : null;
+        var obrazekSloupec = radek ? find('.detail-img.p-image-wrapper', radek) : null;
+        var formSloupec = find('.col-md-4.pull-left', inner);
+        if (!radek || !nadpisSloupec || !obrazekSloupec || !formSloupec) return;
+
+        function vynutit(el, styly) {
+          if (!el) return;
+          Object.keys(styly).forEach(function (vlastnost) {
+            el.style.setProperty(vlastnost, styly[vlastnost], 'important');
+          });
+        }
+
+        vynutit(inner, { display: 'block' });
+        vynutit(radek, {
+          display: 'flex',
+          'flex-wrap': 'wrap',
+          'align-items': 'flex-start',
+          gap: '32px',
+          margin: '0',
+          overflow: 'hidden'
+        });
+        vynutit(nadpisSloupec, {
+          float: 'none',
+          flex: '1 1 300px',
+          'max-width': '340px',
+          width: 'auto',
+          padding: '0'
+        });
+        vynutit(obrazekSloupec, {
+          float: 'none',
+          flex: '3 1 500px',
+          width: 'auto',
+          'max-width': '100%',
+          padding: '0'
+        });
+        vynutit(formSloupec, {
+          display: 'block',
+          clear: 'both',
+          float: 'none',
+          width: '100%',
+          'max-width': '340px',
+          padding: '0',
+          margin: '24px 0 0'
+        });
+      }
+    },
+
   ];
 
 
