@@ -1055,6 +1055,15 @@ body.type-index .welcome-wrapper {
    Bez body.type-index prefixu — platí jen na stránce produktu.
    =================================================================== */
 
+/* KLÍČOVÁ OPRAVA: .p-detail-inner je sám nativně flex řádek —
+   proto se .row (nadpis+obrázek) a .col-md-4.pull-left (formulář)
+   řadily VEDLE SEBE jako dva sloupce, ne pod sebe. Vynucen normální
+   blokový tok, ať se děti řadí pod sebe; vnitřní .row necháváme
+   flex zvlášť (níže), aby nadpis a obrázek zůstaly vedle sebe. */
+.p-detail-inner {
+  display: block !important;
+}
+
 .p-detail-inner > .row {
   display: flex !important;
   flex-wrap: wrap !important;
@@ -1101,6 +1110,8 @@ body.type-index .welcome-wrapper {
 /* Popis + formulář (varianta, cena, tlačítko) — čistá karta pod
    řádkem nadpis/obrázek, na šířku sloupce s nadpisem. */
 .p-detail-inner > .col-md-4.pull-left {
+  display: block !important;
+  clear: both !important;
   float: none !important;
   width: 100% !important;
   max-width: 340px !important;
