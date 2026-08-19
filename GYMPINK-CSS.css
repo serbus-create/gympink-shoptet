@@ -1121,8 +1121,20 @@ body.type-index .welcome-wrapper {
   color: var(--gp-ink) !important;
 }
 
+.add-to-cart {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 12px !important;
+}
+
+.add-to-cart .quantity {
+  align-self: flex-start !important;
+}
+
 .add-to-cart .btn.btn-conversion {
   width: 100% !important;
+  flex-grow: 0 !important;
   background: var(--gp-ink) !important;
   border-color: var(--gp-ink) !important;
   color: #fff !important;
