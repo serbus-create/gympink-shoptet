@@ -1083,8 +1083,20 @@ body.type-index .welcome-wrapper {
 
 /* POZOR: .variant-list.variant-not-chosen-anchor byl dřív omylem
    skrytý (display:none) v domnění, že jde o duplicitní varování —
-   ve skutečnosti je to funkční výběr varianty (velikosti). Skrytí
-   znemožnilo vybrat velikost. NEZKRÝVAT. */
+   ve skutečnosti je to obal SKUTEČNÉHO funkčního výběru varianty
+   (velikosti). Skrytí celého obalu znemožnilo vybrat velikost.
+   NEZKRÝVAT CELÝ .variant-list.
+
+   Ověřeno v DevTools: text "Zvolte variantu" pod cenou je JINÝ,
+   samostatný prvek — placeholder text v poli dostupnosti skladem
+   (.order-availability .availability .choose-variant.default-variant),
+   zobrazený jen dokud není vybraná varianta. Po výběru JS přepne na
+   skutečný stav skladem (jiný span ze stejné skupiny). Bezpečné
+   schovat JEN tenhle konkrétní text, funkční dropdown nahoře
+   zůstává nedotčený. */
+.order-availability .availability .choose-variant.default-variant {
+  display: none !important;
+}
 
 .p-detail-inner .price.row {
   margin: 20px 0 !important;
