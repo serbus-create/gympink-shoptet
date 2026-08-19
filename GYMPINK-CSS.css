@@ -1062,6 +1062,10 @@ body.type-index .welcome-wrapper {
    tohle samo o sobě zajistí, že se .row (nadpis+obrázek) "zabalí"
    kolem svého plovoucího potomka a nezhroutí se — karta s cenou
    pak spadne POD řádek, ne vedle něj do zbylé škvíry. */
+.p-detail-inner {
+  display: block !important;
+}
+
 .p-detail-inner > .row {
   overflow: hidden !important;
 }
