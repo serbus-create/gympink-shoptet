@@ -276,38 +276,6 @@
       }
     },
 
-    {
-      nazev: 'Detail produktu — sjednotit nadpis a formulář do jednoho levého sloupce',
-      spustit: function () {
-        // Ověřeno v DevTools: .p-detail-inner má nadpis (.col-md-4)
-        // a formulář s cenou/tlačítkem (.col-md-4.pull-left) jako
-        // DVA samostatné plovoucí sloupce, ne jeden blok — proto
-        // mezi nimi byly nepředvídatelné mezery/přesahy. Spojujeme
-        // je do jednoho wrapperu vedle obrázku.
-        var inner = find('.p-detail-inner');
-        if (!inner) return;
-        if (inner.classList.contains('gp-detail-restructured')) return;
-
-        var nadpisSloupec = find('.col-md-4:not(.pull-left)', inner);
-        var infoSloupec = find('.col-md-4.pull-left', inner);
-        var obrazekSloupec = find('.detail-img.p-image-wrapper', inner);
-        if (!nadpisSloupec || !infoSloupec || !obrazekSloupec) return;
-
-        var puvodniRow = nadpisSloupec.parentElement;
-
-        var levy = document.createElement('div');
-        levy.className = 'gp-detail-left';
-        levy.appendChild(nadpisSloupec);
-        levy.appendChild(infoSloupec);
-
-        inner.insertBefore(levy, puvodniRow);
-        inner.insertBefore(obrazekSloupec, puvodniRow);
-        if (puvodniRow && puvodniRow.parentElement) puvodniRow.remove();
-
-        inner.classList.add('gp-detail-restructured');
-      }
-    },
-
   ];
 
 
