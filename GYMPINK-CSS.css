@@ -1045,41 +1045,29 @@ body.type-index .welcome-wrapper {
                                               cena, tlačítko Do košíku)
        > .shp-tabs-wrapper.p-detail-tabs-wrapper  (POPIS/DISKUZE, POBO)
 
-   Nadpis a formulář jsou DVA samostatné plovoucí sloupce (ne
-   sourozenci) — první verze je proto řadila do jednoho flex řádku
-   za sebou, takže formulář vyskočil AŽ POD celý řádek (tedy pod
-   vysokou fotku), ne hned pod krátký nadpis.
-
-   ŘEŠENÍ: .row dostane display:contents — "zmizí" jako box, ale
-   jeho děti (nadpis, obrázek) se pro layout chovají jako přímé děti
-   .p-detail-inner. Pak jde CSS grid s pojmenovanými oblastmi vyskládat
-   nadpis nad formulář v levém sloupci, obrázek přes obě řádky
-   vpravo — bez jakéhokoli přesouvání prvků v HTML/JS.
+   Nadpis a formulář jsou DVA samostatné plovoucí sloupce, ne jeden
+   blok vedle obrázku — spojení do jednoho sloupce by vyžadovalo
+   přesouvat prvky přes JS (zkoušeno, výsledek byl křehký a při
+   pomalejším načtení JS vypadal rozbitě). Zvoleno robustnější řešení
+   čistě v CSS: nadpis a obrázek (skuteční sourozenci v .row) jsou
+   vedle sebe, formulář s cenou/tlačítkem je čistá karta pod nimi.
    Záložky POPIS/DISKUZE (POBO obsah) beze změny.
    Bez body.type-index prefixu — platí jen na stránce produktu.
    =================================================================== */
 
-.p-detail-inner {
-  display: grid !important;
-  grid-template-columns: 340px 1fr !important;
-  grid-template-areas:
-    "title image"
-    "form  image"
-    "tabs  tabs" !important;
-  align-items: start !important;
-  column-gap: 48px !important;
-  row-gap: 16px !important;
-}
-
 .p-detail-inner > .row {
-  display: contents !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: flex-start !important;
+  gap: 32px !important;
+  margin: 0 !important;
 }
 
 .p-detail-inner > .row > .col-md-4 {
-  grid-area: title !important;
   float: none !important;
+  flex: 1 1 300px !important;
+  max-width: 340px !important;
   width: auto !important;
-  max-width: none !important;
   padding: 0 !important;
 }
 
@@ -1089,8 +1077,8 @@ body.type-index .welcome-wrapper {
 }
 
 .p-detail-inner > .row > .detail-img.p-image-wrapper {
-  grid-area: image !important;
   float: none !important;
+  flex: 3 1 500px !important;
   width: auto !important;
   max-width: 100% !important;
   padding: 0 !important;
@@ -1110,30 +1098,14 @@ body.type-index .welcome-wrapper {
   border: 1px solid var(--gp-ink) !important;
 }
 
-/* Popis + formulář (varianta, cena, tlačítko) — hned pod nadpisem
-   ve stejném (levém) sloupci, ne pod celou fotkou. */
+/* Popis + formulář (varianta, cena, tlačítko) — čistá karta pod
+   řádkem nadpis/obrázek, na šířku sloupce s nadpisem. */
 .p-detail-inner > .col-md-4.pull-left {
-  grid-area: form !important;
   float: none !important;
-  width: auto !important;
-  max-width: none !important;
+  width: 100% !important;
+  max-width: 340px !important;
   padding: 0 !important;
-  margin: 0 !important;
-}
-
-.p-detail-inner > .shp-tabs-wrapper {
-  grid-area: tabs !important;
-}
-
-@media (max-width: 900px) {
-  .p-detail-inner {
-    grid-template-columns: 1fr !important;
-    grid-template-areas:
-      "image"
-      "title"
-      "form"
-      "tabs" !important;
-  }
+  margin: 24px 0 0 !important;
 }
 
 .p-short-description {
