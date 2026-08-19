@@ -1057,6 +1057,15 @@ body.type-index .welcome-wrapper {
    Bez body.type-index prefixu — platí jen na stránce produktu.
    =================================================================== */
 
+/* ZÁLOHA (nezávislá na JS): kdyby JS krok pro nějaký důvod
+   selhal/neproběhl (např. jiné časování na některých stránkách),
+   tohle samo o sobě zajistí, že se .row (nadpis+obrázek) "zabalí"
+   kolem svého plovoucího potomka a nezhroutí se — karta s cenou
+   pak spadne POD řádek, ne vedle něj do zbylé škvíry. */
+.p-detail-inner > .row {
+  overflow: hidden !important;
+}
+
 .p-detail-inner > .row > .col-md-4 h1 {
   font-size: var(--gp-fs-h2) !important;
   line-height: 1.2 !important;
