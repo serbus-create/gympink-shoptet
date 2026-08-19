@@ -1081,11 +1081,10 @@ body.type-index .welcome-wrapper {
   margin-bottom: 16px !important;
 }
 
-/* Varování "zvolte variantu" pod cenou — duplikovalo popisku
-   dropdownu nahoře, vypadalo jako chyba. Skryto natrvalo. */
-.variant-list.variant-not-chosen-anchor {
-  display: none !important;
-}
+/* POZOR: .variant-list.variant-not-chosen-anchor byl dřív omylem
+   skrytý (display:none) v domnění, že jde o duplicitní varování —
+   ve skutečnosti je to funkční výběr varianty (velikosti). Skrytí
+   znemožnilo vybrat velikost. NEZKRÝVAT. */
 
 .p-detail-inner .price.row {
   margin: 20px 0 !important;
