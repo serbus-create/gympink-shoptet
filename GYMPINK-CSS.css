@@ -1059,17 +1059,26 @@ body.type-index .welcome-wrapper {
    proto se .row (nadpis+obrázek) a .col-md-4.pull-left (formulář)
    řadily VEDLE SEBE jako dva sloupce, ne pod sebe. Vynucen normální
    blokový tok, ať se děti řadí pod sebe; vnitřní .row necháváme
-   flex zvlášť (níže), aby nadpis a obrázek zůstaly vedle sebe. */
-.p-detail-inner {
+   flex zvlášť (níže), aby nadpis a obrázek zůstaly vedle sebe.
+   Vyšší specificita (#content jako kotva) pro jistotu, kdyby
+   nativní pravidlo šablony mělo vyšší prioritu. */
+#content .p-detail-inner {
   display: block !important;
 }
 
-.p-detail-inner > .row {
+#content .p-detail-inner > .row {
   display: flex !important;
   flex-wrap: wrap !important;
   align-items: flex-start !important;
   gap: 32px !important;
   margin: 0 !important;
+  overflow: hidden !important;
+}
+
+#content .p-detail-inner > .row::after {
+  content: "" !important;
+  display: table !important;
+  clear: both !important;
 }
 
 .p-detail-inner > .row > .col-md-4 {
@@ -1085,7 +1094,7 @@ body.type-index .welcome-wrapper {
   line-height: 1.2 !important;
 }
 
-.p-detail-inner > .row > .detail-img.p-image-wrapper {
+#content .p-detail-inner > .row > .detail-img.p-image-wrapper {
   float: none !important;
   flex: 3 1 500px !important;
   width: auto !important;
@@ -1109,7 +1118,7 @@ body.type-index .welcome-wrapper {
 
 /* Popis + formulář (varianta, cena, tlačítko) — čistá karta pod
    řádkem nadpis/obrázek, na šířku sloupce s nadpisem. */
-.p-detail-inner > .col-md-4.pull-left {
+#content .p-detail-inner > .col-md-4.pull-left {
   display: block !important;
   clear: both !important;
   float: none !important;
