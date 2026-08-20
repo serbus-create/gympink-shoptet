@@ -1115,6 +1115,13 @@ body.type-index .welcome-wrapper {
   margin: 20px 0 !important;
 }
 
+.p-detail-inner .price.row > [class*="col-"],
+.p-detail-inner .variant-list > [class*="col-"],
+.p-detail-inner .variant-list {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
 .p-final-price-wrapper .price {
   font-size: 26px !important;
   font-weight: 600 !important;
