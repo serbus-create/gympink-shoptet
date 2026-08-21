@@ -546,47 +546,70 @@ body.type-index .benefitBanner__data {
 }
 
 /* ---------------------------------------------------------------
-   3.4b RESPONZIVNÍ CHOVÁNÍ — tablet a mobil
-   Diagnostika: gap byl počítaný z 8vw (celá šířka obrazovky), ne
-   z šířky karty samotné. Na užších obrazovkách se 4 karty vedle
-   sebe hodně zúžily, ale gap se nezmenšoval úměrně — ikona (96px)
-   + gap (až 120px) + padding (80px) přesáhly celou šířku karty,
-   takže na text nezbylo místo a prohlížeč ho zalomil písmeno po
-   písmenu. Řešení: pod 900px přepnout na 2 karty na řádek s ikonou
-   NAD textem (ne vedle), pod 480px na 1 kartu na řádek.
+   3.4b MOBIL — kulaté miniatury v jedné řadě (podle vzoru exalted.com)
+   Nahrazuje dřívější 2/1-sloupcové karty jednou řadou 4 koleček.
+   ⚠ Obrázky (.benefitBanner__img) jsou teď ploché černé ikony
+   (siluety legín/šortek...), ne fotky. Pro vzhled jako u vzoru je
+   potřeba v administraci nahradit tyhle ikony za čtvercové FOTKY
+   oblečení/modelky — bez výměny bude v kolečku černá silueta na
+   krémovém pozadí místo fotky. CSS níže je připravené na obojí.
    --------------------------------------------------------------- */
 
 @media (max-width: 900px) {
   body.type-index .benefitBanner.position--benefitHomepage {
-    flex-wrap: wrap !important;
-    gap: 16px !important;
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    padding: 0 20px !important;
+    background: transparent !important;
+    margin-top: 32px !important;
+    margin-bottom: 32px !important;
   }
 
   body.type-index .benefitBanner__item {
-    flex: 1 1 calc(50% - 8px) !important;
+    flex: 0 1 auto !important;
     flex-direction: column !important;
-    justify-content: center !important;
-    text-align: center !important;
-    gap: 16px !important;
-    padding: 32px 16px !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
   }
 
   body.type-index .benefitBanner__picture {
-    width: 64px !important;
+    width: clamp(48px, 16vw, 64px) !important;
+    height: clamp(48px, 16vw, 64px) !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    background: var(--gp-tile) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  body.type-index .benefitBanner__img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
   }
 
   body.type-index .benefitBanner__content {
     align-items: center !important;
+    gap: 0 !important;
+    max-width: 78px !important;
   }
 
   body.type-index .benefitBanner__title {
-    font-size: 18px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
   }
-}
 
-@media (max-width: 480px) {
-  body.type-index .benefitBanner__item {
-    flex: 1 1 100% !important;
+  body.type-index .benefitBanner__data {
+    display: none !important;
   }
 }
 
