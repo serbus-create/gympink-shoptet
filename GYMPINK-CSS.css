@@ -376,6 +376,100 @@ body.type-index .wide-carousel .carousel.slide {
   margin-bottom: 0 !important;
 }
 
+/* ---------------------------------------------------------------
+   3.3b HERO BANNER — nadpis + tlačítko vlevo (volné místo na fotce)
+   Diagnostika (DevTools): Shoptet nativně generuje uvnitř .item
+   <span class="extended-banner-texts"> — STEJNÝ mechanismus, jaký
+   používáme u bannerů dole (.extended-banner-title/.text/.link).
+   Teď je prázdný, protože v administraci banneru nejsou vyplněná
+   pole Nadpis / Text tlačítka (proto má odkaz třídu .extended-empty).
+   ⚠ NUTNÁ PODMÍNKA: klientka musí v administraci banner "Teplákové
+   soupravy" doplnit Nadpis a text tlačítka — bez toho zůstane span
+   prázdný a tohle CSS nemá co zobrazit.
+   Barva: tmavá (--gp-ink), protože tahle konkrétní fotka má světlé
+   krémové pozadí — bílý text jako u tmavších bannerů dole by tu byl
+   špatně čitelný. Pokud přibudou další slidy s tmavým pozadím, bude
+   nutné barvu doladit zvlášť pro ně.
+   --------------------------------------------------------------- */
+body.type-index .wide-carousel .item {
+  position: relative !important;
+}
+
+body.type-index .wide-carousel .extended-banner-texts {
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  text-align: left !important;
+  padding: 0 5% 0 64px !important;
+  max-width: 46% !important;
+  box-sizing: border-box !important;
+}
+
+body.type-index .wide-carousel .extended-banner-title {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  background: none !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  font-size: var(--gp-fs-h1) !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  color: var(--gp-ink) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  margin-bottom: 20px !important;
+  display: block !important;
+}
+
+body.type-index .wide-carousel .extended-banner-text {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  font-size: var(--gp-fs-body) !important;
+  color: var(--gp-ink-soft) !important;
+  margin-bottom: 28px !important;
+  display: block !important;
+}
+
+body.type-index .wide-carousel .extended-banner-link {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  white-space: nowrap !important;
+  text-align: center !important;
+  line-height: 1 !important;
+  border: 1px solid var(--gp-ink) !important;
+  border-radius: var(--gp-pill-radius) !important;
+  padding: var(--gp-pill-pad) !important;
+  font-size: var(--gp-fs-nav) !important;
+  color: var(--gp-ink) !important;
+  background: transparent !important;
+}
+
 
 /* ===================================================================
    3.4  BLOK SE 4 IKONAMI (benefitBanner) — přesunuto pod hero bannerem
