@@ -1193,3 +1193,47 @@ body.type-index .welcome-wrapper {
 .gp-filtry-presunuto .filters-unveil-button-wrapper {
   display: inline-block !important;
 }
+
+/* --- Rozbalený filtr: panel patří POD řádek, ne do něj ---
+   Diagnostika (DevTools): #filters-wrapper obaluje DVĚ věci najednou —
+   tlačítko (.filters-unveil-button-wrapper) i rozbalovací panel
+   (#filters). Jako jedna flex položka se pak panel po rozbalení pral
+   o místo v řádku a měnil šířku podle obsahu.
+   Navíc .slider-wrapper má nativní `margin: 0 auto; max-width: 650px`
+   — to byla příčina vystředění posuvníku doprostřed stránky.
+   Řešení: display:contents rozpustí obalové divy, takže tlačítko
+   a panel se stanou přímými flex položkami #category-header. Pak jim
+   lze nezávisle určit pořadí a šířku. */
+.gp-filtry-presunuto,
+.gp-filtry-presunuto > .filters-wrapper {
+  display: contents !important;
+}
+
+.gp-filtry-presunuto > #filters-default-position {
+  display: none !important;
+}
+
+/* tlačítko vlevo, řazení vpravo, panel přes celou šířku pod nimi */
+#category-header .filters-unveil-button-wrapper {
+  order: 1 !important;
+  flex: 0 0 auto !important;
+}
+
+#category-header .listSorting {
+  order: 2 !important;
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+}
+
+#category-header #filters {
+  order: 3 !important;
+  flex: 0 0 100% !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* zrušit nativní vystředění posuvníku ceny */
+#category-header #filters .slider-wrapper {
+  margin: 0 !important;
+  max-width: none !important;
+}
