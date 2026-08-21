@@ -759,6 +759,15 @@ body.type-index .gp-banner-pair-item .extended-banner-link {
   flex: none !important;
 }
 
+/* Šedé pozadí + vycpávka kolem fotky u .highlight-product — běžné
+   karty ho nemají, vypadalo jako "karta v kartě". */
+.product.highlight-product,
+.product.highlight-product .inner,
+.product.highlight-product .img {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
 /* .highlight-product má navíc prázdný .short-descr mezi jménem
    a cenou (běžné karty ho nemají) — způsoboval velkou mezeru. */
 .product.highlight-product .short-descr {
