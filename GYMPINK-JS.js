@@ -383,6 +383,13 @@
           el.classList.remove('js-product-clickable');
           el.classList.remove('col-md-8');
           el.classList.add('col-md-4');
+
+          // Prázdný .short-descr, který má jen tenhle produkt navíc,
+          // způsoboval mezeru u ceny. Po sundání třídy už na něj
+          // nesedí CSS pravidlo (.highlight-product .short-descr),
+          // proto ho rovnou odstraníme z DOM.
+          var shortDescr = find('.short-descr', el);
+          if (shortDescr) shortDescr.remove();
         });
       }
     },
