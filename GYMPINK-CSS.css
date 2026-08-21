@@ -218,8 +218,15 @@ body.type-index #header:not(.gp-scrolled) .top-nav-right .btn-icon {
    zmenšil sloupec natolik, že se JS rozhodl menu sbalit (třída zmizí,
    ukáže se prázdný box). Řešení: použít stabilní #navigation a menu
    natvrdo vynutit rozbalené, ať to JS nemůže znovu sbalit.
-   =================================================================== */
 
+   ⚠ JEN DESKTOP (min-width: 901px). Diagnostika (DevTools, mobil):
+   #navigation má nativně data-collapsible="true" — Shoptet na mobilu
+   sám nabízí hamburger a schová menu do zásuvky. Tahle oprava to bez
+   media query přebíjela i na mobilu (display:flex !important na
+   menu, i když se nevejde), takže celé menu přetékalo přes hlavičku
+   a překrývalo se s ikonami/přihlášením. Na mobilu proto necháváme
+   Shoptetu jeho nativní chování. */
+@media (min-width: 901px) {
 #navigation {
   background: transparent !important;
   width: auto !important;
@@ -253,6 +260,7 @@ body.type-index #header:not(.gp-scrolled) .top-nav-right .btn-icon {
 
 #navigation .menu-level-1 a {
   visibility: visible !important;
+}
 }
 
 .navigation-in.menu,
