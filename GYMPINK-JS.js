@@ -369,6 +369,24 @@
       }
     },
 
+    {
+      nazev: 'Zvýrazněný produkt (.highlight-product) — sundat speciální třídy, ať vypadá jako běžná karta',
+      spustit: function () {
+        // Opakované cílené CSS opravy (layout, mezery, pozadí) pořád
+        // nechytily úplně všechno, co Shoptet nativně stylizuje pro
+        // .highlight-product jinak. Radikálnější, spolehlivější
+        // řešení: sundat mu rovnou speciální třídy, ať je pro
+        // šablonu k nerozeznání od běžné karty.
+        var zvyraznene = findAll('.product.highlight-product');
+        zvyraznene.forEach(function (el) {
+          el.classList.remove('highlight-product');
+          el.classList.remove('js-product-clickable');
+          el.classList.remove('col-md-8');
+          el.classList.add('col-md-4');
+        });
+      }
+    },
+
   ];
 
 
