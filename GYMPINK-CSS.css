@@ -759,6 +759,12 @@ body.type-index .gp-banner-pair-item .extended-banner-link {
   flex: none !important;
 }
 
+/* .highlight-product má navíc prázdný .short-descr mezi jménem
+   a cenou (běžné karty ho nemají) — způsoboval velkou mezeru. */
+.product.highlight-product .short-descr {
+  display: none !important;
+}
+
 
 /* ===================================================================
    3.7  PATIČKA
