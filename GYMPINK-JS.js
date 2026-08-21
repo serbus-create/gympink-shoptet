@@ -352,20 +352,17 @@
     },
 
     {
-      nazev: 'Kategorie — přesun tlačítka filtru na stejný řádek jako Řadit podle',
+      nazev: 'Kategorie — filtr na řádku s Řadit podle (ŘEŠENO V CSS, krok vypnutý)',
       spustit: function () {
-        // Ověřeno v DevTools: #category-header (flex) obsahuje jen
-        // .listSorting (Řadit podle). #filters-wrapper (Otevřít filtr)
-        // je samostatný blok dál v HTML. Přesun jako první prvek do
-        // #category-header, ať jsou oba na jednom řádku — filtr vlevo,
-        // řazení vpravo (viz CSS níže).
-        var hlavicka = find('#category-header');
-        var filtry = find('#filters-wrapper');
-        if (!hlavicka || !filtry) return;
-        if (filtry.classList.contains('gp-filtry-presunuto')) return;
-
-        filtry.classList.add('gp-filtry-presunuto');
-        hlavicka.insertBefore(filtry, hlavicka.firstChild);
+        // Dřív tenhle krok přesouval #filters-wrapper do #category-header.
+        // Problém: Shoptet si po aplikaci filtru blok sám překreslí,
+        // čímž přesun zahodil a layout se rozpadl (filtr skočil
+        // doprostřed stránky). Přesouvat ho znovu přes MutationObserver
+        // by znamenalo trvale se přetahovat se Shoptetem.
+        // Řešení: layout se dělá čistě CSS přes flex `order` na
+        // .category-content-wrapper (viz CSS sekce 3.11), takže na
+        // fyzickém umístění v DOM nezáleží a překreslení nevadí.
+        return;
       }
     },
 

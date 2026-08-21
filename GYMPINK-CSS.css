@@ -1177,63 +1177,71 @@ body.type-index .welcome-wrapper {
   display: none !important;
 }
 
-/* Tlačítko filtru přesunuté JS na stejný řádek jako "Řadit podle"
-   (#category-header) — filtr vlevo, řazení vpravo, jak ukazuje vzor. */
-#category-header {
-  justify-content: space-between !important;
-  align-items: center !important;
+/* Tlačítko filtru na stejném řádku jako "Řadit podle" — ČISTĚ CSS.
+   Diagnostika (DevTools): dřív to řešil JS přesunem #filters-wrapper
+   do #category-header. Jenže Shoptet si po aplikaci filtru blok sám
+   překreslí a přesun zahodí (třída gp-filtry-presunuto zmizí) —
+   layout se pak rozpadl a filtr skočil doprostřed. Řešení bez JS:
+   .category-content-wrapper je flex a pořadí se řídí `order`, takže
+   na fyzickém umístění v DOM nezáleží a překreslení nevadí.
+
+   display:contents rozpustí obalové divy, aby se tlačítko a panel
+   staly přímými flex položkami. */
+.category-content-wrapper {
+  display: flex !important;
   flex-wrap: wrap !important;
+  align-items: center !important;
   gap: 16px !important;
 }
 
-.gp-filtry-presunuto {
-  margin: 0 !important;
+/* výchozí: cokoli neznámého jde na konec přes celou šířku */
+.category-content-wrapper > * {
+  order: 9;
+  flex: 0 0 100%;
 }
 
-.gp-filtry-presunuto .filters-unveil-button-wrapper {
-  display: inline-block !important;
-}
-
-/* --- Rozbalený filtr: panel patří POD řádek, ne do něj ---
-   Diagnostika (DevTools): #filters-wrapper obaluje DVĚ věci najednou —
-   tlačítko (.filters-unveil-button-wrapper) i rozbalovací panel
-   (#filters). Jako jedna flex položka se pak panel po rozbalení pral
-   o místo v řádku a měnil šířku podle obsahu.
-   Navíc .slider-wrapper má nativní `margin: 0 auto; max-width: 650px`
-   — to byla příčina vystředění posuvníku doprostřed stránky.
-   Řešení: display:contents rozpustí obalové divy, takže tlačítko
-   a panel se stanou přímými flex položkami #category-header. Pak jim
-   lze nezávisle určit pořadí a šířku. */
-.gp-filtry-presunuto,
-.gp-filtry-presunuto > .filters-wrapper {
+#filters-wrapper,
+#filters-wrapper > .filters-wrapper {
   display: contents !important;
 }
 
-.gp-filtry-presunuto > #filters-default-position {
+#filters-default-position {
   display: none !important;
 }
 
-/* tlačítko vlevo, řazení vpravo, panel přes celou šířku pod nimi */
-#category-header .filters-unveil-button-wrapper {
+/* 1. tlačítko filtru vlevo */
+.category-content-wrapper .filters-unveil-button-wrapper {
   order: 1 !important;
   flex: 0 0 auto !important;
 }
 
-#category-header .listSorting {
+/* 2. řazení vpravo */
+#category-header {
   order: 2 !important;
-  flex: 0 0 auto !important;
-  margin-left: auto !important;
+  flex: 1 1 auto !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  margin: 0 !important;
 }
 
-#category-header #filters {
+/* 3. rozbalený panel přes celou šířku pod řádkem */
+.category-content-wrapper #filters {
   order: 3 !important;
   flex: 0 0 100% !important;
   width: 100% !important;
   max-width: none !important;
 }
 
-/* zrušit nativní vystředění posuvníku ceny */
-#category-header #filters .slider-wrapper {
+/* zrušit nativní `margin: 0 auto; max-width: 650px` — to centrovalo
+   posuvník ceny doprostřed stránky */
+.category-content-wrapper #filters .slider-wrapper {
   margin: 0 !important;
   max-width: none !important;
+}
+
+/* 4. výpis produktů až za tím */
+.category-content-wrapper #products {
+  order: 4 !important;
+  flex: 0 0 100% !important;
 }
