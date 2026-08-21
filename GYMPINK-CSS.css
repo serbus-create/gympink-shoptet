@@ -403,7 +403,7 @@ body.type-index .wide-carousel .extended-banner-texts {
   align-items: flex-start !important;
   justify-content: center !important;
   text-align: left !important;
-  padding: 0 5% 0 64px !important;
+  padding: 0 5% 0 calc(64px + 10%) !important;
   max-width: 46% !important;
   box-sizing: border-box !important;
 }
@@ -423,7 +423,7 @@ body.type-index .wide-carousel .extended-banner-title {
   font-size: var(--gp-fs-h1) !important;
   font-weight: 700 !important;
   line-height: 1.15 !important;
-  color: var(--gp-ink) !important;
+  color: var(--gp-on-photo) !important;
   text-transform: none !important;
   letter-spacing: 0 !important;
   margin-bottom: 20px !important;
@@ -441,7 +441,7 @@ body.type-index .wide-carousel .extended-banner-text {
   border: none !important;
   padding: 0 !important;
   font-size: var(--gp-fs-body) !important;
-  color: var(--gp-ink-soft) !important;
+  color: rgba(255, 255, 255, 0.88) !important;
   margin-bottom: 28px !important;
   display: block !important;
 }
@@ -462,11 +462,11 @@ body.type-index .wide-carousel .extended-banner-link {
   white-space: nowrap !important;
   text-align: center !important;
   line-height: 1 !important;
-  border: 1px solid var(--gp-ink) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
   border-radius: var(--gp-pill-radius) !important;
   padding: var(--gp-pill-pad) !important;
   font-size: var(--gp-fs-nav) !important;
-  color: var(--gp-ink) !important;
+  color: var(--gp-on-photo) !important;
   background: transparent !important;
 }
 
