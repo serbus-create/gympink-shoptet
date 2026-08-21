@@ -1149,3 +1149,15 @@ body.type-index .welcome-wrapper {
   font-size: 15px !important;
   border-radius: 4px !important;
 }
+
+
+/* ===================================================================
+   3.11  KATEGORIE — skrytí popisu pod nadpisem
+   Diagnostika (ověřeno v DevTools): .category-top obsahuje
+   h1.category-title (nadpis) a jako sourozence div.category-perex
+   (odstavec popisu). Skrytí .category-perex nadpisu vůbec nevadí.
+   =================================================================== */
+
+.category-perex {
+  display: none !important;
+}
