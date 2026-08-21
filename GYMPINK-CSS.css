@@ -1162,11 +1162,17 @@ body.type-index .welcome-wrapper {
   display: none !important;
 }
 
-/* Tlačítko filtru přesunuté JS hned pod nadpis — zarovnat doleva
-   a přidat malý odstup, místo nativního vystředění dál od nadpisu. */
+/* Tlačítko filtru přesunuté JS na stejný řádek jako "Řadit podle"
+   (#category-header) — filtr vlevo, řazení vpravo, jak ukazuje vzor. */
+#category-header {
+  justify-content: space-between !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 16px !important;
+}
+
 .gp-filtry-presunuto {
-  text-align: left !important;
-  margin: 16px 0 24px !important;
+  margin: 0 !important;
 }
 
 .gp-filtry-presunuto .filters-unveil-button-wrapper {

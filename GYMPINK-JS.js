@@ -352,19 +352,20 @@
     },
 
     {
-      nazev: 'Kategorie — přesun tlačítka filtru pod nadpis',
+      nazev: 'Kategorie — přesun tlačítka filtru na stejný řádek jako Řadit podle',
       spustit: function () {
-        // Ověřeno v DevTools: h1.category-title je uvnitř .category-top,
-        // #filters-wrapper (obsahuje tlačítko "Otevřít filtr") je
-        // samostatný blok dál v HTML (u seznamu produktů). Přesun
-        // hned za nadpis, CSS pak zarovná doleva.
-        var nadpis = find('.category-top .category-title');
+        // Ověřeno v DevTools: #category-header (flex) obsahuje jen
+        // .listSorting (Řadit podle). #filters-wrapper (Otevřít filtr)
+        // je samostatný blok dál v HTML. Přesun jako první prvek do
+        // #category-header, ať jsou oba na jednom řádku — filtr vlevo,
+        // řazení vpravo (viz CSS níže).
+        var hlavicka = find('#category-header');
         var filtry = find('#filters-wrapper');
-        if (!nadpis || !filtry) return;
+        if (!hlavicka || !filtry) return;
         if (filtry.classList.contains('gp-filtry-presunuto')) return;
 
         filtry.classList.add('gp-filtry-presunuto');
-        move(filtry, nadpis, 'after');
+        hlavicka.insertBefore(filtry, hlavicka.firstChild);
       }
     },
 
