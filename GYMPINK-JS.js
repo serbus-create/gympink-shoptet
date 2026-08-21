@@ -351,6 +351,23 @@
       }
     },
 
+    {
+      nazev: 'Kategorie — přesun tlačítka filtru pod nadpis',
+      spustit: function () {
+        // Ověřeno v DevTools: h1.category-title je uvnitř .category-top,
+        // #filters-wrapper (obsahuje tlačítko "Otevřít filtr") je
+        // samostatný blok dál v HTML (u seznamu produktů). Přesun
+        // hned za nadpis, CSS pak zarovná doleva.
+        var nadpis = find('.category-top .category-title');
+        var filtry = find('#filters-wrapper');
+        if (!nadpis || !filtry) return;
+        if (filtry.classList.contains('gp-filtry-presunuto')) return;
+
+        filtry.classList.add('gp-filtry-presunuto');
+        move(filtry, nadpis, 'after');
+      }
+    },
+
   ];
 
 

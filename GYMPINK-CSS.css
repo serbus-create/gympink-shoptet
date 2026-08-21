@@ -1161,3 +1161,14 @@ body.type-index .welcome-wrapper {
 .category-perex {
   display: none !important;
 }
+
+/* Tlačítko filtru přesunuté JS hned pod nadpis — zarovnat doleva
+   a přidat malý odstup, místo nativního vystředění dál od nadpisu. */
+.gp-filtry-presunuto {
+  text-align: left !important;
+  margin: 16px 0 24px !important;
+}
+
+.gp-filtry-presunuto .filters-unveil-button-wrapper {
+  display: inline-block !important;
+}
