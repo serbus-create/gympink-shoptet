@@ -1431,3 +1431,72 @@ body.type-index .welcome-wrapper {
     padding: 12px !important;
   }
 }
+
+
+/* ===================================================================
+   3.13  MOBIL — hlavička (logo + ikony)
+   Diagnostika (DevTools, iPhone): Shoptet má vlastní mobilní verzi
+   hlavičky, kterou aktivuje třídou .ums_mobile_header_v1--on na <html>.
+   V ní má nativní pravidlo:
+     @media (max-width:767px) {
+       :where(.ums_mobile_header_v1--on) #header .site-name {
+         position: absolute; top: 0;
+       }
+     }
+   Tím logo VYPADNE z našeho gridu (menu | logo | ikony), sedne si
+   absolutně nahoru vlevo a položí se PŘES ikonu košíku. Ikony tedy
+   nechyběly — byly celou dobu pod logem.
+   Řešení: vrátit .site-name do toku (position:static), ať ho grid
+   umístí doprostřed, a explicitně zajistit viditelnost ikon vpravo.
+   =================================================================== */
+
+@media (max-width: 900px) {
+  #header .site-name {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    text-align: center !important;
+  }
+
+  .navigation-wrapper {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    gap: 8px !important;
+  }
+
+  /* ikony (hledání / účet / košík) — zajistit, že jsou vidět a v řadě */
+  .navigation-wrapper > .top-nav {
+    display: flex !important;
+    visibility: visible !important;
+    align-items: center !important;
+  }
+
+  #header .nav-list.top-nav-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+
+  #header .subnav-left,
+  #header .subnav-right {
+    display: flex !important;
+    visibility: visible !important;
+    align-items: center !important;
+  }
+
+  /* logo na mobilu menší, ať se vejde mezi hamburger a ikony */
+  .site-name img {
+    height: 24px !important;
+    max-height: 24px !important;
+  }
+
+  /* textový odkaz BLOG zabírá na úzké liště moc místa a tlačí logo
+     do ikon — na mobilu ho schováváme (v hamburger menu zůstává) */
+  .gp-blog-moved {
+    display: none !important;
+  }
+}
