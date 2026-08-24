@@ -1669,3 +1669,56 @@ body.type-index .welcome-wrapper {
     padding-left: 0 !important;
   }
 }
+
+
+/* ===================================================================
+   3.18  MOBIL — záchranná síť pro POBO popis produktu
+   Diagnostika: obsah záložky POPIS vykresluje POBO Page Builder.
+   Jeho bloky mají desktopové rozměry (často inline style="width:XXXpx"
+   nebo absolutní pozicování), které se na 390px nezalomí — bloky se
+   překrývají a text leze přes text.
+   Inline styl BEZ !important prohrává s externím pravidlem
+   S !important, takže ho odsud můžeme přebít.
+   ⚠ Je to plošné (cílí na všechny potomky záložek), protože přesné
+   třídy POBO bloků se liší produkt od produktu. Pokud se tím něco
+   rozbije, lepší cesta je upravit rozložení přímo v POBO editoru.
+   Desktop zůstává nedotčený.
+   =================================================================== */
+
+@media (max-width: 900px) {
+  .p-detail-tabs-wrapper,
+  .p-detail-tabs-wrapper * {
+    position: static !important;
+    float: none !important;
+    width: auto !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+  }
+
+  .p-detail-tabs-wrapper img,
+  .p-detail-tabs-wrapper video,
+  .p-detail-tabs-wrapper iframe {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+  }
+
+  /* víceslopcové mřížky POBO složit pod sebe */
+  .p-detail-tabs-wrapper .row,
+  .p-detail-tabs-wrapper [class*="col-"] {
+    display: block !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .p-detail-tabs-wrapper {
+    overflow-x: hidden !important;
+  }
+}
