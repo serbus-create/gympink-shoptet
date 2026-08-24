@@ -1550,3 +1550,21 @@ body.type-index .welcome-wrapper {
     font-size: 15px !important;
   }
 }
+
+
+/* ===================================================================
+   3.15  MOBIL — logo v patičce na střed a o 20 % větší
+   Na desktopu zůstává vlevo (zarovnané s prvním sloupcem "Kontakt",
+   viz sekce 3.7) — tady měníme jen mobilní zobrazení.
+   =================================================================== */
+
+@media (max-width: 900px) {
+  .footer .gp-footer-logo {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .footer .gp-footer-logo img {
+    height: 34px !important;   /* 28px + 20 % */
+  }
+}
