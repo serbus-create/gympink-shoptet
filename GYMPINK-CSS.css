@@ -1651,6 +1651,18 @@ body.type-index .welcome-wrapper {
     padding-right: 0 !important;
   }
 
+  /* Diagnostika (screenshot): vynulování paddingu výš smazalo i
+     odsazení nadpisu a krátkého popisu — text pak lepil na okraje
+     displeje. Obrázek (.detail-img) má jít od kraje ke kraji
+     schválně, ale text ne — vracíme padding jen jemu. */
+  .p-detail-inner > .row > .col-md-4 h1,
+  .p-detail-inner .p-short-description,
+  .breadcrumbs {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    box-sizing: border-box !important;
+  }
+
   .p-detail-inner > .row > .col-md-4 h1 {
     font-size: 20px !important;
     margin-bottom: 16px !important;
