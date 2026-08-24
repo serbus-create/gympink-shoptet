@@ -1409,10 +1409,9 @@ body.type-index .welcome-wrapper {
     margin-top: 32px !important;
   }
 
-  /* vyšší poměr = víc místa na titulek a tlačítko pod ním */
-  body.type-index .gp-banner-big {
-    aspect-ratio: 1.3 !important;
-  }
+  /* Poznámka: dřív tu bylo aspect-ratio: 1.3 (mělo dát víc místa na
+     titulek a CTA). Způsobilo to ale, že se banner ořízl a titulek
+     s tlačítkem zmizely — ponecháváme nativní poměr ze sekce 3.8. */
 
   body.type-index .gp-banner-pair-item .extended-banner-title,
   body.type-index .gp-banner-big .extended-banner-title {
