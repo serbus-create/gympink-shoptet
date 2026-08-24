@@ -568,14 +568,25 @@ body.type-index .benefitBanner__data {
   }
 
   body.type-index .benefitBanner__item {
-    flex: 0 1 auto !important;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+  }
+
+  /* Skutečný flex řádek dělá až odkaz UVNITŘ položky
+     (.benefitBanner__item > a.benefitBanner__link) — proto se
+     flex-direction musí přepnout tady, ne na __item. Jinak zůstane
+     kolečko a text vedle sebe, text dostane pár pixelů a zalomí se
+     písmeno po písmenu. */
+  body.type-index .benefitBanner__link {
+    display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: flex-start !important;
     gap: 8px !important;
+    width: 100% !important;
     min-width: 0 !important;
-    background: transparent !important;
-    padding: 0 !important;
   }
 
   body.type-index .benefitBanner__picture {
@@ -598,14 +609,20 @@ body.type-index .benefitBanner__data {
   body.type-index .benefitBanner__content {
     align-items: center !important;
     gap: 0 !important;
-    max-width: 78px !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
   }
 
   body.type-index .benefitBanner__title {
     font-size: 11px !important;
     font-weight: 600 !important;
-    line-height: 1.2 !important;
+    line-height: 1.25 !important;
     text-align: center !important;
+    letter-spacing: .02em !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    hyphens: none !important;
   }
 
   body.type-index .benefitBanner__data {
@@ -1369,4 +1386,48 @@ body.type-index .welcome-wrapper {
 .category-content-wrapper #products {
   order: 4 !important;
   flex: 0 0 100% !important;
+}
+
+
+/* ===================================================================
+   3.12  MOBIL — bannery (pár + velký)
+   Diagnostika (screenshot, iPhone 390px): na úzké obrazovce se pilulka
+   CTA u velkého banneru ořízla spodní hranou banneru — titulek + CTA
+   nemají v poměru 1,92:1 dost výšky. Řešení: na mobilu zmenšit typo
+   i pilulku a u velkého banneru povolit vyšší poměr stran.
+   Pár bannerů zůstává vedle sebe (jako vzor), jen s menším textem.
+   =================================================================== */
+
+@media (max-width: 900px) {
+  body.type-index .gp-banner-pair {
+    gap: 8px !important;
+    padding: 0 20px !important;
+  }
+
+  body.type-index .gp-banner-big-wrap {
+    padding: 0 20px !important;
+    margin-top: 32px !important;
+  }
+
+  /* vyšší poměr = víc místa na titulek a tlačítko pod ním */
+  body.type-index .gp-banner-big {
+    aspect-ratio: 1.3 !important;
+  }
+
+  body.type-index .gp-banner-pair-item .extended-banner-title,
+  body.type-index .gp-banner-big .extended-banner-title {
+    font-size: clamp(15px, 4.4vw, 22px) !important;
+    margin-bottom: 12px !important;
+  }
+
+  body.type-index .gp-banner-pair-item .extended-banner-link,
+  body.type-index .gp-banner-big .extended-banner-link {
+    padding: 9px 20px !important;
+    font-size: 12px !important;
+  }
+
+  body.type-index .gp-banner-pair-item .extended-banner-texts,
+  body.type-index .gp-banner-big .extended-banner-texts {
+    padding: 12px !important;
+  }
 }
