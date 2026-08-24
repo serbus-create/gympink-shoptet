@@ -307,6 +307,13 @@ body.type-index #header:not(.gp-scrolled) .top-nav-right .btn-icon {
   margin-right: 0 !important;
   padding-left: 20px !important;
   padding-right: 32px !important;
+  /* KRITICKÉ: width:100% + padding BEZ border-box = element je vždy
+     širší než 100 % o velikost paddingu (20+32=52px na desktopu,
+     12+12=24px na mobilu s pravidlem níž). To způsobovalo horizontální
+     přetečení celé stránky (potvrzeno: document.documentElement.
+     scrollWidth > clientWidth na KAŽDÉ stránce, ne jen na detailu
+     produktu — .navigation-wrapper je součást hlavičky všude). */
+  box-sizing: border-box !important;
 }
 
 #header .project-email {
@@ -1821,4 +1828,28 @@ body.type-index .welcome-wrapper {
     margin-bottom: 12px !important;
     line-height: 1.55 !important;
   }
+}
+
+
+/* ===================================================================
+   3.21  Globální pojistka proti horizontálnímu přetečení
+   Diagnostika (Console, document.documentElement.scrollWidth vs
+   clientWidth): stránka byla širší než viewport na CELÉM webu, ne jen
+   na jedné stránce. Hlavní příčina nalezena a opravena v .navigation-
+   -wrapper (3.2b) — width:100% + padding bez box-sizing:border-box.
+   Tahle sekce je jen pojistka pro případ, že by podobný problém
+   vznikl jinde (teď nebo v budoucnu): globální box-sizing reset a
+   tvrdý zákaz horizontálního scrollu na úrovni stránky.
+   Nedotýká se to VNITŘNÍCH scrollovatelných pruhů (např. pás
+   miniatur u fotek produktu) — ty mají overflow-x na sobě samých,
+   ne na <body>, takže zůstanou funkční.
+   =================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
 }
