@@ -1556,9 +1556,16 @@ body.type-index .welcome-wrapper {
    =================================================================== */
 
 @media (max-width: 900px) {
+  /* Centrování přes left/right:0 + margin auto, ne přes
+     left:50% + translateX(-50%) — ta varianta se s nativním
+     `left: 32px` prala a logo skončilo useknuté u levého okraje. */
   .footer .gp-footer-logo {
-    left: 50% !important;
-    transform: translateX(-50%) !important;
+    left: 0 !important;
+    right: 0 !important;
+    transform: none !important;
+    width: fit-content !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 
   .footer .gp-footer-logo img {
