@@ -782,12 +782,9 @@ body.type-index .gp-banner-pair-item .extended-banner-link {
   }
 }
 
-@media (max-width: 480px) {
-  .products.products-block .product {
-    flex: 0 0 100% !important;
-    max-width: 100% !important;
-  }
-}
+/* Vzor (exalted.com) drží na mobilu 2 sloupce až do nejmenších
+   šířek — dřívější breakpoint na 480px přepínal na 1 sloupec, což
+   dělalo hodně dlouhou stránku s malými obrázky. Zrušeno. */
 
 .product,
 .product .inner,
@@ -1566,5 +1563,49 @@ body.type-index .welcome-wrapper {
 
   .footer .gp-footer-logo img {
     height: 34px !important;   /* 28px + 20 % */
+  }
+}
+
+
+/* ===================================================================
+   3.16  MOBIL — výpis produktů v kategorii (podle vzoru)
+   Vzor drží 2 sloupce, obrázek vyplňuje celou šířku dlaždice, pod ním
+   název a cena čitelnou velikostí. Diagnostika (screenshot /leginy/):
+   obrázky nevyplňovaly šířku sloupce a texty byly drobné.
+   =================================================================== */
+
+@media (max-width: 900px) {
+  .products.products-block .product .img,
+  .products.products-block .product .img a {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .products.products-block .product .img img {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    object-fit: cover !important;
+  }
+
+  .products.products-block .product a.name {
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+  }
+
+  .products.products-block .product .prices {
+    font-size: 13px !important;
+  }
+
+  /* text pod fotkou trochu odsadit od okraje dlaždice */
+  .products.products-block .product .descr,
+  .products.products-block .product .prices {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  /* filtr + řazení na úzké obrazovce pod sebe, ať se needitují do sebe */
+  #category-header {
+    flex-wrap: wrap !important;
   }
 }
