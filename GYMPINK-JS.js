@@ -398,6 +398,44 @@
       }
     },
 
+    {
+      nazev: 'POBO popis — mobilní úklid inline rozměrů',
+      spustit: function () {
+        // POBO Page Builder sází bloky s pevnými desktopovými rozměry
+        // přímo do atributu style. Pokud je zapíše s !important,
+        // NELZE je přebít žádným externím CSS — jediná cesta je je
+        // z inline stylu odstranit, což dělá tenhle krok.
+        // Jen mobil; na desktopu má POBO layout zůstat tak, jak si ho
+        // klientka v editoru nastavila.
+        if (window.innerWidth > 900) return;
+
+        var zalozky = find('.p-detail-tabs-wrapper');
+        if (!zalozky) return;
+
+        // Vlastnosti, které na úzké obrazovce rozbíjejí layout.
+        var problemove = [
+          'width', 'min-width', 'height', 'min-height',
+          'position', 'left', 'right', 'top', 'bottom',
+          'transform', 'float', 'white-space'
+        ];
+
+        var prvky = zalozky.querySelectorAll('[style]');
+        Array.prototype.forEach.call(prvky, function (el) {
+          problemove.forEach(function (vlastnost) {
+            el.style.removeProperty(vlastnost);
+          });
+        });
+
+        // Po odstranění inline rozměrů ještě pojistit obrázky, ať se
+        // vejdou do šířky (některé mají rozměry v atributech).
+        var obrazky = zalozky.querySelectorAll('img');
+        Array.prototype.forEach.call(obrazky, function (img) {
+          img.style.setProperty('max-width', '100%', 'important');
+          img.style.setProperty('height', 'auto', 'important');
+        });
+      }
+    },
+
   ];
 
 

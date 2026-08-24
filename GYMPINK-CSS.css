@@ -1686,8 +1686,13 @@ body.type-index .welcome-wrapper {
    =================================================================== */
 
 @media (max-width: 900px) {
-  .p-detail-tabs-wrapper,
-  .p-detail-tabs-wrapper * {
+  /* Vysoká specificita (html body …) schválně: naše CSS je v <head>,
+     POBO si styly vkládá až za běhu — při shodné specificitě by
+     vyhrálo pozdější pravidlo (POBO). Vyšší specificita vyhraje bez
+     ohledu na pořadí. Inline styly s !important tímhle přebít NELZE,
+     ty řeší JS krok "POBO popis — mobilní úklid". */
+  html body .p-detail-tabs-wrapper,
+  html body .p-detail-tabs-wrapper * {
     position: static !important;
     float: none !important;
     width: auto !important;
@@ -1700,17 +1705,17 @@ body.type-index .welcome-wrapper {
     transform: none !important;
   }
 
-  .p-detail-tabs-wrapper img,
-  .p-detail-tabs-wrapper video,
-  .p-detail-tabs-wrapper iframe {
+  html body .p-detail-tabs-wrapper img,
+  html body .p-detail-tabs-wrapper video,
+  html body .p-detail-tabs-wrapper iframe {
     width: 100% !important;
     height: auto !important;
     display: block !important;
   }
 
   /* víceslopcové mřížky POBO složit pod sebe */
-  .p-detail-tabs-wrapper .row,
-  .p-detail-tabs-wrapper [class*="col-"] {
+  html body .p-detail-tabs-wrapper .row,
+  html body .p-detail-tabs-wrapper [class*="col-"] {
     display: block !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
@@ -1718,7 +1723,7 @@ body.type-index .welcome-wrapper {
     margin-right: 0 !important;
   }
 
-  .p-detail-tabs-wrapper {
+  html body .p-detail-tabs-wrapper {
     overflow-x: hidden !important;
   }
 }
