@@ -1399,9 +1399,17 @@ body.type-index .welcome-wrapper {
    =================================================================== */
 
 @media (max-width: 900px) {
+  /* Bannery pod sebou přes celou šířku (jako vzor) — vedle sebe byly
+     na úzké obrazovce moc malé a titulek se pral s CTA tlačítkem. */
   body.type-index .gp-banner-pair {
-    gap: 8px !important;
+    flex-direction: column !important;
+    gap: 12px !important;
     padding: 0 20px !important;
+  }
+
+  body.type-index .gp-banner-pair-item {
+    flex: 0 0 auto !important;
+    width: 100% !important;
   }
 
   body.type-index .gp-banner-big-wrap {
@@ -1415,19 +1423,19 @@ body.type-index .welcome-wrapper {
 
   body.type-index .gp-banner-pair-item .extended-banner-title,
   body.type-index .gp-banner-big .extended-banner-title {
-    font-size: clamp(15px, 4.4vw, 22px) !important;
-    margin-bottom: 12px !important;
+    font-size: clamp(20px, 6vw, 30px) !important;
+    margin-bottom: 16px !important;
   }
 
   body.type-index .gp-banner-pair-item .extended-banner-link,
   body.type-index .gp-banner-big .extended-banner-link {
-    padding: 9px 20px !important;
-    font-size: 12px !important;
+    padding: 11px 28px !important;
+    font-size: 13px !important;
   }
 
   body.type-index .gp-banner-pair-item .extended-banner-texts,
   body.type-index .gp-banner-big .extended-banner-texts {
-    padding: 12px !important;
+    padding: 16px !important;
   }
 }
 
