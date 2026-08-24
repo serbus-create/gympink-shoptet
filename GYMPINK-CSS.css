@@ -1710,6 +1710,95 @@ body.type-index .welcome-wrapper {
   .prices {
     padding-left: 0 !important;
   }
+
+  /* -----------------------------------------------------------------
+     3.17b MOBIL — nákupní panel (varianta / cena / množství / CTA)
+     Diagnostika (DevTools): .add-to-cart je vnořené uvnitř .price,
+     spolu se .shipping-availability, .p-final-price-wrapper a
+     .order-availability — každý z těch bloků má vlastní nativní
+     Bootstrap odsazení, které jsme nikde nevynulovali → velké
+     nekonzistentní mezery mezi variantou/cenou/množstvím/tlačítkem.
+
+     Druhé zjištění: Shoptet vykresluje DVĚ tlačítka Do košíku —
+     velké (.btn-conversion, nativně jen na desktopu přes
+     visible-md/lg třídy) a malé ikonkové (.btn-icon.btn-cart, nativně
+     jen na mobilu přes hidden-md/lg třídy). Naše pravidlo výš nutí
+     velké tlačítko zobrazit VŽDY (bez media query), takže se na
+     mobilu zobrazují obě najednou — to je ten "záhadný košík" pod
+     tlačítkem. Řešení: schovat to malé, necháváme jen jedno CTA.
+
+     Postup: vynulovat marginy/padding všem přímým dětem .price,
+     pak vrátit jen malé, konzistentní mezery tam, kam patří.
+     ----------------------------------------------------------------- */
+
+  .p-detail-inner .price > * {
+    margin: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .p-detail-inner .variant-list {
+    margin-bottom: 14px !important;
+  }
+
+  .p-detail-inner .variant-list select,
+  .p-detail-inner .variant-list .select2-selection {
+    min-height: 48px !important;
+    font-size: 15px !important;
+  }
+
+  .p-final-price-wrapper {
+    margin-bottom: 4px !important;
+  }
+
+  .p-final-price-wrapper .price-final,
+  .p-final-price-wrapper .price {
+    font-size: 22px !important;
+    font-weight: 700 !important;
+  }
+
+  .order-availability {
+    margin-bottom: 14px !important;
+    font-size: 13px !important;
+  }
+
+  .add-to-cart {
+    margin-top: 0 !important;
+  }
+
+  /* stepper množství — kompaktní, čísla a šipky vedle sebe, ne
+     přes celou šířku s velkými mezerami */
+  .add-to-cart .quantity {
+    display: flex !important;
+    align-items: stretch !important;
+    width: auto !important;
+    align-self: flex-start !important;
+    border: 1px solid var(--gp-line, #ddd) !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+  }
+
+  .add-to-cart .quantity input {
+    width: 44px !important;
+    text-align: center !important;
+    border: none !important;
+    font-size: 15px !important;
+  }
+
+  .add-to-cart .quantity .btn-plus,
+  .add-to-cart .quantity .btn-minus,
+  .add-to-cart .quantity button {
+    width: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* duplicitní malé ikonkové tlačítko Do košíku (viz diagnostika
+     výš) — schované, necháváme jen velké styl. tlačítko nad ním */
+  .add-to-cart .btn.btn-icon.btn-plain.btn-cart {
+    display: none !important;
+  }
 }
 
 
