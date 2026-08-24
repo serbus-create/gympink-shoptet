@@ -1737,10 +1737,19 @@ body.type-index .welcome-wrapper {
     padding-right: 0 !important;
   }
 
+  /* Vystředěný layout — krátký popis, varianta, cena, dostupnost
+     i stepper množství na střed. Tlačítko zůstává na celou šířku. */
+  .p-detail-inner .p-short-description,
+  .p-detail-inner .price {
+    text-align: center !important;
+  }
+
   .p-detail-inner .variant-list {
     margin-bottom: 14px !important;
     padding-left: 20px !important;
     padding-right: 20px !important;
+    display: flex !important;
+    justify-content: center !important;
   }
 
   /* užší pole "Zvolte variantu", ne přes celou šířku displeje */
@@ -1748,6 +1757,7 @@ body.type-index .welcome-wrapper {
     width: auto !important;
     max-width: 220px !important;
     flex: 0 0 auto !important;
+    margin: 0 auto !important;
   }
 
   .p-detail-inner .variant-list select,
@@ -1778,15 +1788,17 @@ body.type-index .welcome-wrapper {
 
   .add-to-cart {
     margin-top: 0 !important;
+    align-items: center !important;
   }
 
-  /* stepper množství — kompaktní, čísla a šipky vedle sebe, ne
-     přes celou šířku s velkými mezerami */
+  /* stepper množství — kompaktní, vystředěný, čísla a šipky vedle
+     sebe, ne přes celou šířku s velkými mezerami */
   .add-to-cart .quantity {
     display: flex !important;
     align-items: stretch !important;
     width: auto !important;
-    align-self: flex-start !important;
+    align-self: center !important;
+    margin: 0 auto !important;
     border: 1px solid var(--gp-line, #ddd) !important;
     border-radius: 8px !important;
     overflow: hidden !important;
