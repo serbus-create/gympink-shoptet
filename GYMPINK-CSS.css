@@ -1764,3 +1764,61 @@ body.type-index .welcome-wrapper {
 #pobo-all-content .widget-container {
   max-width: 100% !important;
 }
+
+
+/* ===================================================================
+   3.20  MOBIL — okraje a šířka popisu produktu (POBO)
+   Diagnostika: pravidla v 3.18 nastavila všemu uvnitř popisu
+   width:auto a vynulovala padding, aby se rozbily pevné desktopové
+   rozměry. Vedlejší efekt: zmizelo i legitimní vnitřní odsazení,
+   takže text lepí na okraje displeje a místy přetéká.
+   Řešení: dát odsazení samotnému obalu popisu (ne jednotlivým
+   blokům) a tvrdě omezit šířku obsahu.
+   =================================================================== */
+
+@media (max-width: 900px) {
+  html body #pobo-all-content,
+  html body .p-detail-tabs-wrapper .tab-content,
+  html body .p-detail-tabs-wrapper .shp-tab-content {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    box-sizing: border-box !important;
+    overflow-wrap: break-word !important;
+  }
+
+  /* nic uvnitř nesmí přerůst šířku obrazovky */
+  html body #pobo-all-content,
+  html body #pobo-all-content * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* dlouhá slova / URL ať se zalomí místo přetečení */
+  html body #pobo-all-content p,
+  html body #pobo-all-content li,
+  html body #pobo-all-content h1,
+  html body #pobo-all-content h2,
+  html body #pobo-all-content h3 {
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+  }
+
+  /* odrážky potřebují vlastní odsazení, jinak visí mimo */
+  html body #pobo-all-content ul,
+  html body #pobo-all-content ol {
+    padding-left: 22px !important;
+    margin-left: 0 !important;
+  }
+
+  /* rozumné rozestupy mezi sekcemi */
+  html body #pobo-all-content h2 {
+    margin-top: 28px !important;
+    margin-bottom: 10px !important;
+    line-height: 1.25 !important;
+  }
+
+  html body #pobo-all-content p {
+    margin-bottom: 12px !important;
+    line-height: 1.55 !important;
+  }
+}
