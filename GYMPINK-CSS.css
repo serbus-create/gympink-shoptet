@@ -1311,7 +1311,6 @@ body.type-index .welcome-wrapper {
   border-radius: 4px !important;
 }
 
-
 /* ===================================================================
    3.11  KATEGORIE — skrytí popisu pod nadpisem
    Diagnostika (ověřeno v DevTools): .category-top obsahuje
@@ -1677,10 +1676,34 @@ body.type-index .welcome-wrapper {
     width: 100% !important;
   }
 
-  .add-to-cart .btn-cart,
-  .add-to-cart button[type="submit"] {
-    width: 100% !important;
+  /* Diagnostika: skutečná třída tlačítka je .btn.btn-conversion —
+     tohle pravidlo dřív mířilo na .btn-cart / button[type="submit"],
+     což na téhle šabloně neexistuje, takže se nikdy neuplatnilo.
+     Na mobilu tlačítko navíc zvětšujeme a přidáváme ikonu košíku,
+     ať je jasně vidět, co dělá — 15px text na plné šířce splýval
+     s okolím. */
+  .add-to-cart .btn.btn-conversion {
+    padding: 18px 24px !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    letter-spacing: .02em !important;
+    text-transform: uppercase !important;
+    border-radius: 999px !important;
+    display: flex !important;
+    align-items: center !important;
     justify-content: center !important;
+    gap: 8px !important;
+    min-height: 52px !important;
+  }
+
+  .add-to-cart .btn.btn-conversion::before {
+    content: "🛒";
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .add-to-cart .quantity {
+    align-self: stretch !important;
   }
 
   .p-final-price-wrapper,
