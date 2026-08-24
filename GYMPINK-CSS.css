@@ -1504,10 +1504,12 @@ body.type-index .welcome-wrapper {
     align-items: center !important;
   }
 
-  /* logo na mobilu menší, ať se vejde mezi hamburger a ikony */
+  /* Logo na mobilu — zvětšeno z 24px na 32px, ať je dobře vidět.
+     Prostor je: BLOG je na mobilu skrytý (viz níž), takže je vedle
+     loga jen hamburger a ikony — 32px by se mělo vejít bez kolize. */
   .site-name img {
-    height: 24px !important;
-    max-height: 24px !important;
+    height: 32px !important;
+    max-height: 32px !important;
   }
 
   /* textový odkaz BLOG zabírá na úzké liště moc místa a tlačí logo
