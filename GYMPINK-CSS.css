@@ -1505,3 +1505,40 @@ body.type-index .welcome-wrapper {
     display: none !important;
   }
 }
+
+
+/* ===================================================================
+   3.14  MOBIL — čitelnost textu ve vysunutém menu (hamburger)
+   Diagnostika (screenshot): na homepage je hlavička nad hero fotkou
+   průhledná, proto má menu bílý text se stínem (sekce 3.0). Vysunuté
+   mobilní menu má ale BÍLÉ pozadí → bílý text na bílém = nečitelné.
+   Řešení: v mobilním menu vynutit tmavý text a zrušit stín. Selektor
+   musí zrcadlit specificitu pravidla ze 3.0, aby ho přebil.
+   =================================================================== */
+
+@media (max-width: 900px) {
+  #navigation .menu-level-1 a,
+  body.type-index #header:not(.gp-scrolled) .menu-level-1 a,
+  body.type-index #header:not(.gp-scrolled) #navigation .menu-level-1 a {
+    color: var(--gp-ink) !important;
+    text-shadow: none !important;
+  }
+
+  /* položky menu v zásuvce pod sebou, oddělené linkou */
+  #navigation .menu-level-1 {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+  }
+
+  #navigation .menu-level-1 li {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  #navigation .menu-level-1 a {
+    display: block !important;
+    padding: 16px 20px !important;
+    font-size: 15px !important;
+  }
+}
