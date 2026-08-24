@@ -1727,3 +1727,40 @@ body.type-index .welcome-wrapper {
     overflow-x: hidden !important;
   }
 }
+
+
+/* ===================================================================
+   3.19  POBO popis — úprava mřížky "advantages-four"
+   JS z ní vytáhne chybně zanořené widgety (viz krok "rozbalit špatně
+   zanořené widgety"). Po vyprázdnění v ní zůstane jen jeden vyplněný
+   sloupeček ze čtyř ("perfektní fit"), takže mřížka 4×1 nedává smysl —
+   necháme obsah přirozeně na plnou šířku a na mobilu pod sebe.
+   =================================================================== */
+
+.rc-advantages-four {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 16px !important;
+  align-items: flex-start !important;
+}
+
+/* prázdná políčka pro ikonu (zůstanou po vytažení obsahu) neroztahovat */
+.rc-advantages-four__ico-container:empty {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .rc-advantages-four {
+    flex-direction: column !important;
+  }
+
+  .rc-advantages-four__item {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* text v POBO widgetech ať se vejde do šířky */
+#pobo-all-content .widget-container {
+  max-width: 100% !important;
+}

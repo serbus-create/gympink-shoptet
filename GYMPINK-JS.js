@@ -399,6 +399,50 @@
     },
 
     {
+      nazev: 'POBO popis — rozbalit špatně zanořené widgety a smazat prázdné',
+      spustit: function () {
+        // Diagnostika (HTML zdroj popisu): widget "advantages-four" je
+        // mřížka 4 sloupečků, kde .rc-advantages-four__ico-container je
+        // políčko pro MALOU IKONU. V tomhle produktu do něj někdo vnořil
+        // celé další widgety (image-right > image-half-left "Proč si je
+        // zamiluješ?", text "Barva přímo na míru", faq). Obsah na několik
+        // obrazovek se tak cpe do ~25 % šířky mřížky → text se drtí a
+        // překrývá. Žádné CSS to nespraví, musí se rozebrat struktura.
+        // Navíc tam jsou widgety obsahující jen &nbsp; → prázdné díry.
+        var koren = find('#pobo-all-content');
+        if (!koren) return;
+
+        // 1) Vytáhnout widgety zanořené v políčku pro ikonu ven.
+        //    Vkládáme je ZA celý widget-container, ve kterém vězely,
+        //    aby zůstalo pořadí obsahu tak, jak ho klientka zamýšlela.
+        var ikonky = findAll('.rc-advantages-four__ico-container', koren);
+        ikonky.forEach(function (ikona) {
+          var vnorene = findAll(':scope > .widget-container', ikona);
+          if (!vnorene.length) return;
+
+          var hostitel = ikona.closest('.widget-container');
+          if (!hostitel || !hostitel.parentElement) return;
+
+          vnorene.forEach(function (w) {
+            hostitel.parentElement.insertBefore(w, hostitel.nextSibling);
+          });
+        });
+
+        // 2) Smazat widgety bez obsahu (jen &nbsp; / mezery).
+        //    Pojistka: widget s obrázkem/videem se nemaže, i kdyby
+        //    neměl žádný text.
+        findAll('.widget-container', koren).forEach(function (w) {
+          var maMedia = w.querySelector('img, video, iframe, picture, svg');
+          if (maMedia) return;
+
+          // \u00a0 = nezlomitelná mezera (&nbsp;)
+          var text = (w.textContent || '').replace(/\u00a0/g, ' ').trim();
+          if (text === '') w.remove();
+        });
+      }
+    },
+
+    {
       nazev: 'POBO popis — mobilní úklid inline rozměrů',
       spustit: function () {
         // POBO Page Builder sází bloky s pevnými desktopovými rozměry
