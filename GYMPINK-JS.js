@@ -298,6 +298,13 @@
         var inner = find('.p-detail-inner');
         if (!inner) return;
 
+        // Layout níž se nastavuje inline s !important, což přebije
+        // i media queries — na mobilu bychom pak nemohli nic upravit
+        // a vynucené šířky (max-width:340px, flex-basis:500px) tam
+        // nedávají smysl. Pod 901 px proto necháváme nativní skládání
+        // Shoptetu (prvky pod sebou).
+        if (window.innerWidth <= 900) return;
+
         var obrazekSloupec = find('.detail-img.p-image-wrapper', inner);
         var formSloupec = find(':scope > .col-md-4.pull-left', inner) || find('.col-md-4.pull-left', inner);
         var nadpisElement = find('h1', inner);
