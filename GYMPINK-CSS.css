@@ -1713,9 +1713,9 @@ body.type-index .welcome-wrapper {
      s okolím. */
   .add-to-cart .btn.btn-conversion {
     width: auto !important;
-    max-width: 260px !important;
+    max-width: 210px !important;
     margin: 0 auto !important;
-    padding: 13px 24px !important;
+    padding: 10px 20px !important;
     font-size: 14px !important;
     font-weight: 700 !important;
     letter-spacing: .02em !important;
@@ -1725,7 +1725,7 @@ body.type-index .welcome-wrapper {
     align-items: center !important;
     justify-content: center !important;
     gap: 6px !important;
-    min-height: 44px !important;
+    min-height: 38px !important;
   }
 
   .add-to-cart .btn.btn-conversion::before {
