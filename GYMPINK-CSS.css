@@ -1770,3 +1770,19 @@ body.type-index .welcome-wrapper {
     color: #fff !important;
   }
 }
+
+
+/* MOBIL — dostupnost (Skladem/Vyprodáno) na střed a trochu větší */
+@media (max-width: 900px) {
+  .p-detail-inner .order-availability,
+  .p-detail-inner .order-availability .availability {
+    text-align: center !important;
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .p-detail-inner .order-availability .choose-variant {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+  }
+}
