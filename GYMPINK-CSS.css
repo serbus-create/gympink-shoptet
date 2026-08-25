@@ -324,10 +324,19 @@ body.type-index #header:not(.gp-scrolled) .top-nav-right .btn-icon {
   display: none !important;
 }
 
+/* Diagnostika (Console): scrollWidth 449 vs clientWidth 430 = 19px
+   přetok, viditelný už na úrovni hlavičky (HEADER/.navigation-wrapper)
+   na KAŽDÉ stránce. Shoda v čase se zvětšením loga (24→32px) není
+   náhoda — grid položky mají defaultně `min-width: auto`, takže se
+   CSS Grid nesmí zmenšit pod přirozenou šířku svého obsahu. Širší
+   logo v prostředním sloupci (auto) mohlo zbylé dva sloupce (menu,
+   ikony) vytlačit přes dostupnou šířku. min-width:0 dovolí gridu
+   sloupce zmenšit místo přetečení celé stránky. */
 .navigation-wrapper > #navigation {
   grid-column: 1 !important;
   grid-row: 1 !important;
   justify-self: start !important;
+  min-width: 0 !important;
 }
 
 .navigation-wrapper > .site-name {
@@ -335,6 +344,7 @@ body.type-index #header:not(.gp-scrolled) .top-nav-right .btn-icon {
   grid-row: 1 !important;
   justify-self: center !important;
   text-align: center !important;
+  min-width: 0 !important;
 }
 
 .navigation-wrapper > .top-nav {
@@ -344,6 +354,7 @@ body.type-index #header:not(.gp-scrolled) .top-nav-right .btn-icon {
   position: static !important;
   margin: 0 !important;
   padding: 0 !important;
+  min-width: 0 !important;
   top: auto !important;
   right: auto !important;
 }
