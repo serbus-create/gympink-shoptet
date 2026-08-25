@@ -1685,3 +1685,41 @@ body.type-index .welcome-wrapper {
     max-width: 100% !important;
   }
 }
+
+
+/* ===================================================================
+   MOBIL — vystředění nákupního bloku (varianta, cena, množství)
+   Opatrně: jen text-align a flex justify-content/margin:auto — ŽÁDNÉ
+   změny display/position na .p-detail-inner, .row ani cokoli u
+   galerie/miniatur/POBO popisu (to byl zdroj minulého problému
+   s kradenými kliky). Pokud se cokoli podobného objeví znovu, tohle
+   je první podezřelé místo ke zrušení.
+   =================================================================== */
+
+@media (max-width: 900px) {
+  .p-detail-inner .price,
+  .p-detail-inner .p-short-description {
+    text-align: center !important;
+  }
+
+  .p-detail-inner .variant-list {
+    display: flex !important;
+    justify-content: center !important;
+  }
+
+  .p-detail-inner .variant-list > [class*="col-"] {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    max-width: 280px !important;
+  }
+
+  .p-detail-inner .add-to-cart {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  .p-detail-inner .add-to-cart .quantity {
+    margin: 0 auto 12px !important;
+  }
+}
