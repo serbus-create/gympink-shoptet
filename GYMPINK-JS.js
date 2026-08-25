@@ -169,7 +169,7 @@
 
         function odsadit() {
           var vyska = hlavicka.getBoundingClientRect().height;
-          obsah.style.setProperty('padding-top', (vyska + 16) + 'px', 'important');
+          obsah.style.setProperty('padding-top', (vyska + 8) + 'px', 'important');
         }
 
         odsadit();

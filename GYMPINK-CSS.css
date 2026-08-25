@@ -1664,6 +1664,14 @@ body.type-index .welcome-wrapper {
     box-sizing: border-box !important;
   }
 
+  /* Diagnostika (Console): celková mezera nad produktem = kompenzace
+     hlavičky (58px + rezerva, viz JS) + vlastní margin-top
+     breadcrumbs (nativně 18px) = ~92px dohromady. Obě hodnoty
+     zmenšeny, ať mezera nepůsobí zbytečně velká. */
+  .breadcrumbs {
+    margin-top: 8px !important;
+  }
+
   .p-detail-inner > .row > .col-md-4 h1 {
     font-size: 20px !important;
     margin-bottom: 16px !important;
