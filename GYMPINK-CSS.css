@@ -148,6 +148,14 @@
   box-shadow: 0 1px 8px rgba(0, 0, 0, .08) !important;
   transition: background-color .25s ease, top .25s ease !important;
   padding-bottom: 0 !important;
+  /* Diagnostika (Console, getComputedStyle při scrollY:777): hlavička
+     měla transform: translateY(-58px) — přesně mínus svoje vlastní
+     výška. Šablona má v konfiguraci "fixed_header": false, takže
+     Shoptet spouští VLASTNÍ JS pro schovávání hlavičky při scrollu
+     (přes transform). My navrch vynucujeme position:fixed, ale jejich
+     JS pořád běží a translateY zůstává trvale nalepený → hlavička
+     je sice fixed, ale posunutá mimo obrazovku. Přebito natvrdo. */
+  transform: none !important;
 }
 
 /* Homepage — start průhledný nad hero fotkou, top:30px (nad ní),
