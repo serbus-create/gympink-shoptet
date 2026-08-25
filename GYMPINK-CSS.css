@@ -1356,7 +1356,8 @@ body.type-index .welcome-wrapper {
 
   .p-detail-inner .price.row .add-to-cart {
     grid-column: 2 !important;
-    grid-row: 2 / span 2 !important;
+    grid-row: 2 !important;
+    align-self: center !important;
   }
 }
 
