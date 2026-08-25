@@ -1246,6 +1246,14 @@ body.type-index .welcome-wrapper {
   border: 1px solid transparent !important;
 }
 
+/* Diagnostika: náš soubor thumbnaily nikdy nestyloval — ořezávání
+   dole dělalo nativní Shoptet pravidlo (čtvercový box + object-fit:
+   cover). Přepnuto na "contain", ať se vejde celá fotka. */
+.p-thumbnails .p-thumbnail img {
+  object-fit: contain !important;
+  background: var(--gp-tile) !important;
+}
+
 .p-thumbnails .p-thumbnail.highlighted {
   border: 1px solid var(--gp-ink) !important;
 }
