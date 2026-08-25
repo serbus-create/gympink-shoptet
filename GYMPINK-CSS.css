@@ -1233,13 +1233,18 @@ body.type-index .welcome-wrapper {
    selhal/neproběhl (např. jiné časování na některých stránkách),
    tohle samo o sobě zajistí, že se .row (nadpis+obrázek) "zabalí"
    kolem svého plovoucího potomka a nezhroutí se — karta s cenou
-   pak spadne POD řádek, ne vedle něj do zbylé škvíry. */
+   pak spadne POD řádek, ne vedle něj do zbylé škvíry.
+   Jen DESKTOP — na mobilu necháváme nativní chování šablony
+   (viz poznámka na konci souboru, proč jsme mobilní úpravy detailu
+   produktu zrušili). */
+@media (min-width: 901px) {
 .p-detail-inner {
   display: block !important;
 }
 
 .p-detail-inner > .row {
   overflow: hidden !important;
+}
 }
 
 .p-detail-inner > .row > .col-md-4 h1 {
@@ -1646,432 +1651,37 @@ body.type-index .welcome-wrapper {
 
 
 /* ===================================================================
-   3.17  MOBIL — detail produktu
-   JS krok (3.10) se pod 901 px už nespouští, takže tady poprvé
-   stylujeme mobilní podobu. Cíl: nadpis, galerie a formulář pod sebou
-   na plnou šířku, tlačítko Do košíku přes celou šířku.
-   ⚠ Rozházený POPIS (překrývající se bloky) NENÍ z našich souborů —
-   vykresluje ho POBO Page Builder a jeho bloky mají pevné desktopové
-   šířky. Musí se upravit v POBO editoru u daného produktu.
+   MOBIL — detail produktu: NÁVRAT K NATIVNÍ ŠABLOŇĚ
+   Po opakovaných pokusech (3.17–3.22 v historii Gitu) se na mobilu
+   objevil neviditelný prvek, který kradl kliky na tlačítko Do košíku
+   a výběr varianty — otevíral místo toho fotku z popisu. Příčinu se
+   nepodařilo spolehlivě najít ani po několika kolech oprav.
+   Rozhodnutí: na mobilu detail produktu NEUPRAVUJEME vůbec — necháváme
+   nativní responzivní chování šablony Tango, které si Shoptet sám
+   odladil. Naše úpravy (rozložení, POBO úklid, velikost tlačítka,
+   vystředění nákupního panelu) platí JEN pro desktop (min-width:901px).
+   Pokud se v budoucnu bude chtít mobil znovu stylovat, doporučený
+   postup: nejdřív najít viníka přes DevTools element picker (kliknout
+   přímo na postižené místo, ne číst HTML zdroj) — to se v tomhle kole
+   nestihlo udělat před rozhodnutím vrátit se k nativnímu chování.
    =================================================================== */
 
-@media (max-width: 900px) {
-  .p-detail-inner > .row {
-    display: block !important;
-    overflow: visible !important;
-  }
-
-  .p-detail-inner > .row > .col-md-4,
-  .p-detail-inner > .col-md-4.pull-left,
-  .detail-img.p-image-wrapper {
-    float: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-
-  /* Diagnostika (screenshot): vynulování paddingu výš smazalo i
-     odsazení nadpisu a krátkého popisu — text pak lepil na okraje
-     displeje. Obrázek (.detail-img) má jít od kraje ke kraji
-     schválně, ale text ne — vracíme padding jen jemu. */
-  .p-detail-inner > .row > .col-md-4 h1,
-  .p-detail-inner .p-short-description,
-  .breadcrumbs {
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-    box-sizing: border-box !important;
-  }
-
-  /* Diagnostika (Console): celková mezera nad produktem = kompenzace
-     hlavičky (58px + rezerva, viz JS) + vlastní margin-top
-     breadcrumbs (nativně 18px) = ~92px dohromady. Obě hodnoty
-     zmenšeny, ať mezera nepůsobí zbytečně velká. */
-  .breadcrumbs {
-    margin-top: 8px !important;
-  }
-
-  .p-detail-inner > .row > .col-md-4 h1 {
-    font-size: 20px !important;
-    margin-bottom: 16px !important;
-  }
-
-  /* tlačítko Do košíku přes celou šířku, množství nad ním */
-  .add-to-cart {
+/* Widget "advantages-four" (JS ho po vytažení zanořeného obsahu
+   nechá s jediným vyplněným sloupečkem) — jen DESKTOP, ať se stejný
+   widget na mobilu vykresluje nativně jako zbytek POBO popisu. */
+@media (min-width: 901px) {
+  .rc-advantages-four {
     display: flex !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 12px !important;
-    width: 100% !important;
+    flex-wrap: wrap !important;
+    gap: 16px !important;
+    align-items: flex-start !important;
   }
 
-  /* Diagnostika: skutečná třída tlačítka je .btn.btn-conversion —
-     tohle pravidlo dřív mířilo na .btn-cart / button[type="submit"],
-     což na téhle šabloně neexistuje, takže se nikdy neuplatnilo.
-     Na mobilu tlačítko navíc zvětšujeme a přidáváme ikonu košíku,
-     ať je jasně vidět, co dělá — 15px text na plné šířce splýval
-     s okolím. */
-  .add-to-cart .btn.btn-conversion {
-    width: auto !important;
-    max-width: 252px !important;
-    margin: 0 auto !important;
-    padding: 12px 24px !important;
-    font-size: 14px !important;
-    font-weight: 700 !important;
-    letter-spacing: .02em !important;
-    text-transform: uppercase !important;
-    border-radius: 999px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 6px !important;
-    min-height: 42px !important;
-  }
-
-  .add-to-cart .btn.btn-conversion::before {
-    content: "🛒";
-    font-size: 15px;
-    line-height: 1;
-  }
-
-  .add-to-cart .quantity {
-    align-self: stretch !important;
-  }
-
-  .p-final-price-wrapper,
-  .prices {
-    padding-left: 0 !important;
-  }
-
-  /* -----------------------------------------------------------------
-     3.17b MOBIL — nákupní panel (varianta / cena / množství / CTA)
-     Diagnostika (DevTools): .add-to-cart je vnořené uvnitř .price,
-     spolu se .shipping-availability, .p-final-price-wrapper a
-     .order-availability — každý z těch bloků má vlastní nativní
-     Bootstrap odsazení, které jsme nikde nevynulovali → velké
-     nekonzistentní mezery mezi variantou/cenou/množstvím/tlačítkem.
-
-     Druhé zjištění: Shoptet vykresluje DVĚ tlačítka Do košíku —
-     velké (.btn-conversion, nativně jen na desktopu přes
-     visible-md/lg třídy) a malé ikonkové (.btn-icon.btn-cart, nativně
-     jen na mobilu přes hidden-md/lg třídy). Naše pravidlo výš nutí
-     velké tlačítko zobrazit VŽDY (bez media query), takže se na
-     mobilu zobrazují obě najednou — to je ten "záhadný košík" pod
-     tlačítkem. Řešení: schovat to malé, necháváme jen jedno CTA.
-
-     Postup: vynulovat marginy/padding všem přímým dětem .price,
-     pak vrátit jen malé, konzistentní mezery tam, kam patří.
-     ----------------------------------------------------------------- */
-
-  .p-detail-inner .price > * {
-    margin: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-
-  /* Vystředěný layout — krátký popis, varianta, cena, dostupnost
-     i stepper množství na střed. Tlačítko zůstává na celou šířku. */
-  .p-detail-inner .p-short-description,
-  .p-detail-inner .price {
-    text-align: center !important;
-  }
-
-  .p-detail-inner .variant-list {
-    margin-bottom: 14px !important;
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-    display: flex !important;
-    justify-content: center !important;
-  }
-
-  /* užší pole "Zvolte variantu", ne přes celou šířku displeje */
-  .p-detail-inner .variant-list > [class*="col-"] {
-    width: auto !important;
-    max-width: 220px !important;
-    flex: 0 0 auto !important;
-    margin: 0 auto !important;
-  }
-
-  .p-detail-inner .variant-list select,
-  .p-detail-inner .variant-list .select2-selection {
-    width: 100% !important;
-    min-height: 48px !important;
-    font-size: 15px !important;
-  }
-
-  .p-final-price-wrapper {
-    margin-bottom: 4px !important;
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-  }
-
-  .p-final-price-wrapper .price-final,
-  .p-final-price-wrapper .price {
-    font-size: 22px !important;
-    font-weight: 700 !important;
-  }
-
-  .order-availability {
-    margin-bottom: 14px !important;
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-    font-size: 13px !important;
-  }
-
-  .add-to-cart {
-    margin-top: 0 !important;
-    align-items: center !important;
-  }
-
-  /* stepper množství — kompaktní, vystředěný, čísla a šipky vedle
-     sebe, ne přes celou šířku s velkými mezerami */
-  .add-to-cart .quantity {
-    display: flex !important;
-    align-items: stretch !important;
-    width: auto !important;
-    align-self: center !important;
-    margin: 0 auto !important;
-    border: 1px solid var(--gp-line, #ddd) !important;
-    border-radius: 8px !important;
-    overflow: hidden !important;
-  }
-
-  .add-to-cart .quantity input {
-    width: 44px !important;
-    text-align: center !important;
-    border: none !important;
-    font-size: 15px !important;
-  }
-
-  .add-to-cart .quantity .btn-plus,
-  .add-to-cart .quantity .btn-minus,
-  .add-to-cart .quantity button {
-    width: 36px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-
-  /* duplicitní malé ikonkové tlačítko Do košíku (viz diagnostika
-     výš) — schované, necháváme jen velké styl. tlačítko nad ním */
-  .add-to-cart .btn.btn-icon.btn-plain.btn-cart {
+  .rc-advantages-four__ico-container:empty {
     display: none !important;
   }
-}
 
-
-/* ===================================================================
-   3.18  MOBIL — záchranná síť pro POBO popis produktu
-   Diagnostika: obsah záložky POPIS vykresluje POBO Page Builder.
-   Jeho bloky mají desktopové rozměry (často inline style="width:XXXpx"
-   nebo absolutní pozicování), které se na 390px nezalomí — bloky se
-   překrývají a text leze přes text.
-   Inline styl BEZ !important prohrává s externím pravidlem
-   S !important, takže ho odsud můžeme přebít.
-   ⚠ Je to plošné (cílí na všechny potomky záložek), protože přesné
-   třídy POBO bloků se liší produkt od produktu. Pokud se tím něco
-   rozbije, lepší cesta je upravit rozložení přímo v POBO editoru.
-   Desktop zůstává nedotčený.
-   =================================================================== */
-
-@media (max-width: 900px) {
-  /* Vysoká specificita (html body …) schválně: naše CSS je v <head>,
-     POBO si styly vkládá až za běhu — při shodné specificitě by
-     vyhrálo pozdější pravidlo (POBO). Vyšší specificita vyhraje bez
-     ohledu na pořadí. Inline styly s !important tímhle přebít NELZE,
-     ty řeší JS krok "POBO popis — mobilní úklid". */
-  html body .p-detail-tabs-wrapper,
-  html body .p-detail-tabs-wrapper * {
-    position: static !important;
-    float: none !important;
-    width: auto !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    left: auto !important;
-    right: auto !important;
-    top: auto !important;
-    bottom: auto !important;
-    transform: none !important;
-  }
-
-  html body .p-detail-tabs-wrapper img,
-  html body .p-detail-tabs-wrapper video,
-  html body .p-detail-tabs-wrapper iframe {
-    width: 100% !important;
-    height: auto !important;
-    display: block !important;
-  }
-
-  /* víceslopcové mřížky POBO složit pod sebe */
-  html body .p-detail-tabs-wrapper .row,
-  html body .p-detail-tabs-wrapper [class*="col-"] {
-    display: block !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
-
-  html body .p-detail-tabs-wrapper {
-    overflow-x: hidden !important;
-  }
-}
-
-
-/* ===================================================================
-   3.19  POBO popis — úprava mřížky "advantages-four"
-   JS z ní vytáhne chybně zanořené widgety (viz krok "rozbalit špatně
-   zanořené widgety"). Po vyprázdnění v ní zůstane jen jeden vyplněný
-   sloupeček ze čtyř ("perfektní fit"), takže mřížka 4×1 nedává smysl —
-   necháme obsah přirozeně na plnou šířku a na mobilu pod sebe.
-   =================================================================== */
-
-.rc-advantages-four {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 16px !important;
-  align-items: flex-start !important;
-}
-
-/* prázdná políčka pro ikonu (zůstanou po vytažení obsahu) neroztahovat */
-.rc-advantages-four__ico-container:empty {
-  display: none !important;
-}
-
-@media (max-width: 900px) {
-  .rc-advantages-four {
-    flex-direction: column !important;
-  }
-
-  .rc-advantages-four__item {
-    width: 100% !important;
+  #pobo-all-content .widget-container {
     max-width: 100% !important;
   }
-}
-
-/* text v POBO widgetech ať se vejde do šířky */
-#pobo-all-content .widget-container {
-  max-width: 100% !important;
-}
-
-
-/* ===================================================================
-   3.20  MOBIL — okraje a šířka popisu produktu (POBO)
-   Diagnostika: pravidla v 3.18 nastavila všemu uvnitř popisu
-   width:auto a vynulovala padding, aby se rozbily pevné desktopové
-   rozměry. Vedlejší efekt: zmizelo i legitimní vnitřní odsazení,
-   takže text lepí na okraje displeje a místy přetéká.
-   Řešení: dát odsazení samotnému obalu popisu (ne jednotlivým
-   blokům) a tvrdě omezit šířku obsahu.
-   =================================================================== */
-
-@media (max-width: 900px) {
-  html body #pobo-all-content,
-  html body .p-detail-tabs-wrapper .tab-content,
-  html body .p-detail-tabs-wrapper .shp-tab-content {
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-    box-sizing: border-box !important;
-    overflow-wrap: break-word !important;
-  }
-
-  /* nic uvnitř nesmí přerůst šířku obrazovky */
-  html body #pobo-all-content,
-  html body #pobo-all-content * {
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  /* dlouhá slova / URL ať se zalomí místo přetečení */
-  html body #pobo-all-content p,
-  html body #pobo-all-content li,
-  html body #pobo-all-content h1,
-  html body #pobo-all-content h2,
-  html body #pobo-all-content h3 {
-    overflow-wrap: break-word !important;
-    word-break: normal !important;
-  }
-
-  /* odrážky potřebují vlastní odsazení, jinak visí mimo */
-  html body #pobo-all-content ul,
-  html body #pobo-all-content ol {
-    padding-left: 22px !important;
-    margin-left: 0 !important;
-  }
-
-  /* rozumné rozestupy mezi sekcemi */
-  html body #pobo-all-content h2 {
-    margin-top: 28px !important;
-    margin-bottom: 10px !important;
-    line-height: 1.25 !important;
-  }
-
-  html body #pobo-all-content p {
-    margin-bottom: 12px !important;
-    line-height: 1.55 !important;
-  }
-}
-
-
-/* ===================================================================
-   3.21  Globální pojistka proti horizontálnímu přetečení
-   Diagnostika (Console, document.documentElement.scrollWidth vs
-   clientWidth): stránka byla širší než viewport na CELÉM webu, ne jen
-   na jedné stránce. Hlavní příčina nalezena a opravena v .navigation-
-   -wrapper (3.2b) — width:100% + padding bez box-sizing:border-box.
-   Tahle sekce je jen pojistka pro případ, že by podobný problém
-   vznikl jinde (teď nebo v budoucnu): globální box-sizing reset a
-   tvrdý zákaz horizontálního scrollu na úrovni stránky.
-   Nedotýká se to VNITŘNÍCH scrollovatelných pruhů (např. pás
-   miniatur u fotek produktu) — ty mají overflow-x na sobě samých,
-   ne na <body>, takže zůstanou funkční.
-   =================================================================== */
-
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
-html, body {
-  max-width: 100vw !important;
-}
-
-/* Diagnostika: overflow-x:hidden na <html> je v mobilních
-   prohlížečích (hlavně iOS Safari) známá past — vytvoří nový
-   scrollovací kontext, ve kterém přestane fungovat position:fixed
-   (hlavička přestane zůstávat nahoře při scrollování a "jede" spolu
-   s obsahem). Proto overflow-x:hidden patří JEN na <body>, nikdy na
-   <html>. max-width zůstává na obou, ten tenhle problém nezpůsobuje. */
-body {
-  overflow-x: hidden !important;
-}
-
-
-/* ===================================================================
-   3.22  Neviditelný trigger galerie (.cbox-gal) kradl kliky
-   Diagnostika (zdrojový kód stránky): u každé miniatury je kromě
-   viditelného <a class="p-thumbnail"> ještě PRÁZDNÝ sourozenec
-   <a class="cbox-gal" data-gallery="lightbox[gallery]"> — nativní
-   Shoptet trigger pro zvětšení fotky (colorbox lightbox). Normálně
-   má nulovou velikost (žádný obsah). Na mobilu, kde .p-detail-inner
-   přepínáme na display:block (aby šly prvky pod sebe), je možné, že
-   tenhle prázdný odkaz dostane neočekávané rozměry a "rozteče" se
-   přes prostor pod sebou — kde na mobilu leží formulář s tlačítkem
-   Do košíku a výběrem varianty. Projev: klik na tlačítko/variantu
-   místo toho otevře fotku z popisu produktu.
-   Řešení: natvrdo nulová velikost, position:static, ať nemůže nic
-   zakrývat. data-gallery atribut zůstává zachovaný, takže JS knihovna
-   lightboxu (vázaná přes delegaci na .cbox-gal) dál funguje při
-   kliku na SAMOTNOU miniaturu (.p-thumbnail) — jen se tenhle prvek
-   sám nemůže stát neviditelnou překážkou nad jiným obsahem.
-   =================================================================== */
-
-.cbox-gal {
-  position: static !important;
-  display: block !important;
-  width: 0 !important;
-  height: 0 !important;
-  max-width: 0 !important;
-  max-height: 0 !important;
-  overflow: hidden !important;
-  pointer-events: none !important;
 }
