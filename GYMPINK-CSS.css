@@ -1321,6 +1321,45 @@ body.type-index .welcome-wrapper {
   color: var(--gp-ink) !important;
 }
 
+/* Jen DESKTOP — cena+dostupnost vlevo (pod sebou), množství+tlačítko
+   vedle nich vpravo (svisle vycentrované na výšku obou levých řádků).
+   .price.row je Bootstrap .row s víc dětmi (shipping-availability,
+   p-final-price-wrapper, order-availability, spaced-small,
+   add-to-cart) — místo přeskládávání DOM je přes CSS grid umístíme
+   do konkrétních buněk podle jejich existující třídy. */
+@media (min-width: 901px) {
+  .p-detail-inner .price.row {
+    display: grid !important;
+    grid-template-columns: auto 1fr !important;
+    column-gap: 32px !important;
+    row-gap: 4px !important;
+    align-items: center !important;
+  }
+
+  .p-detail-inner .price.row .shipping-availability {
+    grid-column: 1 / -1 !important;
+  }
+
+  .p-detail-inner .price.row .p-final-price-wrapper {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+  }
+
+  .p-detail-inner .price.row .order-availability {
+    grid-column: 1 !important;
+    grid-row: 3 !important;
+  }
+
+  .p-detail-inner .price.row .spaced-small {
+    display: none !important;
+  }
+
+  .p-detail-inner .price.row .add-to-cart {
+    grid-column: 2 !important;
+    grid-row: 2 / span 2 !important;
+  }
+}
+
 .add-to-cart {
   display: flex !important;
   flex-direction: column !important;
