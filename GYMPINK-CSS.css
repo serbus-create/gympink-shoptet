@@ -1343,6 +1343,26 @@ body.type-index .welcome-wrapper {
   border-radius: 4px !important;
 }
 
+/* Jen DESKTOP — množství a tlačítko vedle sebe v jedné řádce
+   (na mobilu zůstává pod sebou, tam to funguje dobře). */
+@media (min-width: 901px) {
+  .add-to-cart {
+    flex-direction: row !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .add-to-cart .quantity {
+    flex: 0 0 auto !important;
+    align-self: center !important;
+  }
+
+  .add-to-cart .btn.btn-conversion {
+    width: auto !important;
+    flex: 1 1 auto !important;
+  }
+}
+
 /* ===================================================================
    3.11  KATEGORIE — skrytí popisu pod nadpisem
    Diagnostika (ověřeno v DevTools): .category-top obsahuje
