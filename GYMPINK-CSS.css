@@ -1741,8 +1741,8 @@ body.type-index .welcome-wrapper {
     align-items: center !important;
     justify-content: center !important;
     gap: 8px !important;
-    width: auto !important;
-    max-width: 286px !important;
+    width: 100% !important;
+    max-width: 340px !important;
     margin: 0 auto !important;
     padding: 10px 22px !important;
     min-height: 42px !important;
