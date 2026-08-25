@@ -2044,3 +2044,34 @@ html, body {
 body {
   overflow-x: hidden !important;
 }
+
+
+/* ===================================================================
+   3.22  Neviditelný trigger galerie (.cbox-gal) kradl kliky
+   Diagnostika (zdrojový kód stránky): u každé miniatury je kromě
+   viditelného <a class="p-thumbnail"> ještě PRÁZDNÝ sourozenec
+   <a class="cbox-gal" data-gallery="lightbox[gallery]"> — nativní
+   Shoptet trigger pro zvětšení fotky (colorbox lightbox). Normálně
+   má nulovou velikost (žádný obsah). Na mobilu, kde .p-detail-inner
+   přepínáme na display:block (aby šly prvky pod sebe), je možné, že
+   tenhle prázdný odkaz dostane neočekávané rozměry a "rozteče" se
+   přes prostor pod sebou — kde na mobilu leží formulář s tlačítkem
+   Do košíku a výběrem varianty. Projev: klik na tlačítko/variantu
+   místo toho otevře fotku z popisu produktu.
+   Řešení: natvrdo nulová velikost, position:static, ať nemůže nic
+   zakrývat. data-gallery atribut zůstává zachovaný, takže JS knihovna
+   lightboxu (vázaná přes delegaci na .cbox-gal) dál funguje při
+   kliku na SAMOTNOU miniaturu (.p-thumbnail) — jen se tenhle prvek
+   sám nemůže stát neviditelnou překážkou nad jiným obsahem.
+   =================================================================== */
+
+.cbox-gal {
+  position: static !important;
+  display: block !important;
+  width: 0 !important;
+  height: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
