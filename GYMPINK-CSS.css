@@ -1794,11 +1794,15 @@ body.type-index .welcome-wrapper {
    (Znovu obnoveno — omylem smazáno při velké revizi mobilního detailu
    produktu, protože bylo fyzicky umístěné ve stejné části souboru.)
 
-   Diagnostika: overflow-x:hidden na <html> je v mobilních prohlížečích
-   (hlavně iOS Safari) známá past — vytvoří nový scrollovací kontext,
-   ve kterém přestane fungovat position:fixed (hlavička přestane
-   zůstávat nahoře při scrollování a "jede" spolu s obsahem). Proto
-   overflow-x:hidden patří JEN na <body>, nikdy na <html>.
+   Diagnostika (Console, getComputedStyle na #header a jeho předcích):
+   nejdřív jsme mysleli, že stačí přesunout overflow-x:hidden z <html>
+   na <body>. Nestačilo — stejná past (nový scrollovací kontext, který
+   rozbíjí position:fixed) se v mobilních prohlížečích umí objevit
+   i na <body>, ne jen na kořenovém <html>. Správné řešení: overflow
+   nedávat na html ANI na body, ale na vnitřní wrapper (.overall-
+   -wrapper), který hlavičku i obsah obaluje. Ten není transformovaný
+   ani jinak neobvyklý (ověřeno), takže nemění kontext pro fixed prvky
+   uvnitř — jen ořízne přetečení.
    =================================================================== */
 
 *, *::before, *::after {
@@ -1809,6 +1813,6 @@ html, body {
   max-width: 100vw !important;
 }
 
-body {
+.overall-wrapper {
   overflow-x: hidden !important;
 }
