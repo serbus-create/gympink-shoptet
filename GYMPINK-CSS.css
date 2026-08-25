@@ -1693,8 +1693,8 @@ body.type-index .welcome-wrapper {
      ať je jasně vidět, co dělá — 15px text na plné šířce splýval
      s okolím. */
   .add-to-cart .btn.btn-conversion {
-    padding: 18px 24px !important;
-    font-size: 16px !important;
+    padding: 13px 24px !important;
+    font-size: 14px !important;
     font-weight: 700 !important;
     letter-spacing: .02em !important;
     text-transform: uppercase !important;
@@ -1702,13 +1702,13 @@ body.type-index .welcome-wrapper {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 8px !important;
-    min-height: 52px !important;
+    gap: 6px !important;
+    min-height: 44px !important;
   }
 
   .add-to-cart .btn.btn-conversion::before {
     content: "🛒";
-    font-size: 18px;
+    font-size: 15px;
     line-height: 1;
   }
 
