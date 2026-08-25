@@ -1723,3 +1723,50 @@ body.type-index .welcome-wrapper {
     margin: 0 auto 12px !important;
   }
 }
+
+
+/* ===================================================================
+   MOBIL — zvýraznění nativního tlačítka "Do košíku"
+   Na mobilu se ukazuje jiné (ikonkové) tlačítko než na desktopu:
+   .btn.btn-icon.btn-plain.btn-cart — má jen ikonu, text "Do košíku"
+   je uvnitř jako .sr-only (skrytý, jen pro čtečky obrazovky). Bez
+   viditelného textu nemusí být jasné, že jde o CTA k nákupu.
+   Řešení: zviditelnit ten existující text (ne přidávat nový) a dát
+   tlačítku tmavé pozadí + tvar pilulky, ať je nepřehlédnutelné.
+   Opatrně: jen barvy/tvar/text, žádné display:block na rodičích. */
+
+@media (max-width: 900px) {
+  .add-to-cart .btn.btn-icon.btn-plain.btn-cart {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    width: auto !important;
+    max-width: 220px !important;
+    margin: 0 auto !important;
+    padding: 10px 22px !important;
+    min-height: 42px !important;
+    background: var(--gp-ink) !important;
+    border: none !important;
+    border-radius: 999px !important;
+    color: #fff !important;
+  }
+
+  /* zviditelnění existujícího textu "Do košíku" (byl jen pro čtečky) */
+  .add-to-cart .btn.btn-icon.btn-plain.btn-cart .sr-only {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+    clip-path: none !important;
+    white-space: normal !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: .02em !important;
+    color: #fff !important;
+  }
+}
