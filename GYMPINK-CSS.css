@@ -1786,3 +1786,29 @@ body.type-index .welcome-wrapper {
     font-weight: 600 !important;
   }
 }
+
+
+/* ===================================================================
+   Globální pojistka proti horizontálnímu přetečení + oprava fixed
+   hlavičky na mobilu
+   (Znovu obnoveno — omylem smazáno při velké revizi mobilního detailu
+   produktu, protože bylo fyzicky umístěné ve stejné části souboru.)
+
+   Diagnostika: overflow-x:hidden na <html> je v mobilních prohlížečích
+   (hlavně iOS Safari) známá past — vytvoří nový scrollovací kontext,
+   ve kterém přestane fungovat position:fixed (hlavička přestane
+   zůstávat nahoře při scrollování a "jede" spolu s obsahem). Proto
+   overflow-x:hidden patří JEN na <body>, nikdy na <html>.
+   =================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  max-width: 100vw !important;
+}
+
+body {
+  overflow-x: hidden !important;
+}
