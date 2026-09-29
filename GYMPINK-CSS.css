@@ -216,16 +216,7 @@ body.type-index #header:not(.gp-scrolled) .top-nav-right .btn-icon {
   background: transparent !important;
 }
 
-/* Logo je BÍLÉ (gymink_white.png) → na světle růžové liště by splynulo.
-   brightness(0) z něj udělá tmavou (černou) siluetu; průhlednost zůstává.
-   Na homepage nad hero fotkou (průhledná hlavička, bez .gp-scrolled)
-   zůstává původní bílé. Kdyby se to nelíbilo, stačí smazat tento blok. */
-#header .site-name img {
-  filter: brightness(0) !important;
-}
-body.type-index #header:not(.gp-scrolled) .site-name img {
-  filter: none !important;
-}
+/* Logo zůstává BÍLÉ (gymink_white.png) na žádost klientky — bez filtru. */
 
 
 /* ===================================================================
