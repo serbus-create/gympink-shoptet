@@ -562,7 +562,7 @@ body.type-index .benefitBanner__item {
   gap: clamp(32px, 8vw, 120px) !important;
   flex: 1 1 0 !important;
   min-width: 0 !important;
-  background: var(--gp-tile) !important;
+  background: var(--gp-header-bg) !important;
   padding: 48px 40px !important;
   border-radius: 0 !important;
 }
@@ -645,7 +645,7 @@ body.type-index .benefitBanner__data {
     height: clamp(48px, 16vw, 64px) !important;
     border-radius: 50% !important;
     overflow: hidden !important;
-    background: var(--gp-tile) !important;
+    background: var(--gp-header-bg) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
