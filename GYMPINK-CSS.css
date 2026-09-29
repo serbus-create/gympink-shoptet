@@ -190,6 +190,23 @@ body.type-index #header:not(.gp-scrolled) .top-nav-right .btn-icon {
 }
 
 
+/* Bílé písmo v růžové liště (na žádost klientky) — jen desktop.
+   Mobilní zásuvka menu má vlastní bílé pozadí, tam zůstává tmavé.
+   Změna zpět na tmavé: nahradit #fff za var(--gp-ink). */
+@media (min-width: 901px) {
+  #header .menu-level-1 a,
+  #header .top-nav-right a,
+  #header .top-nav-right .btn-icon,
+  #header .gp-blog-moved a,
+  body.type-index #header.gp-scrolled .menu-level-1 a,
+  body.type-index #header.gp-scrolled .top-nav-right a,
+  body.type-index #header.gp-scrolled .top-nav-right .btn-icon,
+  body.type-index #header.gp-scrolled .gp-blog-moved a {
+    color: #fff !important;
+  }
+}
+
+
 /* ===================================================================
    3.1  LOGO — omezení velikosti
    Diagnostika: .site-name img nemá žádné omezení rozměrů, vykresluje
