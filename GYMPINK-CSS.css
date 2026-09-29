@@ -747,7 +747,7 @@ body.type-index .gp-banner-pair-item .extended-banner-title {
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
-  font-size: clamp(16px, 1.8vw, 22px) !important;
+  font-size: clamp(22.4px, 2.52vw, 30.8px) !important; /* +40 % (bylo clamp(16px,1.8vw,22px)) */
   font-weight: 700 !important;
   color: var(--gp-on-photo) !important;
   margin-bottom: 14px !important;
@@ -1173,7 +1173,7 @@ body.type-index .gp-banner-big .extended-banner-title {
   outline: none !important;
   box-shadow: none !important;
   padding: 0 !important;
-  font-size: var(--gp-fs-h2) !important;
+  font-size: clamp(28px, 3.36vw, 44.8px) !important; /* +40 % (bylo --gp-fs-h2 = clamp(20px,2.4vw,32px)) */
   font-weight: 700 !important;
   color: var(--gp-on-photo) !important;
   text-transform: none !important;
@@ -1544,7 +1544,7 @@ body.type-index .welcome-wrapper {
 
   body.type-index .gp-banner-pair-item .extended-banner-title,
   body.type-index .gp-banner-big .extended-banner-title {
-    font-size: clamp(20px, 6vw, 30px) !important;
+    font-size: clamp(28px, 8.4vw, 42px) !important; /* +40 % (bylo clamp(20px,6vw,30px)) */
     margin-bottom: 16px !important;
   }
 
