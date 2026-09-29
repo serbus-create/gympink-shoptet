@@ -985,7 +985,7 @@ body.type-index .gp-banner-pair-item .extended-banner-link {
 footer.footer {
   position: relative !important;
   margin-top: 40px !important;
-  background: var(--gp-tile) !important;
+  background: var(--gp-header-bg) !important;
 }
 
 /* Logo GymPink v pravém horním rohu patičky — vkládá JS (přesná
