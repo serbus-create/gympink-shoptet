@@ -878,7 +878,9 @@ body.type-index .gp-banner-pair-item .extended-banner-link {
 }
 
 .product .img {
-  aspect-ratio: 0.75 !important;
+  /* 2:3 = poměr původních fotek; Shoptet je vkládá do plátna 4:3 s bílými
+     okraji, které se při 2:3 + object-fit: cover ořežou přesně. */
+  aspect-ratio: 2 / 3 !important;
   overflow: hidden !important;
   position: relative !important;
 }
@@ -2217,4 +2219,60 @@ body.type-index .gp-drop .product .p .p-bottom .availability {
   body.type-index .gp-drop .products-inline > .product {
     flex: 0 0 calc((100% - 8px) / 1.5) !important;
   }
+}
+
+
+/* ===================================================================
+   3.26  PŘÍZNAKY (štítky) — varianta A: obdélníky v rohu fotky
+   Ostré rohy, 11px velkými písmeny, těsně v levém horním rohu fotky,
+   pod sebou s mezerou 4 px. Barvy pozadí štítků se nastavují
+   v administraci (Nastavení → Produkty → Parametry a příznaky) —
+   Shoptet je zapisuje inline; text je vždy bílý.
+   Paleta: Novinka #1a1a1a · Bestsellers #a3336f · Akce #d3312b ·
+           Výprodej #8f1d2c · Tip #2d6a6e
+   JS přesouvá .flags-inline do .flags-extra uvnitř .img (výpis kategorií).
+   =================================================================== */
+.product .img .flags,
+.product .img .flags-extra,
+body.type-index .gp-drop .product .p a.image .extra-flags,
+body.type-index .gp-drop .product .p a.image .flags {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: auto !important;
+  bottom: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 4px !important;
+  width: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  z-index: 3 !important;
+  pointer-events: none !important;
+}
+
+/* .extra-flags obsahuje .flags — vnitřní obal nesmí být znovu absolutní */
+body.type-index .gp-drop .product .p a.image .extra-flags .flags {
+  position: static !important;
+}
+
+.product .img .flags > *,
+.product .img .flags .flag,
+body.type-index .gp-drop .product .p a.image .flags > *,
+body.type-index .gp-drop .product .p a.image .flags .flag {
+  position: static !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 5px 9px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+  letter-spacing: .03em !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+  white-space: nowrap !important;
 }

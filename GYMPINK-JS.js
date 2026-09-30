@@ -610,6 +610,31 @@
       }
     },
 
+    {
+      nazev: 'Příznaky (varianta A) — přesun .flags-inline do rohu fotky (.img)',
+      spustit: function () {
+        // Diagnostika (DevTools, výpis kategorie): .product > .inner >
+        //   .img (a > img, div.flags.flags-extra)   ← fotka + prázdný slot
+        //   .flags.flags-inline                       ← skutečné štítky, mimo fotku
+        //   .descr
+        // Štítky přesuneme do .flags-extra uvnitř .img, ať se dají v CSS
+        // umístit přesně do levého horního rohu fotky.
+        findAll('.product .inner').forEach(function (inner) {
+          var foto = find('.img', inner);
+          var inline = find('.flags-inline', inner);
+          if (!foto || !inline || foto.contains(inline)) return;
+
+          var slot = find('.flags-extra', foto);
+          if (!slot) {
+            foto.appendChild(inline);
+            return;
+          }
+          while (inline.firstChild) slot.appendChild(inline.firstChild);
+          inline.style.setProperty('display', 'none', 'important');
+        });
+      }
+    },
+
   ];
 
 
