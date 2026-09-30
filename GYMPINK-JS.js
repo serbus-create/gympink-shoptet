@@ -752,15 +752,27 @@
         L.classList.add(rezimB ? 'gp-pdp-row2' : 'gp-pdp-modeA');
         if (!rezimB && zalozky) zalozky.classList.add('gp-pdp-tabs');
 
-        // Hlavní fotka galerie (první <img>, který není miniatura).
-        var hlavniFoto = findAll('img', galerie).filter(function (i) {
-          return !i.closest('.p-thumbnails, .p-thumbnails-wrapper, .p-thumbnail');
-        })[0];
+        // Hlavní fotka galerie = největší vykreslený <img>; miniatury = malé <img>
+        // (do 15 % plochy hlavní fotky). Nezávisí na názvech tříd šablony.
+        var obrazky = findAll('img', galerie);
+        function plochaObr(i) {
+          var r = i.getBoundingClientRect();
+          return r.width * r.height;
+        }
+        var hlavniFoto = obrazky.slice().sort(function (a, b) {
+          return plochaObr(b) - plochaObr(a);
+        })[0] || null;
         if (hlavniFoto) hlavniFoto.classList.add('gp-pdp-main-img');
+        var hlavniPlocha = hlavniFoto ? plochaObr(hlavniFoto) : 0;
 
-        // Miniatury: najdeme jejich společný kontejner a větev galerie, ve
-        // které leží, a hlavní fotku ve své větvi. Složíme je pod sebe.
-        var miniatury = findAll('.p-thumbnail', galerie);
+        var miniatury = [];
+        obrazky.forEach(function (i) {
+          var pl = plochaObr(i);
+          if (i === hlavniFoto || pl <= 0 || pl >= hlavniPlocha * 0.15) return;
+          var a = i.closest('a') || i;
+          if (galerie.contains(a) && miniatury.indexOf(a) === -1) miniatury.push(a);
+        });
+
         var hlavniVetev = hlavniFoto ? potomekObsahujici(galerie, hlavniFoto) : null;
         var miniaturyKontejner = null;
         var miniaturyVetev = null;
@@ -998,11 +1010,27 @@
             }, SLOUPEC));
             if (zalozky) vynutit(zalozky, { 'grid-column': '1 / -1', 'grid-row': '4' });
           }
-          galerieNaSloupec();
+          try {
+            galerieNaSloupec();
+          } catch (chyba) {
+            window.__gpGal = 'galerie CHYBA: ' + chyba.message;
+            log('PDP2 galerie CHYBA: ' + chyba.message);
+          }
+        }
+        function popisEl(el) {
+          if (!el) return 'null';
+          var r = el.getBoundingClientRect();
+          return el.tagName.toLowerCase() + (el.className && typeof el.className === 'string'
+            ? '.' + el.className.trim().replace(/\s+/g, '.') : '') +
+            ' [' + Math.round(r.width) + 'x' + Math.round(r.height) + ']';
         }
         function galerieNaSloupec() {
           if (window.innerWidth <= 900) return;
-          if (!hlavniFoto) return;
+          if (!hlavniFoto) { window.__gpGal = 'galerie: hlavní fotka NENALEZENA'; return; }
+          window.__gpGal = 'galerie: fotek=' + obrazky.length + ' miniatur=' + miniatury.length +
+            '\n  hlavni: ' + popisEl(hlavniFoto) +
+            '\n  kontejner miniatur: ' + popisEl(miniaturyKontejner) +
+            '\n  prvni miniatura: ' + popisEl(miniatury[0]);
 
           // Kontejner galerie G = nejbližší společný rodič hlavní fotky a
           // miniatur (mb = větev s fotkou, tb = větev s miniaturami).
@@ -1080,7 +1108,7 @@
               if (polozka !== m) {
                 vynutit(m, { display: 'block', position: 'static', width: '100%', height: '100%', margin: '0' });
               }
-              var mi = find('img', m);
+              var mi = m.tagName === 'IMG' ? m : find('img', m);
               if (mi) {
                 vynutit(mi, {
                   position: 'absolute', top: '0', left: '0', width: '100%', height: '100%',
@@ -1270,8 +1298,9 @@
             ' overflow=' + c.overflow;
         }
         function obnovit() {
-          okno.textContent = ['.gp-pdp-buy', '.p-short-description', '.variant-list', '.gp-sizes',
-            '.gp-size', '.add-to-cart', '.gp-freeship', '.gp-trust'].map(popis).join('\n');
+          okno.textContent = (window.__gpGal ? window.__gpGal + '\n\n' : '') +
+            ['.gp-pdp-buy', '.p-short-description', '.variant-list', '.gp-sizes',
+             '.gp-size', '.add-to-cart', '.gp-freeship', '.gp-trust'].map(popis).join('\n');
         }
         setTimeout(obnovit, 900);
         okno.addEventListener('click', obnovit);
