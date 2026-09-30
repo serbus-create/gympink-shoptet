@@ -4032,3 +4032,20 @@ footer.footer .custom-footer__onlinePayments img {
     color: #fff !important;
   }
 }
+
+
+/* ===================================================================
+   3.54  Hamburger a lupa vlevo — větší rozestup (byly nalepené)
+   Telefon 22 px, tablet / malý notebook 16 px. Větší rozestup je i lepší
+   pro klepání prstem (menší riziko, že se trefí druhá ikona).
+   =================================================================== */
+@media (max-width: 1279px) {
+  .gp-search-left {
+    gap: 16px !important;
+  }
+}
+@media (max-width: 767px) {
+  .gp-search-left {
+    gap: 22px !important;
+  }
+}
