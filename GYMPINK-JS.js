@@ -532,6 +532,14 @@
 
           obal.appendChild(skupina);
 
+          // Pořadí na titulní straně: malý pár bannerů → tato sekce →
+          // velký banner (Týmové oblečení). Pár i velký banner už
+          // vytvořil předchozí krok; sekci vložíme hned za pár.
+          var parBanneru = find('.gp-banner-pair');
+          if (parBanneru && !skupina.id.match(/^products-(?!1$)/)) {
+            move(obal, parBanneru, 'after');
+          }
+
           // Fotky: vyplnit celou kartu (nativní pravidlo je nechávalo
           // v režimu "contain" s bílými pruhy po stranách).
           findAll('a.image img', skupina).forEach(function (img) {
