@@ -3812,3 +3812,66 @@ footer.footer .custom-footer__onlinePayments img {
     filter: drop-shadow(0 1px 8px rgba(0, 0, 0, .5)) !important;
   }
 }
+
+
+/* ===================================================================
+   3.49  MOBIL — hlavička stejná barva jako banner + lupa vlevo
+   Diagnostika (změřeno ve screenshotu): lišta #ecdee8 vs. hero #efdde9.
+   Vnitřní vrstvy hlavičky (Shoptet maluje mobilní hlavičku barvou ze
+   svého nastavení) dostanou průhledné pozadí, takže prosvítá jen naše
+   #efdde9 z #header. Nahoře na titulní straně zrušen i stín pod lištou
+   (dělal viditelný přechod k banneru).
+   Lupa: JS ji na mobilu přesune do .gp-search-left (vlevo v liště).
+   =================================================================== */
+.gp-search-left {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  #header {
+    opacity: 1 !important;
+    filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background-image: none !important;
+  }
+  #header::before,
+  #header::after {
+    background: none !important;
+    box-shadow: none !important;
+  }
+  #header > *:not(#navigation),
+  #header .navigation-wrapper,
+  #header .top-nav,
+  #header .top-nav-right {
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+  body.type-index #header:not(.gp-scrolled) {
+    box-shadow: none !important;
+  }
+
+  .gp-search-left {
+    display: flex !important;
+    position: absolute !important;
+    left: 12px !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    align-items: center !important;
+    z-index: 5 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+  .gp-search-left li {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .gp-search-left a,
+  .gp-search-left a * {
+    color: #fff !important;
+    text-shadow: 0 1px 12px rgba(0, 0, 0, .55) !important;
+  }
+}

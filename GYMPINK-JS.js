@@ -1524,6 +1524,42 @@
       }
     },
     {
+      nazev: 'Mobil — lupa (hledání) vlevo v liště (na počítači zůstává vpravo)',
+      spustit: function () {
+        var hlavicka = find('#header');
+        if (!hlavicka) return;
+        // Tlačítko hledání: Shoptet ho značí data-target="search"; nouzově podle textu "Hledat".
+        var tlacitko = find('a[data-target="search"]', hlavicka) ||
+          findAll('.top-nav-right a', hlavicka).filter(function (a) {
+            return /hledat/i.test((a.textContent || '') + ' ' + (a.getAttribute('aria-label') || ''));
+          })[0];
+        if (!tlacitko) return;
+        var polozka = tlacitko.closest('li') || tlacitko;
+        if (polozka.parentNode && polozka.parentNode.classList &&
+            polozka.parentNode.classList.contains('gp-search-left')) return; // už zpracováno
+
+        var puvodniRodic = polozka.parentNode;
+        var puvodniDalsi = polozka.nextSibling;
+
+        var box = document.createElement('div');
+        box.className = 'gp-search-left';
+        hlavicka.appendChild(box);
+
+        // Idempotentní přepínání podle šířky okna (mobil ≤ 900 px = vlevo).
+        function ulozit() {
+          if (window.innerWidth <= 900) {
+            if (polozka.parentNode !== box) box.appendChild(polozka);
+          } else if (polozka.parentNode === box) {
+            var kam = (puvodniDalsi && puvodniDalsi.parentNode === puvodniRodic)
+              ? puvodniDalsi : puvodniRodic.firstChild;
+            puvodniRodic.insertBefore(polozka, kam);
+          }
+        }
+        ulozit();
+        window.addEventListener('resize', ulozit);
+      }
+    },
+    {
       nazev: 'PDP2 — diagnostické okno (jen s ?debug=1 v adrese)',
       spustit: function () {
         if (!document.body.classList.contains('gp-pdp2')) return;
