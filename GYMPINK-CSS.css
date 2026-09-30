@@ -4265,7 +4265,17 @@ footer.footer .custom-footer__onlinePayments img {
   body.gp-pdp2 .add-to-cart .quantity {
     height: 52px !important;
     min-height: 52px !important;
+    margin: 0 !important;
     box-sizing: border-box !important;
+  }
+  body.gp-pdp2 .add-to-cart .btn.btn-conversion {
+    height: 52px !important;
+    margin: 0 !important;
+  }
+
+  /* menší mezera mezi lištou a drobečkovou navigací (dřív ~130 px) */
+  body.gp-pdp2 #content-wrapper {
+    padding-top: 0 !important;
   }
 
   /* odpočet dopravy a ikony důvěry */
