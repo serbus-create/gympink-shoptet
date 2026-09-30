@@ -627,11 +627,28 @@
           var slot = find('.flags-extra', foto);
           if (!slot) {
             foto.appendChild(inline);
-            return;
+          } else {
+            while (inline.firstChild) slot.appendChild(inline.firstChild);
+            inline.style.setProperty('display', 'none', 'important');
           }
-          while (inline.firstChild) slot.appendChild(inline.firstChild);
-          inline.style.setProperty('display', 'none', 'important');
         });
+
+        // Šablona vynucuje štítkům pevnou výšku (na fotce vznikl černý
+        // čtverec ~70 px). Inline !important vyhraje nad jakýmkoli
+        // pravidlem, takže výšku a roztažení vynulujeme přímo na prvcích.
+        function vynulujRozmery(el) {
+          [['width', 'auto'], ['height', 'auto'], ['min-width', '0'],
+           ['min-height', '0'], ['max-width', 'none'], ['max-height', 'none'],
+           ['aspect-ratio', 'auto'], ['flex', '0 0 auto'],
+           ['align-self', 'flex-start']]
+            .forEach(function (kv) { el.style.setProperty(kv[0], kv[1], 'important'); });
+        }
+        findAll('.product .img .flags, .product .img .flags-extra, ' +
+                '.product a.image .extra-flags, .product a.image .flags')
+          .forEach(function (kontejner) {
+            vynulujRozmery(kontejner);
+            Array.prototype.slice.call(kontejner.children).forEach(vynulujRozmery);
+          });
       }
     },
 

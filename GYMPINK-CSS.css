@@ -2258,6 +2258,29 @@ body.type-index .gp-drop .product .p a.image .extra-flags .flags {
   position: static !important;
 }
 
+/* Reset pevných rozměrů/čtvercového odznaku z Tanga (viz i JS). */
+.product .img .flags,
+.product .img .flags-extra,
+.product .img .flags > *,
+body.type-index .gp-drop .product .p a.image .extra-flags,
+body.type-index .gp-drop .product .p a.image .flags,
+body.type-index .gp-drop .product .p a.image .flags > * {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  min-width: 0 !important;
+  aspect-ratio: auto !important;
+  flex: 0 0 auto !important;
+}
+
+.product .img .flags > *::before,
+.product .img .flags > *::after,
+.product .img .flags .flag::before,
+.product .img .flags .flag::after {
+  display: none !important;
+  content: none !important;
+}
+
 .product .img .flags > *,
 .product .img .flags .flag,
 body.type-index .gp-drop .product .p a.image .flags > *,
