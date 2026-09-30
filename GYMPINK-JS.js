@@ -1534,7 +1534,10 @@
             return /hledat/i.test((a.textContent || '') + ' ' + (a.getAttribute('aria-label') || ''));
           })[0];
         if (!tlacitko) return;
-        var polozka = tlacitko.closest('li') || tlacitko;
+        // Přesouvá se jen samotné tlačítko, pokud v obalu <li> bydlí i další odkazy
+        // (jinak by se s lupou přesunul třeba účet nebo košík).
+        var obalLupy = tlacitko.closest('li');
+        var polozka = (obalLupy && findAll('a, button', obalLupy).length === 1) ? obalLupy : tlacitko;
         if (polozka.parentNode && polozka.parentNode.classList &&
             polozka.parentNode.classList.contains('gp-search-left')) return; // už zpracováno
 
@@ -1738,7 +1741,7 @@
           }
           findAll('*', hlavicka).forEach(function (el) {
             if (schovane.indexOf(el) !== -1) return;
-            if (el.closest('.gp-tablet-nav, #navigation, .gp-burger-li, .gp-search-left')) return;
+            if (el.closest('.gp-tablet-nav, #navigation, .gp-burger-li, .gp-search-left, .top-nav-right, a[href*="/kosik/"]')) return;
             var cs = getComputedStyle(el);
             if (cs.display === 'none' || cs.visibility === 'hidden') return;
             if (cs.backgroundColor !== 'rgb(255, 255, 255)') return;
@@ -1803,7 +1806,14 @@
         var nativni = findAll('a, button', hlavicka).filter(function (el) {
           return /^\s*menu\s*$/i.test(el.textContent || '') && !el.closest('#navigation, .gp-tablet-nav');
         })[0] || null;
-        var nativniPolozka = nativni ? (nativni.closest('li') || nativni) : null;
+        // POZOR: v jednom <li> může být vedle "Menu" i košík. Přesouvat celý <li> by
+        // odneslo i košík → přesouváme jen samotný prvek, pokud v <li> není sám.
+        var nativniPolozka = null;
+        if (nativni) {
+          var obalLi = nativni.closest('li');
+          var interaktivni = obalLi ? findAll('a, button', obalLi) : [];
+          nativniPolozka = (obalLi && interaktivni.length === 1) ? obalLi : nativni;
+        }
         var puvodniNativni = nativniPolozka ? { rodic: nativniPolozka.parentNode, dalsi: nativniPolozka.nextSibling } : null;
         var puvodniRodicVlastni = null;
 
