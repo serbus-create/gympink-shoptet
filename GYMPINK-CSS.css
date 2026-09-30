@@ -4294,3 +4294,36 @@ footer.footer .custom-footer__onlinePayments img {
     max-width: 480px !important;
   }
 }
+
+/* ===================================================================
+   3.57  ZÁLOŽKY (Popis / Specifikace / Diskuze) — iPad na výšku
+   Nativně jsou v 768–900 px ve dvou sloupcích (nabídka vlevo, obsah
+   vpravo). Skládáme je pod sebe a nabídku dáváme na střed, stejně jako
+   na desktopu a na telefonu.
+   =================================================================== */
+@media (max-width: 900px) {
+  body.gp-pdp2 .gp-pdp-tabs > .row.gp-pdp-flat {
+    display: block !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  body.gp-pdp2 .gp-pdp-tabs > .row.gp-pdp-flat::before,
+  body.gp-pdp2 .gp-pdp-tabs > .row.gp-pdp-flat::after {
+    display: none !important;
+  }
+  body.gp-pdp2 .gp-pdp-tabs > .row.gp-pdp-flat > [class*="col-sm-"] {
+    float: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  body.gp-pdp2 .gp-pdp-tabs .gp-tabs-nav {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    text-align: center !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+  }
+}
