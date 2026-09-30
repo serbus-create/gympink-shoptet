@@ -468,9 +468,21 @@
         findAll('.products-inline[class*="homepage-products-"]').forEach(function (skupina) {
           if (skupina.closest('.gp-drop')) return; // už zpracováno
 
-          // Nadpis skupiny je sourozenec těsně před ní.
-          var nadpis = skupina.previousElementSibling;
-          if (!nadpis || !nadpis.classList.contains('homepage-group-title')) nadpis = null;
+          // Nadpis skupiny: nejdřív podle čísla skupiny (products-N →
+          // homepage-products-heading-N), pak nejbližší předchozí
+          // sourozenec .homepage-group-title.
+          var nadpis = null;
+          var cislo = (skupina.id || '').replace(/^products-/, '');
+          if (cislo) {
+            nadpis = find('.homepage-products-heading-' + cislo, skupina.parentNode);
+          }
+          if (!nadpis) {
+            var sus = skupina.previousElementSibling;
+            while (sus && !sus.classList.contains('homepage-group-title')) {
+              sus = sus.previousElementSibling;
+            }
+            nadpis = sus || null;
+          }
 
           // Obal: [hlavička: nadpis + nástroje] + pás produktů
           var obal = document.createElement('div');
@@ -480,7 +492,16 @@
           var hlavicka = document.createElement('div');
           hlavicka.className = 'gp-drop-head';
           obal.appendChild(hlavicka);
-          if (nadpis) hlavicka.appendChild(nadpis);
+          if (nadpis) {
+            hlavicka.appendChild(nadpis);
+            // Inline !important — nativní pravidla šablony nadpis přebíjela.
+            ['display:block', 'visibility:visible', 'position:static',
+             'opacity:1', 'height:auto', 'width:auto', 'float:none']
+              .forEach(function (d) {
+                var kv = d.split(':');
+                nadpis.style.setProperty(kv[0], kv[1], 'important');
+              });
+          }
 
           // Nástroje vpravo. Odkaz "Zobrazit vše" míří na /novinky/ —
           // JEDINÁ pevně zapsaná hodnota (ovládací prvek, ne obsah).
@@ -510,6 +531,15 @@
           hlavicka.appendChild(nastroje);
 
           obal.appendChild(skupina);
+
+          // Fotky: vyplnit celou kartu (nativní pravidlo je nechávalo
+          // v režimu "contain" s bílými pruhy po stranách).
+          findAll('a.image img', skupina).forEach(function (img) {
+            [['width', '100%'], ['height', '100%'], ['max-width', 'none'],
+             ['max-height', 'none'], ['object-fit', 'cover'],
+             ['object-position', 'center'], ['margin', '0'], ['padding', '0']]
+              .forEach(function (kv) { img.style.setProperty(kv[0], kv[1], 'important'); });
+          });
 
           function krok() { return Math.max(200, Math.round(skupina.clientWidth * 0.8)); }
           zpet.addEventListener('click', function () {
