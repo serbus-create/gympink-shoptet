@@ -3594,3 +3594,76 @@ footer.footer .gp-vhs img {
     align-items: flex-start !important;
   }
 }
+
+
+/* ===================================================================
+   3.43  ZÁPATÍ E — opravy podle první kontroly
+   - Blog / Informace: prohozené třídy (__section2 je Blog, __articles je
+     Informace); sloupce navíc značí JS podle textu nadpisu (.gp-col-*).
+   - platební karty doleva, kontejnery na plnou šířku, spodní pruh přes
+     celou šířku, bílý text i u odkazu "Vytvořil Shoptet", mezery kolem
+     "a vhs.", menší horní mezera.
+   =================================================================== */
+footer.footer {
+  padding-top: 0 !important;
+}
+footer.footer .footer-rows {
+  padding-top: 40px !important;
+}
+footer.footer .footer-rows,
+footer.footer .footer-bottom {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+@media (min-width: 901px) {
+  /* přemapování oblastí: Informace uprostřed, Blog vpravo */
+  footer.footer .custom-footer__articles  { grid-area: informace !important; }
+  footer.footer .custom-footer__section2  { grid-area: blog !important; }
+  footer.footer .custom-footer .gp-col-info { grid-area: informace !important; }
+  footer.footer .custom-footer .gp-col-blog { grid-area: blog !important; }
+}
+
+/* Blog: titulky normálním písmem (nativně velkými písmeny) */
+footer.footer .gp-col-blog a,
+footer.footer .custom-footer__section2 a {
+  display: block !important;
+  text-transform: none !important;
+  font-weight: 400 !important;
+}
+
+/* platební karty u levého okraje */
+footer.footer .custom-footer__onlinePayments,
+footer.footer .custom-footer__onlinePayments * {
+  text-align: left !important;
+  justify-content: flex-start !important;
+}
+footer.footer .custom-footer__onlinePayments *:not(img) {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+footer.footer .custom-footer__onlinePayments img {
+  display: inline-block !important;
+  margin: 0 12px 0 0 !important;
+}
+
+/* spodní pruh: bílý text i u odkazu "Vytvořil Shoptet" */
+footer.footer .footer-bottom a.title,
+footer.footer .footer-bottom a.image,
+footer.footer .footer-bottom .copyright {
+  color: #fff !important;
+  opacity: 1 !important;
+}
+footer.footer .gp-vhs-a {
+  margin: 0 8px !important;
+  color: #fff !important;
+  font-size: 12px !important;
+}
+footer.footer .gp-vhs {
+  margin: 0 !important;
+}
+footer.footer .footer-bottom a.image {
+  margin-right: 8px !important;
+}

@@ -1423,8 +1423,34 @@
           titul.parentNode.insertBefore(odkaz, spojka.nextSibling);
         }
 
+        // ----- Sloupce Blog / Informace poznáme podle TEXTU nadpisu -----
+        // (třídy __articles / __section2 se ukázaly jako prohozené oproti očekávání)
+        findAll('.custom-footer > *', paticka).forEach(function (sloupec) {
+          var nadpisSl = find('.pageElement__heading', sloupec);
+          var text = nadpisSl ? (nadpisSl.textContent || '') : '';
+          if (/blog/i.test(text)) sloupec.classList.add('gp-col-blog');
+          else if (/informace/i.test(text)) sloupec.classList.add('gp-col-info');
+        });
+
+        // ----- Spodní pruh: levý okraj textu sedí s prvním sloupcem (měřeno) -----
+        var spodek = find('.footer-bottom', paticka);
+        function zarovnatSpodek() {
+          if (!spodek) return;
+          spodek.style.removeProperty('padding-left');
+          spodek.style.removeProperty('padding-right');
+          if (window.innerWidth <= 900 || !kontakt) return;
+          var posun = Math.round(kontakt.getBoundingClientRect().left - paticka.getBoundingClientRect().left);
+          if (posun > 0 && posun < 300) {
+            spodek.style.setProperty('padding-left', posun + 'px', 'important');
+            spodek.style.setProperty('padding-right', posun + 'px', 'important');
+          }
+        }
+        zarovnatSpodek();
+        window.addEventListener('resize', zarovnatSpodek);
+        window.addEventListener('load', zarovnatSpodek);
+
         // ----- Mobil: Informace a Blog jako rozbalovací sekce (CSS je řídí jen ≤ 900 px) -----
-        ['.custom-footer__section2', '.custom-footer__articles'].forEach(function (sel) {
+        ['.gp-col-blog', '.gp-col-info', '.custom-footer__section2', '.custom-footer__articles'].forEach(function (sel) {
           var sloupec = find(sel, paticka);
           var nadpis = sloupec ? find('.pageElement__heading', sloupec) : null;
           if (!sloupec || !nadpis || sloupec.classList.contains('gp-acc')) return;
