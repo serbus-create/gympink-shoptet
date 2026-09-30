@@ -4287,3 +4287,10 @@ footer.footer .custom-footer__onlinePayments img {
     margin-bottom: 8px !important;
   }
 }
+
+/* iPad na výšku: užší sloupec, ať fotka není vyšší než obrazovka */
+@media (min-width: 600px) and (max-width: 900px) {
+  body.gp-pdp2 .p-detail-inner .row.gp-pdp-modeA {
+    max-width: 480px !important;
+  }
+}
