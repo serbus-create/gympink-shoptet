@@ -1941,3 +1941,20 @@ html, body {
 .overall-wrapper {
   overflow-x: hidden !important;
 }
+
+
+/* ===================================================================
+   3.23  BANNERY — lehký stín pod bílým textem (lepší čitelnost na
+   světlých / růžových fotkách). Titulky + text tlačítka "Podívej se".
+   Záměrně jemnější než stín v hlavičce. Zesílit/zeslabit: druhé číslo
+   (blur) a poslední (průhlednost).
+   =================================================================== */
+body.type-index .gp-banner-pair-item .extended-banner-title,
+body.type-index .gp-banner-big .extended-banner-title {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .28), 0 2px 14px rgba(0, 0, 0, .35) !important;
+}
+
+body.type-index .gp-banner-pair-item .extended-banner-link,
+body.type-index .gp-banner-big .extended-banner-link {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .25), 0 1px 10px rgba(0, 0, 0, .28) !important;
+}
