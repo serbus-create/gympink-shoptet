@@ -4003,3 +4003,32 @@ footer.footer .custom-footer__onlinePayments img {
     display: none !important;
   }
 }
+
+
+/* ===================================================================
+   3.53  MENU (hamburger) VLEVO — telefon, tablet, malý notebook (< 1280 px)
+   Vzor Exalted: vlevo hamburger (a vedle něj lupa), uprostřed logo,
+   vpravo účet / košík. JS přesouvá hamburger do levého boxu
+   (.gp-search-left) — na telefonu nativní, na tabletu vlastní.
+   =================================================================== */
+@media (max-width: 1279px) {
+  .gp-search-left {
+    gap: 6px !important;
+  }
+  .gp-search-left li,
+  .gp-search-left > a {
+    display: flex !important;
+    align-items: center !important;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  /* nativní hamburger v levém boxu: bílý se stínem jako ostatní ikony */
+  .gp-search-left a,
+  .gp-search-left a * {
+    color: #fff !important;
+  }
+  .gp-search-left .gp-burger {
+    color: #fff !important;
+  }
+}

@@ -1785,6 +1785,66 @@
       }
     },
     {
+      nazev: 'Menu (hamburger) vlevo v liště — telefon, tablet, malý notebook (jako Exalted)',
+      spustit: function () {
+        var hlavicka = find('#header');
+        if (!hlavicka) return;
+
+        // Levý box (stejný jako u lupy): [hamburger][lupa]. Když ještě neexistuje, založíme ho.
+        var box = find('.gp-search-left', hlavicka);
+        if (!box) {
+          box = document.createElement('div');
+          box.className = 'gp-search-left';
+          hlavicka.appendChild(box);
+        }
+
+        // Nativní hamburger telefonu = odkaz/tlačítko s (skrytým) textem "Menu".
+        // Přesouváme ho celý (i s obsluhou kliku), nativní nabídka zůstává funkční.
+        var nativni = findAll('a, button', hlavicka).filter(function (el) {
+          return /^\s*menu\s*$/i.test(el.textContent || '') && !el.closest('#navigation, .gp-tablet-nav');
+        })[0] || null;
+        var nativniPolozka = nativni ? (nativni.closest('li') || nativni) : null;
+        var puvodniNativni = nativniPolozka ? { rodic: nativniPolozka.parentNode, dalsi: nativniPolozka.nextSibling } : null;
+        var puvodniRodicVlastni = null;
+
+        function vlastni() { return find('.gp-burger-li', hlavicka); }
+        function vratitNativni() {
+          if (!nativniPolozka || nativniPolozka.parentNode !== box) return;
+          var kam = (puvodniNativni.dalsi && puvodniNativni.dalsi.parentNode === puvodniNativni.rodic)
+            ? puvodniNativni.dalsi : null;
+          puvodniNativni.rodic.insertBefore(nativniPolozka, kam);
+        }
+        function vratitVlastni(b) {
+          if (!b || b.parentNode !== box) return;
+          var ikony = puvodniRodicVlastni || find('.top-nav-right', hlavicka);
+          if (ikony) ikony.appendChild(b);
+        }
+        function umistit() {
+          var w = window.innerWidth;
+          if (nativniPolozka && (w < 768 || w > 1279)) nativniPolozka.style.removeProperty('display');
+          var b = vlastni();
+          if (b && b.parentNode !== box && !puvodniRodicVlastni) puvodniRodicVlastni = b.parentNode;
+          if (w < 768) {
+            // telefon: nativní hamburger vlevo
+            vratitVlastni(b);
+            if (nativniPolozka && nativniPolozka.parentNode !== box) box.insertBefore(nativniPolozka, box.firstChild);
+          } else if (w <= 1279) {
+            // tablet / malý notebook: vlastní hamburger vlevo (nativní, kdyby se tu ukázal, schovat)
+            vratitNativni();
+            if (nativniPolozka) nativniPolozka.style.setProperty('display', 'none', 'important');
+            if (b && b.parentNode !== box) box.insertBefore(b, box.firstChild);
+          } else {
+            // počítač: vše na původních místech
+            vratitNativni();
+            vratitVlastni(b);
+          }
+        }
+        umistit();
+        window.addEventListener('resize', umistit);
+        window.addEventListener('load', umistit);
+      }
+    },
+    {
       nazev: 'PDP2 — diagnostické okno (jen s ?debug=1 v adrese)',
       spustit: function () {
         if (!document.body.classList.contains('gp-pdp2')) return;
