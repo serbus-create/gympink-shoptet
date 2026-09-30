@@ -204,6 +204,15 @@ body.type-index #header:not(.gp-scrolled) .top-nav-right .btn-icon {
   body.type-index #header.gp-scrolled .gp-blog-moved a {
     color: #fff !important;
   }
+
+  /* Text u košíku ("Prázdný košík" / cena) — nativně šedý, vlastní barva
+     na <span>u, proto ho barvíme zvlášť (potomci odkazů + .cart-price). */
+  #header .top-nav-right a *,
+  #header .top-nav-right .cart-price,
+  #header .cart-price,
+  #header [data-testid="headerCartPrice"] {
+    color: #fff !important;
+  }
 }
 
 
