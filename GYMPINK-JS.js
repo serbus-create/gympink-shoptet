@@ -32,6 +32,17 @@
      ----------------------------------------------------------------- */
 
   /**
+   * Nový vzhled detailu produktu (PDP2) je zatím jen pro testování:
+   * zapíná se na produktu BABY PINK legíny, nebo kdekoli přidáním
+   * ?pdp=2 k adrese. Ostatní produkty zůstávají beze změny.
+   * Až bude hotovo, stačí funkci změnit na `return true`.
+   */
+  function jePdp2() {
+    return /^\/leginy-baby-pink\/?$/.test(location.pathname) ||
+           /[?&]pdp=2(&|$)/.test(location.search);
+  }
+
+  /**
    * Bezpečné vyhledání prvku. Vrací null místo vyhození chyby.
    */
   function find(selector, context) {
@@ -297,6 +308,9 @@
         // v DOM leží jejich obalující .row.
         var inner = find('.p-detail-inner');
         if (!inner) return;
+
+        // Nový vzhled detailu (PDP2) si layout řídí sám.
+        if (document.body.classList.contains('gp-pdp2')) return;
 
         // Layout níž se nastavuje inline s !important, což přebije
         // i media queries — na mobilu bychom pak nemohli nic upravit
@@ -683,6 +697,112 @@
       }
     },
 
+    {
+      nazev: 'Detail produktu 2 (PDP2) — mřížka galerie/panel, značky tříd, řádek důvěry',
+      spustit: function () {
+        if (!document.body.classList.contains('gp-pdp2')) return;
+        var inner = find('.p-detail-inner');
+        if (!inner) return;
+
+        // ----- Nalezení prvků (selektory ověřené v DevTools, viz CSS 3.10) -----
+        var galerie = find('.detail-img.p-image-wrapper', inner);
+        var nadpis = find('h1', inner);
+        var nadpisSloupec = nadpis ? nadpis.closest('.col-md-4') : null;
+        var nakup = find(':scope > .col-md-4.pull-left', inner) || find('.col-md-4.pull-left', inner);
+        var radek = galerie ? galerie.parentElement : null;
+        if (!galerie || !nadpis || !nadpisSloupec || !nakup || !radek) return;
+        if (radek.contains(nakup)) return; // špatná shoda
+
+        var zalozky = find(':scope > .shp-tabs-wrapper', inner) || find('.shp-tabs-wrapper', inner);
+
+        // Značky tříd — CSS se opírá o ně, ne o křehké .row / .col-md-4.
+        radek.classList.add('gp-pdp-row');
+        nadpisSloupec.classList.add('gp-pdp-title');
+        galerie.classList.add('gp-pdp-gallery');
+        nakup.classList.add('gp-pdp-buy');
+        if (zalozky) zalozky.classList.add('gp-pdp-tabs');
+
+        // Hlavní fotka galerie (první <img>, který není miniatura).
+        var hlavniFoto = findAll('img', galerie).filter(function (i) {
+          return !i.closest('.p-thumbnails, .p-thumbnails-wrapper, .p-thumbnail');
+        })[0];
+        if (hlavniFoto) hlavniFoto.classList.add('gp-pdp-main-img');
+
+        // ----- Řádek důvěry pod tlačítkem -----
+        // JEDINÁ výjimka z pravidla "JS nevkládá obsah": krátké pevné
+        // položky. Jsou zapsané tady v poli, ať jdou snadno upravit.
+        // Pouze ověřitelná tvrzení (14 dní na vrácení = zákonné právo
+        // spotřebitele; platby = e-shop přijímá online platby).
+        var DUVERA = [
+          { href: '/doprava-a-platby/', text: 'Doprava a platby',
+            ikona: '<path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0M15 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0M5 17H3V6a1 1 0 0 1 1-1h9v12M9 17h6M19 17h2v-6h-8M13 6h5l3 5"/>' },
+          { text: '14 dní na vrácení',
+            ikona: '<path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 5v4h4M4 13a8.1 8.1 0 0 0 15.5 2M20 19v-4h-4"/>' },
+          { text: 'Bezpečná online platba',
+            ikona: '<path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1-8.5 15a12 12 0 0 1-8.5-15A12 12 0 0 0 12 3M11 11a1 1 0 1 0 2 0a1 1 0 1 0-2 0M12 12v2.5"/>' }
+        ];
+        if (!find('.gp-trust', nakup)) {
+          var cenaRadek = find('.price.row', nakup);
+          var seznam = document.createElement('ul');
+          seznam.className = 'gp-trust';
+          DUVERA.forEach(function (d) {
+            var li = document.createElement('li');
+            var svg = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d.ikona + '</svg>';
+            li.innerHTML = d.href
+              ? '<a href="' + d.href + '">' + svg + '<span>' + d.text + '</span></a>'
+              : svg + '<span>' + d.text + '</span>';
+            seznam.appendChild(li);
+          });
+          if (cenaRadek && cenaRadek.parentNode) {
+            cenaRadek.parentNode.insertBefore(seznam, cenaRadek.nextSibling);
+          } else {
+            nakup.appendChild(seznam);
+          }
+        }
+
+        // ----- Mřížka: inline !important jen na desktopu, s úklidem při zúžení -----
+        var nastaveni = [];
+        function vynutit(el, styly) {
+          if (!el) return;
+          Object.keys(styly).forEach(function (v) {
+            el.style.setProperty(v, styly[v], 'important');
+            nastaveni.push([el, v]);
+          });
+        }
+        function uklidit() {
+          nastaveni.forEach(function (n) { n[0].style.removeProperty(n[1]); });
+          nastaveni = [];
+        }
+        function aplikuj() {
+          uklidit();
+          if (window.innerWidth <= 900) return; // mobil: nativní chování šablony
+          vynutit(inner, {
+            display: 'grid',
+            'grid-template-columns': 'minmax(0, .85fr) minmax(0, 1.15fr)',
+            'column-gap': '40px',
+            'align-items': 'start',
+            position: 'relative'
+          });
+          vynutit(radek, { display: 'contents' });
+          vynutit(nadpisSloupec, { display: 'contents' });
+          vynutit(galerie, {
+            'grid-column': '1', 'grid-row': '1 / span 3',
+            float: 'none', width: 'auto', 'max-width': 'none',
+            padding: '0', margin: '0'
+          });
+          vynutit(nadpis, { 'grid-column': '2', 'grid-row': '1' });
+          vynutit(nakup, {
+            'grid-column': '2', 'grid-row': '2',
+            float: 'none', width: 'auto', 'max-width': 'none',
+            padding: '0', margin: '0', display: 'block', clear: 'none'
+          });
+          if (zalozky) vynutit(zalozky, { 'grid-column': '1 / -1', 'grid-row': '4' });
+        }
+        aplikuj();
+        window.addEventListener('resize', aplikuj);
+      }
+    },
+
   ];
 
 
@@ -692,6 +812,11 @@
 
   function spustit() {
     log('Start, úprav k provedení: ' + upravy.length);
+
+    // Třída musí být na <body> dřív, než proběhne první úprava detailu.
+    if (jePdp2() && find('.p-detail-inner')) {
+      document.body.classList.add('gp-pdp2');
+    }
 
     upravy.forEach(function (uprava) {
       try {

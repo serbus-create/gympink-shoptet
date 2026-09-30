@@ -2306,3 +2306,257 @@ body.type-index .gp-drop .product .p a.image .flags .flag {
   color: #fff !important;
   white-space: nowrap !important;
 }
+
+
+/* ===================================================================
+   3.27  DETAIL PRODUKTU 2 (PDP2) — prodejní panel
+   Zapíná se jen třídou body.gp-pdp2 (JS: produkt BABY PINK legíny,
+   nebo ?pdp=2 v adrese). Ostatní produkty zůstávají beze změny.
+   Layout (desktop): vlevo galerie, vpravo název, krátký popis s
+   odrážkami, velikost, cena + dostupnost, množství + tlačítko, řádek
+   důvěry. Záložky (popis) pod celou šířkou.
+
+   CO SI KLIENTKA MĚNÍ SAMA V ADMINISTRACI:
+     - název, cena, dostupnost, velikosti, foto ....... nativně
+     - odrážky s fajfkami ............ KRÁTKÝ POPIS produktu (odrážkový seznam)
+     - štítek na fotce ............... PŘÍZNAK produktu (barva v nastavení)
+     - popis pod tím ................. Podrobný popis
+   Řádek důvěry (3 ikony) je zapsán v GYMPINK-JS.js (pole DUVERA).
+   =================================================================== */
+body.gp-pdp2 {
+  --gp-cta: #a3336f;
+  --gp-cta-hover: #8a2a5e;
+}
+
+@media (min-width: 901px) {
+
+  /* --- mřížka (záloha k inline stylům z JS) --- */
+  body.gp-pdp2 .p-detail-inner {
+    display: grid !important;
+    grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr) !important;
+    column-gap: 40px !important;
+    align-items: start !important;
+    position: relative !important;
+  }
+  body.gp-pdp2 .gp-pdp-row,
+  body.gp-pdp2 .gp-pdp-title {
+    display: contents !important;
+  }
+  body.gp-pdp2 .gp-pdp-gallery {
+    grid-column: 1 !important;
+    grid-row: 1 / span 3 !important;
+    float: none !important;
+    width: auto !important;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  body.gp-pdp2 .gp-pdp-title h1 {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+  }
+  body.gp-pdp2 .gp-pdp-buy {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    float: none !important;
+    width: auto !important;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  body.gp-pdp2 .gp-pdp-tabs {
+    grid-column: 1 / -1 !important;
+    grid-row: 4 !important;
+  }
+
+  /* --- galerie: hlavní fotka 2:3 (ořízne bílé okraje v plátně 4:3) --- */
+  body.gp-pdp2 .gp-pdp-main-img {
+    width: 100% !important;
+    aspect-ratio: 2 / 3 !important;
+    height: auto !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+  }
+
+  /* --- příznaky (štítky) v rohu galerie, varianta A --- */
+  body.gp-pdp2 .p-detail-inner .flags {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 5 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    width: auto !important;
+    height: auto !important;
+  }
+  body.gp-pdp2 .p-detail-inner .flags > * {
+    position: static !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 5px 9px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    line-height: 1.2 !important;
+    letter-spacing: .03em !important;
+    text-transform: uppercase !important;
+    color: #fff !important;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: auto !important;
+  }
+
+  /* --- název --- */
+  body.gp-pdp2 .gp-pdp-title h1 {
+    margin: 0 0 8px !important;
+    font-size: 26px !important;
+    font-weight: 500 !important;
+    line-height: 1.2 !important;
+    text-transform: none !important;
+    color: var(--gp-ink) !important;
+  }
+
+  /* --- krátký popis + odrážky s fajfkami (editovatelné v administraci) --- */
+  body.gp-pdp2 .p-short-description {
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    color: var(--gp-ink-soft) !important;
+    margin: 0 0 16px !important;
+  }
+  body.gp-pdp2 .p-short-description ul {
+    list-style: none !important;
+    margin: 12px 0 0 !important;
+    padding: 0 !important;
+  }
+  body.gp-pdp2 .p-short-description li {
+    position: relative !important;
+    margin: 6px 0 !important;
+    padding: 0 0 0 26px !important;
+    font-size: 14px !important;
+    color: var(--gp-ink) !important;
+    list-style: none !important;
+  }
+  body.gp-pdp2 .p-short-description li::before {
+    content: "" !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: .28em !important;
+    width: 16px !important;
+    height: 16px !important;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a3336f' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12l5 5L20 7'/></svg>") no-repeat center / contain !important;
+  }
+
+  /* --- výběr velikosti (nativní <select>, jen přestylovaný) --- */
+  body.gp-pdp2 .variant-list select {
+    width: 100% !important;
+    height: 48px !important;
+    padding: 0 14px !important;
+    border: 1px solid #b4b2a9 !important;
+    border-radius: 0 !important;
+    background-color: #fff !important;
+    font-size: 14px !important;
+    color: var(--gp-ink) !important;
+    box-shadow: none !important;
+  }
+  body.gp-pdp2 .variant-list select:focus {
+    border-color: var(--gp-cta) !important;
+    outline: none !important;
+  }
+
+  /* --- cena + dostupnost + množství + tlačítko --- */
+  body.gp-pdp2 .p-detail-inner .price.row {
+    display: grid !important;
+    grid-template-columns: auto 1fr !important;
+    column-gap: 14px !important;
+    row-gap: 10px !important;
+    align-items: baseline !important;
+    margin: 18px 0 0 !important;
+  }
+  body.gp-pdp2 .p-detail-inner .price.row .p-final-price-wrapper {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+  }
+  body.gp-pdp2 .p-detail-inner .price.row .order-availability {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    font-size: 13px !important;
+  }
+  body.gp-pdp2 .p-detail-inner .price.row .shipping-availability {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    font-size: 12px !important;
+    color: var(--gp-ink-soft) !important;
+  }
+  body.gp-pdp2 .p-detail-inner .price.row .add-to-cart {
+    grid-column: 1 / -1 !important;
+    grid-row: 3 !important;
+    margin: 4px 0 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+  body.gp-pdp2 .p-final-price-wrapper .price {
+    font-size: 30px !important;
+    font-weight: 500 !important;
+    color: var(--gp-ink) !important;
+  }
+  body.gp-pdp2 .add-to-cart .quantity {
+    flex: 0 0 auto !important;
+    align-self: stretch !important;
+  }
+  body.gp-pdp2 .add-to-cart .btn.btn-conversion {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-height: 54px !important;
+    padding: 0 24px !important;
+    background: var(--gp-cta) !important;
+    border: 1px solid var(--gp-cta) !important;
+    border-radius: 0 !important;
+    color: #fff !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    letter-spacing: .01em !important;
+    text-transform: none !important;
+    box-shadow: none !important;
+  }
+  body.gp-pdp2 .add-to-cart .btn.btn-conversion:hover {
+    background: var(--gp-cta-hover) !important;
+    border-color: var(--gp-cta-hover) !important;
+  }
+
+  /* --- řádek důvěry pod tlačítkem --- */
+  body.gp-pdp2 .gp-trust {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+    list-style: none !important;
+    margin: 16px 0 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+    font-size: 12px !important;
+    color: var(--gp-ink-soft) !important;
+  }
+  body.gp-pdp2 .gp-trust li {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  body.gp-pdp2 .gp-trust a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+  body.gp-pdp2 .gp-trust svg {
+    display: block !important;
+    margin: 0 auto 4px !important;
+    color: var(--gp-ink) !important;
+  }
+}
