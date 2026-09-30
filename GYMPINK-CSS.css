@@ -4342,3 +4342,50 @@ footer.footer .custom-footer__onlinePayments img {
     transform: translateX(16px) !important;
   }
 }
+
+
+/* ===================================================================
+   3.59  HERO (titulní strana) — nadpis „Teplákové kolekce“ dominantní
+   Diagnostika (živý web): text je v .extended-banner-texts s odsazením
+   zleva calc(64px + 10 %), což na telefonu a iPadu odsouvalo nadpis
+   doprostřed fotky. Modelka stojí od ~40 % šířky hero doprava, proto
+   je velikost nadpisu svázaná s šířkou okna (vw) — roste, ale nedostane
+   se na ni. Tlačítko „Podívej se“ jde s nadpisem (je ve stejném boxu).
+   =================================================================== */
+
+/* desktop (≥ 1280 px): jen větší */
+@media (min-width: 1280px) {
+  body.type-index .wide-carousel .extended-banner-title {
+    font-size: clamp(44px, 4.3vw, 76px) !important;
+    line-height: 1.08 !important;
+    margin-bottom: 28px !important;
+  }
+}
+
+/* iPad (768–1279 px): víc vlevo a větší */
+@media (min-width: 768px) and (max-width: 1279px) {
+  body.type-index .wide-carousel .extended-banner-texts {
+    padding-left: 6% !important;
+    padding-right: 2% !important;
+    max-width: 56% !important;
+  }
+  body.type-index .wide-carousel .extended-banner-title {
+    font-size: clamp(38px, 5vw, 58px) !important;
+    line-height: 1.1 !important;
+    margin-bottom: 24px !important;
+  }
+}
+
+/* telefon (< 768 px): víc vlevo, o něco větší */
+@media (max-width: 767px) {
+  body.type-index .wide-carousel .extended-banner-texts {
+    padding-left: 6% !important;
+    padding-right: 2% !important;
+    max-width: 62% !important;
+  }
+  body.type-index .wide-carousel .extended-banner-title {
+    font-size: clamp(26px, 7vw, 34px) !important;
+    line-height: 1.12 !important;
+    margin-bottom: 16px !important;
+  }
+}
