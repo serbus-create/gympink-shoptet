@@ -1113,6 +1113,7 @@
             }
           }
           if (miniaturyKontejner && miniaturyKontejner !== G) {
+            miniaturyKontejner.classList.add('gp-thumbs');
             vynutit(miniaturyKontejner, {
               display: 'grid', 'grid-template-columns': 'repeat(5, minmax(0, 1fr))',
               gap: '8px', width: '100%', height: 'auto', position: 'static',
@@ -1138,8 +1139,33 @@
             });
           }
         }
+        // Cena je odsazená zprava (~16 px) proti nadpisu a popisu, příčina není
+        // ve stylech na prvku. Změříme, kde skutečně začíná velká cena, a
+        // posuneme obal ceny o rozdíl (obě řádky ceny se posunou stejně).
+        function vyrovnatCenu() {
+          var obalCeny = find('.p-final-price-wrapper', pb);
+          if (!obalCeny) return;
+          obalCeny.style.removeProperty('margin-left');
+          if (window.innerWidth <= 900) return;
+          var meritko = find('.price-final-holder', obalCeny) || find('.price-final', obalCeny);
+          if (!meritko) return;
+          var posun = Math.round(meritko.getBoundingClientRect().left - pb.getBoundingClientRect().left);
+          if (posun > 0 && posun < 80) {
+            obalCeny.style.setProperty('margin-left', (-posun) + 'px', 'important');
+          }
+        }
+
+        // Prázdné odstavce (&nbsp;) na konci krátkého popisu dělaly mezeru ~85 px.
+        findAll('.p-short-description p, .p-short-description div').forEach(function (el) {
+          if (el.children.length === 0 && !(el.textContent || '').replace(/\u00a0/g, ' ').trim()) {
+            el.style.setProperty('display', 'none', 'important');
+          }
+        });
+
         aplikuj();
-        window.addEventListener('resize', aplikuj);
+        vyrovnatCenu();
+        window.addEventListener('resize', function () { aplikuj(); vyrovnatCenu(); });
+        window.addEventListener('load', vyrovnatCenu);
       }
     },
 

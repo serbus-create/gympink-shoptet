@@ -3331,3 +3331,15 @@ body.gp-pdp2 .variant-list {
     text-indent: 0 !important;
   }
 }
+
+
+/* ===================================================================
+   3.40  PDP2 — miniatury: vypnout clearfix pseudo-prvky kontejneru
+   ::before / ::after (clearfix) se v mřížce chovají jako položky a
+   zabíraly první buňku řady → miniatury začínaly u druhého sloupce.
+   =================================================================== */
+body.gp-pdp2 .gp-thumbs::before,
+body.gp-pdp2 .gp-thumbs::after {
+  display: none !important;
+  content: none !important;
+}
