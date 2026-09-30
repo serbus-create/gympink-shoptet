@@ -882,6 +882,15 @@ body.type-index .gp-banner-pair-item .extended-banner-link {
   background: transparent !important;
 }
 
+.products.products-block .product .inner,
+.products.products-block .product .img,
+.products.products-block .product .img > a {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
 .product .img {
   /* 2:3 = poměr původních fotek; Shoptet je vkládá do plátna 4:3 s bílými
      okraji, které se při 2:3 + object-fit: cover ořežou přesně. */

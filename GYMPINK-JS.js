@@ -652,6 +652,37 @@
       }
     },
 
+    {
+      nazev: 'Kategorie — odstranit vodorovné odsazení karty (mezi fotkami jen mezera z CSS)',
+      spustit: function () {
+        // Diagnostika (měření screenshotu /leginy/): mezera mezi fotkami je
+        // ~35 px, ačkoli mřížka má gap 4 px. Zbylých ~2×15 px je uvnitř
+        // karty (Bootstrap gutter col-md-4) — přebíjí naše CSS na některém
+        // prvku v řetězci .product > .inner > .img. Protože nevíme na kterém,
+        // vynulujeme vodorovný padding/margin na celé cestě od .img nahoru
+        // ke kartě inline !important (to vyhraje vždy).
+        function nuluj(el, vcetneSirky) {
+          ['padding-left', 'padding-right', 'margin-left', 'margin-right']
+            .forEach(function (v) { el.style.setProperty(v, '0', 'important'); });
+          if (vcetneSirky) {
+            el.style.setProperty('width', '100%', 'important');
+            el.style.setProperty('max-width', 'none', 'important');
+          }
+        }
+        findAll('#products.products-block > .product, .products-block > .product')
+          .forEach(function (karta) {
+            var foto = find('.img', karta);
+            if (!foto) return;
+            var el = foto;
+            while (el && el !== karta) {
+              nuluj(el, true);
+              el = el.parentElement;
+            }
+            nuluj(karta, false); // šířku karty řídí flex-basis z CSS
+          });
+      }
+    },
+
   ];
 
 
