@@ -784,7 +784,7 @@
         // (14 dní na vrácení = zákonné právo spotřebitele; e-shop přijímá
         // online platby).
         var DUVERA = [
-          { href: '/doprava-a-platby/', text: 'Doprava a platby',
+          { href: '/doprava-a-platby/', text: 'Zásilkovna od 89 Kč',
             ikona: '<path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0M15 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0M5 17H3V6a1 1 0 0 1 1-1h9v12M9 17h6M19 17h2v-6h-8M13 6h5l3 5"/>' },
           { text: '14 dní na vrácení',
             ikona: '<path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 5v4h4M4 13a8.1 8.1 0 0 0 15.5 2M20 19v-4h-4"/>' },
@@ -804,6 +804,68 @@
           });
           if (cenaRadek.parentNode) {
             cenaRadek.parentNode.insertBefore(seznam, cenaRadek.nextSibling);
+          }
+        }
+
+        // ----- Velikosti jako políčka (původní <select> zůstává, jen je skrytý) -----
+        // Diagnostika (DevTools): select#simple-variants-select, možnosti typu
+        // "Velikost: S - Vyprodáno (1 099 Kč)", value = priceId. Klik na políčko
+        // nastaví select a vyvolá 'change' — Shoptet dál počítá cenu, dostupnost
+        // i zprávu "Zvolte variantu" přes svůj původní select. Bez selectu
+        // (jednoduchý produkt, nebo víc parametrů) se nic nemění.
+        var vyber = find('#simple-variants-select');
+        if (vyber && !find('.gp-sizes')) {
+          var moznosti = findAll('option', vyber).filter(function (o) { return o.value !== ''; });
+          if (moznosti.length) {
+            var obalVarianty = vyber.closest('.variant-list') || vyber.parentElement;
+            var seznamVelikosti = document.createElement('div');
+            seznamVelikosti.className = 'gp-sizes';
+            seznamVelikosti.setAttribute('role', 'radiogroup');
+            var popisekVelikosti = document.createElement('span');
+            popisekVelikosti.className = 'gp-sizes-label';
+            seznamVelikosti.appendChild(popisekVelikosti);
+
+            var tlacitkaVelikosti = [];
+            var nazevParametru = '';
+            moznosti.forEach(function (o) {
+              var txt = (o.textContent || '').replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+              var bezCeny = txt.replace(/\s*\([^)]*\)\s*$/, '');
+              var m = bezCeny.match(/^([^:]+):\s*(.*)$/);
+              var hodnota = (m ? m[2] : bezCeny).split(/\s+-\s+/)[0].trim() || bezCeny;
+              if (m && !nazevParametru) nazevParametru = m[1].trim();
+              var vyprodano = /vyprodáno/i.test(txt);
+
+              var b = document.createElement('button');
+              b.type = 'button'; // nikdy neodesílat formulář
+              b.className = 'gp-size' + (vyprodano ? ' gp-size--out' : '');
+              b.textContent = hodnota;
+              b.setAttribute('role', 'radio');
+              b.setAttribute('aria-label', hodnota + (vyprodano ? ' (vyprodáno)' : ''));
+              b.setAttribute('data-value', o.value);
+              b.addEventListener('click', function () {
+                vyber.value = o.value;
+                vyber.dispatchEvent(new Event('change', { bubbles: true }));
+                synchronizovat();
+              });
+              seznamVelikosti.appendChild(b);
+              tlacitkaVelikosti.push(b);
+            });
+            popisekVelikosti.textContent = nazevParametru || 'Velikost';
+
+            function synchronizovat() {
+              tlacitkaVelikosti.forEach(function (b) {
+                var zapnuto = b.getAttribute('data-value') === String(vyber.value);
+                b.classList.toggle('is-on', zapnuto);
+                b.setAttribute('aria-checked', zapnuto ? 'true' : 'false');
+              });
+            }
+            vyber.addEventListener('change', synchronizovat);
+            synchronizovat();
+
+            obalVarianty.insertBefore(seznamVelikosti, obalVarianty.firstChild);
+            vyber.classList.add('gp-select-hidden');
+            vyber.setAttribute('aria-hidden', 'true');
+            vyber.setAttribute('tabindex', '-1');
           }
         }
 
@@ -856,7 +918,12 @@
               .forEach(function (o) { vynutit(o, { display: 'contents' }); });
             vynutit(galerie, Object.assign({ 'grid-column': '1', 'grid-row': '1 / span 3' }, SLOUPEC));
             vynutit(nadpis, Object.assign({ 'grid-column': '2', 'grid-row': '1' }, NADPIS));
-            vynutit(pb, Object.assign({ 'grid-column': '2', 'grid-row': '2', display: 'block', clear: 'none' }, SLOUPEC));
+            vynutit(pb, Object.assign({
+              'grid-column': '2', 'grid-row': '2', clear: 'none',
+              // panel je sám mřížka: cena | dostupnost, popis, velikosti, nákup, důvěra
+              display: 'grid', 'grid-template-columns': 'auto 1fr',
+              'column-gap': '14px', 'align-items': 'baseline'
+            }, SLOUPEC));
             if (zalozky) vynutit(zalozky, { 'grid-column': '1 / -1', 'grid-row': '4' });
           }
           galerieNaSloupec();

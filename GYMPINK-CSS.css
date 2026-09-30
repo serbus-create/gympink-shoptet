@@ -2631,3 +2631,201 @@ body.gp-pdp2 {
     color: var(--gp-ink) !important;
   }
 }
+
+
+/* ===================================================================
+   3.28  PDP2 — pořadí prvků v prodejním panelu + velikosti + množství
+   Diagnostika (DevTools, BABY PINK): .gp-pdp-buy obsahuje
+     .p-short-description
+     form#product-detail-form
+        > .variant-list > select#simple-variants-select
+        > .price.row > .shipping-availability (prázdné)
+                     > .p-final-price-wrapper > strong.price-final
+                     > .order-availability > .availability
+                     > .spaced-small (prázdné)
+                     > .add-to-cart > span.quantity (input.amount,
+                          button.increase, button.decrease)
+                          + button.btn-conversion (desktop)
+                          + button.btn-cart (mobil)
+        > ul.gp-trust (vkládá JS)
+   Formulář i .price.row dostanou display: contents, takže jejich děti
+   jsou položky mřížky panelu (.gp-pdp-buy) a dají se seřadit:
+     řádek 1  cena | dostupnost      řádek 2  krátký popis
+     řádek 3  velikosti              řádek 4  množství + tlačítko
+     řádek 5  ikony důvěry
+   Nic se nepřesouvá v DOM, formulář se odesílá jako dřív.
+   =================================================================== */
+
+/* políčka velikostí (platí i na mobilu — původní select je skrytý) */
+body.gp-pdp2 .gp-select-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  pointer-events: none !important;
+}
+body.gp-pdp2 .variant-list {
+  position: relative !important;
+}
+body.gp-pdp2 .gp-sizes {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+body.gp-pdp2 .gp-sizes-label {
+  flex: 0 0 100% !important;
+  margin: 0 0 2px !important;
+  font-size: 12px !important;
+  color: var(--gp-ink-soft) !important;
+}
+body.gp-pdp2 .gp-size {
+  min-width: 46px !important;
+  height: 42px !important;
+  padding: 0 12px !important;
+  border: 1px solid #b4b2a9 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: var(--gp-ink) !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+}
+body.gp-pdp2 .gp-size:hover {
+  border-color: var(--gp-ink) !important;
+}
+body.gp-pdp2 .gp-size.is-on {
+  border-color: var(--gp-cta) !important;
+  background: #fbeaf0 !important;
+  color: var(--gp-cta) !important;
+  font-weight: 500 !important;
+}
+body.gp-pdp2 .gp-size--out {
+  color: #a3a19a !important;
+  border-color: #e6e3de !important;
+  text-decoration: line-through !important;
+}
+body.gp-pdp2 .gp-size--out.is-on {
+  color: var(--gp-cta) !important;
+  text-decoration: line-through !important;
+}
+
+@media (min-width: 901px) {
+  /* formulář a řádek s cenou se "rozpustí" — jejich děti jsou položky mřížky */
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy form.pr-action,
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .price.row {
+    display: contents !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy [itemprop="offers"],
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .shipping-availability,
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .spaced-small {
+    display: none !important;
+  }
+
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .p-final-price-wrapper {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    width: auto !important;
+    float: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .order-availability {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: auto !important;
+    float: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 13px !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy > .p-short-description {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    margin: 14px 0 16px !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .variant-list {
+    grid-column: 1 / -1 !important;
+    grid-row: 3 !important;
+    width: auto !important;
+    float: none !important;
+    padding: 0 !important;
+    margin: 0 0 16px !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .add-to-cart {
+    grid-column: 1 / -1 !important;
+    grid-row: 4 !important;
+    width: auto !important;
+    float: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .gp-trust {
+    grid-column: 1 / -1 !important;
+    grid-row: 5 !important;
+  }
+}
+
+/* množství: − 1 + v jednom rámečku (vedle tlačítka) */
+body.gp-pdp2 .add-to-cart .quantity {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 4px !important;
+  position: relative !important;
+}
+body.gp-pdp2 .add-to-cart .quantity label {
+  order: 2 !important;
+  margin: 0 !important;
+  display: block !important;
+}
+body.gp-pdp2 .add-to-cart .quantity .decrease { order: 1 !important; }
+body.gp-pdp2 .add-to-cart .quantity .increase { order: 3 !important; }
+body.gp-pdp2 .add-to-cart .quantity input.amount {
+  width: 40px !important;
+  height: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  text-align: center !important;
+  font-size: 15px !important;
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+}
+body.gp-pdp2 .add-to-cart .quantity input.amount::-webkit-outer-spin-button,
+body.gp-pdp2 .add-to-cart .quantity input.amount::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+body.gp-pdp2 .add-to-cart .quantity .increase,
+body.gp-pdp2 .add-to-cart .quantity .decrease {
+  position: static !important;
+  width: 28px !important;
+  height: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: none !important;
+  color: var(--gp-ink) !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+}
+body.gp-pdp2 .add-to-cart .quantity .increase::before,
+body.gp-pdp2 .add-to-cart .quantity .increase::after,
+body.gp-pdp2 .add-to-cart .quantity .decrease::before,
+body.gp-pdp2 .add-to-cart .quantity .decrease::after {
+  display: none !important;
+  content: none !important;
+}
+body.gp-pdp2 .add-to-cart .quantity .increase__sign,
+body.gp-pdp2 .add-to-cart .quantity .decrease__sign {
+  display: inline !important;
+  position: static !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  font-size: 18px !important;
+}
