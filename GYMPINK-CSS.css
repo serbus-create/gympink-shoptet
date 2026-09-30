@@ -1757,6 +1757,22 @@ body.type-index .welcome-wrapper {
    =================================================================== */
 
 @media (max-width: 1279px) {
+  /* Šablona na telefonu dělá z karty flex (sloupec s pevnou výškou),
+     který fotku smrští a roztáhne mezeru mezi názvem a cenou.
+     Vracíme běžné skládání shora dolů. */
+  .products.products-block .product,
+  .products.products-block .product .inner,
+  .products.products-block .product .descr {
+    display: block !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  .products.products-block .product .img {
+    flex: 0 0 auto !important;
+    height: auto !important;
+  }
+
   /* Fotka vyplní celý rámeček 2:3 (stejně jako na desktopu). Dřív tu
      bylo height:auto → fotka (plátno 4:3) zabrala jen půlku rámečku. */
   .products.products-block .product .img {
