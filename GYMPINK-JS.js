@@ -1132,6 +1132,22 @@
             log('PDP2 záložky: vytvořena záložka Specifikace' + (ikony ? ' (s ikonami)' : ''));
           }
         }
+
+        // ----- Záložky vedle sebe, na střed (inline !important) -----
+        // Šablona (původně svislé záložky vlevo) přebíjí CSS, proto layout
+        // řady nastavujeme přímo na prvcích. Vlastní vzhled tlačítek zůstává v CSS.
+        if (nav) {
+          [['display', 'flex'], ['flex-direction', 'row'], ['flex-wrap', 'wrap'],
+           ['justify-content', 'center'], ['align-items', 'flex-end'], ['gap', '0'],
+           ['width', '100%'], ['float', 'none'], ['margin', '0 0 32px'],
+           ['padding', '0'], ['list-style', 'none']]
+            .forEach(function (kv) { nav.style.setProperty(kv[0], kv[1], 'important'); });
+          Array.prototype.forEach.call(nav.children, function (polozka) {
+            [['float', 'none'], ['display', 'block'], ['width', 'auto'], ['flex', '0 0 auto'],
+             ['margin', '0'], ['padding', '0'], ['position', 'relative']]
+              .forEach(function (kv) { polozka.style.setProperty(kv[0], kv[1], 'important'); });
+          });
+        }
       }
     },
 

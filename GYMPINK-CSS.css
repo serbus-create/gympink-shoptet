@@ -3083,3 +3083,45 @@ body.gp-pdp2 .gp-freeship.is-free .gp-freeship__fill {
     list-style: none !important;
   }
 }
+
+
+/* ===================================================================
+   3.32  PDP2 — záložky: střed stránky, souvislé okraje tlačítek
+   Layout řady (flex, střed) nastavuje JS inline; tady je vzhled.
+   Aktivní záložka: rámeček nahoře a po stranách, dole splývá s bílým
+   obsahem a překrývá linku pod řadou (position + z-index + margin -1px).
+   =================================================================== */
+@media (min-width: 901px) {
+  body.gp-pdp2 .gp-pdp-tabs {
+    max-width: 1100px !important;
+    margin: 56px auto 0 !important;
+  }
+  body.gp-pdp2 .gp-tabs-nav {
+    border-bottom: 1px solid #d9d5cf !important;
+  }
+  body.gp-pdp2 .gp-tabs-nav a {
+    position: relative !important;
+    z-index: 1 !important;
+    display: block !important;
+    margin: 0 0 -1px !important;
+    padding: 14px 28px !important;
+    border: 1px solid transparent !important;
+    border-bottom: 1px solid transparent !important;
+    border-radius: 8px 8px 0 0 !important;
+    background: transparent !important;
+    color: var(--gp-ink-soft) !important;
+  }
+  body.gp-pdp2 .gp-tabs-nav a:hover {
+    color: var(--gp-ink) !important;
+    background: #faf7f9 !important;
+  }
+  body.gp-pdp2 .gp-tabs-nav > li.active a,
+  body.gp-pdp2 .gp-tabs-nav a.active,
+  body.gp-pdp2 .gp-tabs-nav a[aria-selected="true"] {
+    color: var(--gp-ink) !important;
+    background: #fff !important;
+    border-color: #d9d5cf !important;
+    border-bottom-color: #fff !important;
+    z-index: 2 !important;
+  }
+}
