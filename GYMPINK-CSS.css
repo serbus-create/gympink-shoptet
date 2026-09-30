@@ -2763,9 +2763,13 @@ body.gp-pdp2 .gp-size--out.is-on {
     padding: 0 !important;
     margin: 0 !important;
   }
-  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .gp-trust {
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .gp-freeship {
     grid-column: 1 / -1 !important;
     grid-row: 5 !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .gp-trust {
+    grid-column: 1 / -1 !important;
+    grid-row: 6 !important;
   }
 }
 
@@ -2828,4 +2832,37 @@ body.gp-pdp2 .add-to-cart .quantity .decrease__sign {
   visibility: visible !important;
   opacity: 1 !important;
   font-size: 18px !important;
+}
+
+
+/* --- odpočet do dopravy zdarma (PDP2) --- */
+body.gp-pdp2 .gp-freeship {
+  margin: 16px 0 0 !important;
+}
+body.gp-pdp2 .gp-freeship__text {
+  margin: 0 0 6px !important;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+  color: var(--gp-ink-soft) !important;
+}
+body.gp-pdp2 .gp-freeship__text strong {
+  font-weight: 500 !important;
+  color: var(--gp-cta) !important;
+}
+body.gp-pdp2 .gp-freeship__track {
+  height: 6px !important;
+  background: #e6e3de !important;
+  overflow: hidden !important;
+}
+body.gp-pdp2 .gp-freeship__fill {
+  height: 100% !important;
+  width: 0;
+  background: var(--gp-cta) !important;
+  transition: width .35s ease !important;
+}
+body.gp-pdp2 .gp-freeship.is-free .gp-freeship__text strong {
+  color: #3B6D11 !important;
+}
+body.gp-pdp2 .gp-freeship.is-free .gp-freeship__fill {
+  background: #3B6D11 !important;
 }

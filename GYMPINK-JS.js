@@ -784,7 +784,7 @@
         // (14 dní na vrácení = zákonné právo spotřebitele; e-shop přijímá
         // online platby).
         var DUVERA = [
-          { href: '/doprava-a-platby/', text: 'Doprava zdarma od 2 000 Kč',
+          { href: '/doprava-a-platby/', text: 'Doprava a platby',
             ikona: '<path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0M15 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0M5 17H3V6a1 1 0 0 1 1-1h9v12M9 17h6M19 17h2v-6h-8M13 6h5l3 5"/>' },
           { text: '14 dní na vrácení',
             ikona: '<path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 5v4h4M4 13a8.1 8.1 0 0 0 15.5 2M20 19v-4h-4"/>' },
@@ -805,6 +805,72 @@
           if (cenaRadek.parentNode) {
             cenaRadek.parentNode.insertBefore(seznam, cenaRadek.nextSibling);
           }
+        }
+
+        // ----- Odpočet do dopravy zdarma -----
+        // Hodnotu košíku čteme z ikony košíku v hlavičce (text "Prázdný
+        // košík" nebo částka v Kč). Shoptet ji po přidání zboží přepíše
+        // AJAXem — proto MutationObserver. Nenašel-li se košík, pruh se skryje.
+        var ZDARMA_OD = 2000; // Kč — doprava zdarma od (potvrzeno majitelkou e-shopu)
+        var seznamDuvery = find('.gp-trust');
+        if (seznamDuvery && !find('.gp-freeship')) {
+          var pruh = document.createElement('div');
+          pruh.className = 'gp-freeship';
+          pruh.setAttribute('aria-live', 'polite');
+          var textPruhu = document.createElement('p');
+          textPruhu.className = 'gp-freeship__text';
+          var draha = document.createElement('div');
+          draha.className = 'gp-freeship__track';
+          var vypln = document.createElement('div');
+          vypln.className = 'gp-freeship__fill';
+          draha.appendChild(vypln);
+          pruh.appendChild(textPruhu);
+          pruh.appendChild(draha);
+          seznamDuvery.parentNode.insertBefore(pruh, seznamDuvery);
+
+          var cenaKosiku = function () {
+            var odkaz = find('#header a[href*="/kosik/"]') || find('a[href*="/kosik/"]');
+            if (!odkaz) return null;
+            var t = (odkaz.textContent || '').replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+            if (/prázdn/i.test(t)) return 0;
+            var m = t.match(/(\d[\d\s.,]*)\s*Kč/);
+            if (!m) return null;
+            var cislo = parseFloat(m[1].replace(/\s/g, '').replace(',', '.'));
+            return isNaN(cislo) ? null : cislo;
+          };
+          var fmt = function (n) { return Math.round(n).toLocaleString('cs-CZ'); };
+          var silne = function (txt) {
+            var b = document.createElement('strong');
+            b.textContent = txt;
+            return b;
+          };
+          var aktualizujDopravu = function () {
+            var kosik = cenaKosiku();
+            if (kosik === null) { pruh.style.display = 'none'; return; }
+            pruh.style.display = '';
+            var zbyva = Math.max(0, Math.ceil(ZDARMA_OD - kosik));
+            textPruhu.textContent = '';
+            pruh.classList.toggle('is-free', zbyva === 0);
+            if (zbyva === 0) {
+              textPruhu.appendChild(silne('Máš dopravu zdarma'));
+            } else if (kosik === 0) {
+              textPruhu.appendChild(document.createTextNode('Objednávka nad ' + fmt(ZDARMA_OD) + ' Kč má '));
+              textPruhu.appendChild(silne('dopravu zdarma'));
+            } else {
+              textPruhu.appendChild(document.createTextNode('Do dopravy zdarma ti zbývá '));
+              textPruhu.appendChild(silne(fmt(zbyva) + ' Kč'));
+            }
+            vypln.style.width = Math.min(100, (kosik / ZDARMA_OD) * 100) + '%';
+          };
+          aktualizujDopravu();
+
+          var casovac = null;
+          new MutationObserver(function () {
+            clearTimeout(casovac);
+            casovac = setTimeout(aktualizujDopravu, 150);
+          }).observe(find('#header') || document.body, {
+            childList: true, subtree: true, characterData: true
+          });
         }
 
         // ----- Velikosti jako políčka (původní <select> zůstává, jen je skrytý) -----
