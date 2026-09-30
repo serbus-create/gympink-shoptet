@@ -1423,6 +1423,17 @@
           titul.parentNode.insertBefore(odkaz, spojka.nextSibling);
         }
 
+        // ----- Instagram: vedle ikony doplnit @jméno z odkazu nastaveného v administraci -----
+        findAll('.custom-footer__contact a[href*="instagram.com"]', paticka).forEach(function (odkazIG) {
+          if (find('.gp-social-handle', odkazIG)) return;
+          var shoda = (odkazIG.getAttribute('href') || '').match(/instagram\.com\/([^\/?#]+)/i);
+          if (!shoda) return;
+          var jmeno = document.createElement('span');
+          jmeno.className = 'gp-social-handle';
+          jmeno.textContent = '@' + shoda[1];
+          odkazIG.appendChild(jmeno);
+        });
+
         // ----- Sloupce Blog / Informace poznáme podle TEXTU nadpisu -----
         // (třídy __articles / __section2 se ukázaly jako prohozené oproti očekávání)
         findAll('.custom-footer > *', paticka).forEach(function (sloupec) {

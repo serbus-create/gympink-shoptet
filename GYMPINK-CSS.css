@@ -3667,3 +3667,24 @@ footer.footer .gp-vhs {
 footer.footer .footer-bottom a.image {
   margin-right: 8px !important;
 }
+
+
+/* ===================================================================
+   3.44  ZÁPATÍ E — Instagram: ikona + @jméno (jako řádek s e-mailem)
+   Jméno doplňuje JS z odkazu (instagram.com/<jméno>/) nastaveného v
+   administraci, takže se mění spolu s ním.
+   =================================================================== */
+footer.footer .custom-footer__contact .social-icons a {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 24px !important;
+  text-decoration: none !important;
+}
+footer.footer .gp-social-handle {
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+  color: var(--gp-ink) !important;
+}
+footer.footer .custom-footer__contact .social-icons a:hover .gp-social-handle {
+  color: #a3336f !important;
+}
