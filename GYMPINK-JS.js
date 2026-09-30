@@ -1360,8 +1360,9 @@
         }
         function obnovit() {
           okno.textContent = (window.__gpGal ? window.__gpGal + '\n\n' : '') +
-            ['.gp-pdp-buy', '.p-short-description', '.variant-list', '.gp-sizes',
-             '.gp-size', '.add-to-cart', '.gp-freeship', '.gp-trust'].map(popis).join('\n');
+            ['.gp-pdp-gallery', '.gp-pdp-main-img', '.gp-thumbs', '.gp-thumbs > *:first-child',
+             '.p-final-price-wrapper', '.gp-pdp-buy', '.p-short-description', '.variant-list',
+             '.gp-sizes', '.add-to-cart'].map(popis).join('\n');
         }
         setTimeout(obnovit, 900);
         okno.addEventListener('click', obnovit);
