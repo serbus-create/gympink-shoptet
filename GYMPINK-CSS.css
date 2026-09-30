@@ -2331,11 +2331,19 @@ body.gp-pdp2 {
 @media (min-width: 901px) {
 
   /* --- mřížka (záloha k inline stylům z JS) --- */
-  body.gp-pdp2 .p-detail-inner {
+  /* POZOR: mřížka na .p-detail-inner platí JEN v režimu A (formulář je
+     samostatný sloupec vedle řádku). V režimu B je uvnitř jediný potomek
+     (.row), který by se tou mřížkou nacpal do prvního sloupce (~43 %) a
+     celý blok by byl zúžený — přesně to se stalo při prvním nasazení. */
+  body.gp-pdp2 .p-detail-inner.gp-pdp-modeA {
     display: grid !important;
     grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr) !important;
     column-gap: 40px !important;
     align-items: start !important;
+    position: relative !important;
+  }
+  body.gp-pdp2 .p-detail-inner.gp-pdp-modeB {
+    display: block !important;
     position: relative !important;
   }
   body.gp-pdp2 .gp-pdp-row,

@@ -707,10 +707,19 @@
         var galerie = find('.detail-img.p-image-wrapper', inner);
         var nadpis = find('h1', inner);
         var cenaRadek = find('.price.row', inner);
-        if (!galerie || !nadpis || !cenaRadek) return;
+        if (!galerie || !nadpis || !cenaRadek) {
+          log('PDP2 přeskočeno, nenalezeno: ' +
+              (!galerie ? '[galerie .detail-img.p-image-wrapper] ' : '') +
+              (!nadpis ? '[h1] ' : '') +
+              (!cenaRadek ? '[.price.row] ' : ''));
+          return;
+        }
 
         var radek = galerie.parentElement;
-        if (!radek || radek === inner) return;
+        if (!radek || radek === inner) {
+          log('PDP2 přeskočeno: rodič galerie je přímo .p-detail-inner');
+          return;
+        }
 
         // Dva možné tvary stránky (po vypnutí POBO se objevil ten první):
         //  B) nadpis I formulář (cena, tlačítko) jsou v JEDNOM sloupci uvnitř
@@ -725,8 +734,13 @@
         var nakup = null;
         if (!rezimB) {
           nakup = cenaRadek.closest('.col-md-4') || cenaRadek.parentElement;
-          if (!nakup || nakup === info || radek.contains(nakup)) return;
+          if (!nakup || nakup === info || radek.contains(nakup)) {
+            log('PDP2 přeskočeno: nepodařilo se určit sloupec formuláře');
+            return;
+          }
         }
+        log('PDP2 režim ' + (rezimB ? 'B (nadpis i formulář v jednom sloupci)' : 'A (formulář zvlášť)'));
+        inner.classList.add(rezimB ? 'gp-pdp-modeB' : 'gp-pdp-modeA');
 
         var zalozky = find(':scope > .shp-tabs-wrapper', inner) || find('.shp-tabs-wrapper', inner);
 
