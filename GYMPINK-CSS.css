@@ -2952,3 +2952,88 @@ body.gp-pdp2 .gp-freeship.is-free .gp-freeship__fill {
     border-bottom-color: var(--gp-ink) !important;
   }
 }
+
+
+/* ===================================================================
+   3.30  PDP2 — záložky jako "složkové karty" + typografie popisu
+   Vzor (Old Man's / Fermato): řada záložek s tenkou linkou přes celou
+   šířku, aktivní záložka má rámeček se zaoblenými horními rohy a linku
+   přerušuje; text popisu je dlouhé odstavce max ~860 px široké, odrážky
+   mají šipky. Přebíjí vzhled ze sekce 3.29 (stejné selektory, později).
+   =================================================================== */
+@media (min-width: 901px) {
+  body.gp-pdp2 .gp-pdp-tabs {
+    max-width: none !important;
+    margin: 56px 0 0 !important;
+  }
+
+  body.gp-pdp2 .gp-tabs-nav {
+    gap: 0 !important;
+    margin: 0 0 32px !important;
+    border-bottom: 1px solid var(--gp-line) !important;
+  }
+  body.gp-pdp2 .gp-tabs-nav a {
+    margin: 0 0 -1px !important;
+    padding: 14px 22px !important;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    color: var(--gp-ink) !important;
+    border: 1px solid transparent !important;
+    border-bottom: 0 !important;
+    border-radius: 8px 8px 0 0 !important;
+  }
+  body.gp-pdp2 .gp-tabs-nav a:hover {
+    color: var(--gp-ink) !important;
+    background: #faf7f9 !important;
+  }
+  body.gp-pdp2 .gp-tabs-nav > li.active a,
+  body.gp-pdp2 .gp-tabs-nav a.active,
+  body.gp-pdp2 .gp-tabs-nav a[aria-selected="true"] {
+    color: var(--gp-ink) !important;
+    background: #fff !important;
+    border-color: var(--gp-line) !important;
+    border-bottom: 1px solid #fff !important;
+  }
+
+  /* text popisu: pohodlná šířka řádku, jen u textových prvků
+     (obrázky a karty z popisu zůstávají široké) */
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane p,
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane ul,
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane ol,
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane h2,
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane h3,
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane h4 {
+    max-width: 860px !important;
+  }
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane p,
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane li {
+    line-height: 1.75 !important;
+  }
+
+  /* odrážky se šipkou */
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane ul {
+    list-style: none !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+  }
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane ul > li {
+    position: relative !important;
+    list-style: none !important;
+    padding-left: 34px !important;
+    margin: 4px 0 !important;
+  }
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane ul > li::before {
+    content: "" !important;
+    position: absolute !important;
+    left: 8px !important;
+    top: .72em !important;
+    width: 8px !important;
+    height: 8px !important;
+    border-top: 2px solid var(--gp-ink) !important;
+    border-right: 2px solid var(--gp-ink) !important;
+    transform: rotate(45deg) translateY(-50%) !important;
+    background: none !important;
+  }
+}
