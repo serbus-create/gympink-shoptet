@@ -671,6 +671,18 @@
           }
         });
 
+        // Titulní strana (pás produktů): .product > .p > a.image (img + .extra-flags >
+        // .flags.flags-extra) a štítky v .flags-inline pod názvem. Stejný přesun jako v kategoriích.
+        findAll('.products-inline .product').forEach(function (karta) {
+          var foto = find('a.image', karta);
+          var inline = find('.flags-inline', karta);
+          if (!foto || !inline || foto.contains(inline)) return;
+          var slot = find('.extra-flags .flags', foto) || find('.flags-extra', foto) || find('.extra-flags', foto);
+          if (!slot || !inline.children.length) return;
+          while (inline.firstChild) slot.appendChild(inline.firstChild);
+          inline.style.setProperty('display', 'none', 'important');
+        });
+
         // Šablona vynucuje štítkům pevnou výšku (na fotce vznikl černý
         // čtverec ~70 px). Inline !important vyhraje nad jakýmkoli
         // pravidlem, takže výšku a roztažení vynulujeme přímo na prvcích.
