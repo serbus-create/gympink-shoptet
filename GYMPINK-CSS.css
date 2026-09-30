@@ -1958,3 +1958,26 @@ body.type-index .gp-banner-pair-item .extended-banner-link,
 body.type-index .gp-banner-big .extended-banner-link {
   text-shadow: 0 1px 3px rgba(0, 0, 0, .25), 0 1px 10px rgba(0, 0, 0, .28) !important;
 }
+
+
+/* ===================================================================
+   3.24  HLAVNÍ MENU — skrytí kategorií Novinky a Bestsellers
+   Skrýváme podle adresy odkazu (ne podle textu), celou položku <li>,
+   v celé hlavičce (hlavní lišta, "Více" i mobilní zásuvka).
+   Kategorie samotné dál existují a fungují na svých URL — jen nejsou
+   v menu. Vrátit zpět: smazat tento blok.
+   =================================================================== */
+#header li:has(> a[href$="/novinky/"]),
+#header li:has(> a[href$="/bestsellers/"]),
+#navigation li:has(> a[href$="/novinky/"]),
+#navigation li:has(> a[href$="/bestsellers/"]) {
+  display: none !important;
+}
+
+/* záloha pro prohlížeče bez :has() — skryje aspoň samotný odkaz */
+#header a[href$="/novinky/"],
+#header a[href$="/bestsellers/"],
+#navigation a[href$="/novinky/"],
+#navigation a[href$="/bestsellers/"] {
+  display: none !important;
+}
