@@ -2866,3 +2866,89 @@ body.gp-pdp2 .gp-freeship.is-free .gp-freeship__text strong {
 body.gp-pdp2 .gp-freeship.is-free .gp-freeship__fill {
   background: #3B6D11 !important;
 }
+
+
+/* ===================================================================
+   3.29  PDP2 — záložky POPIS / DISKUZE nad popisem, jeden sloupec
+   Nativně (po vypnutí POBO) jsou tři sloupce: záložky svisle vlevo,
+   popis uprostřed, tabulka parametrů + Tisk/Zeptat se/Sdílet vpravo.
+   Struktura bloku nebyla ověřena, proto JS označí všechny obaly na
+   cestě k záložkám, popisu, diskuzi a tabulce třídou .gp-pdp-flat a
+   CSS z nich udělá plnou šířku pod sebou. Přepínání záložek (Bootstrap
+   .tab-pane / .active) zůstává nedotčené.
+   =================================================================== */
+@media (min-width: 901px) {
+  body.gp-pdp2 .gp-pdp-tabs {
+    display: block !important;
+    float: none !important;
+    width: 100% !important;
+    max-width: 1000px !important;
+    margin: 56px auto 0 !important;
+    padding: 0 !important;
+  }
+
+  /* obaly na cestě: plná šířka, pod sebou (viditelnost záložek neměníme) */
+  body.gp-pdp2 .gp-pdp-tabs .gp-pdp-flat {
+    float: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    flex: 0 0 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  body.gp-pdp2 .gp-pdp-tabs .gp-pdp-flat:not(.tab-pane) {
+    display: block !important;
+  }
+  body.gp-pdp2 .gp-pdp-tabs .gp-pdp-flat.tab-pane.active {
+    display: block !important;
+  }
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane:not(.active) {
+    display: none !important;
+  }
+
+  /* záložky: horizontální řada s podtržením aktivní */
+  body.gp-pdp2 .gp-tabs-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 32px !important;
+    width: 100% !important;
+    margin: 0 0 28px !important;
+    padding: 0 !important;
+    list-style: none !important;
+    border-bottom: 1px solid var(--gp-line) !important;
+  }
+  body.gp-pdp2 .gp-tabs-nav > li {
+    float: none !important;
+    display: block !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+  body.gp-pdp2 .gp-tabs-nav a {
+    display: block !important;
+    margin: 0 0 -1px !important;
+    padding: 12px 0 !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    letter-spacing: .06em !important;
+    text-transform: uppercase !important;
+    text-decoration: none !important;
+    color: var(--gp-ink-soft) !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-bottom: 2px solid transparent !important;
+  }
+  body.gp-pdp2 .gp-tabs-nav a:hover {
+    color: var(--gp-ink) !important;
+  }
+  body.gp-pdp2 .gp-tabs-nav > li.active a,
+  body.gp-pdp2 .gp-tabs-nav a.active,
+  body.gp-pdp2 .gp-tabs-nav a[aria-selected="true"] {
+    color: var(--gp-ink) !important;
+    border-bottom-color: var(--gp-ink) !important;
+  }
+}

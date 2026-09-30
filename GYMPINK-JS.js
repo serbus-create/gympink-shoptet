@@ -1027,6 +1027,47 @@
       }
     },
 
+    {
+      nazev: 'PDP2 — záložky Popis/Diskuze nad popisem, vše v jednom sloupci',
+      spustit: function () {
+        if (!document.body.classList.contains('gp-pdp2')) return;
+
+        // Blok záložek je sourozenec řádku s galerií uvnitř .p-detail-inner.
+        var blok = find('.p-detail-inner .shp-tabs-wrapper') || find('.shp-tabs-wrapper');
+        if (!blok) { log('PDP2 záložky: blok .shp-tabs-wrapper nenalezen'); return; }
+        blok.classList.add('gp-pdp-tabs');
+
+        // Navigace záložek = seznam odkazující na #description.
+        var odkazPopis = find('a[href="#description"]', blok) || find('a[href$="#description"]', blok);
+        var nav = odkazPopis ? odkazPopis.closest('ul') : null;
+        if (nav) nav.classList.add('gp-tabs-nav');
+
+        // Cíle, jejichž předky "zploštíme" (bez floatů/šířek/sloupců):
+        // navigace, obsah popisu, diskuze, tabulka parametrů, ikony Tisk/Zeptat se/Sdílet.
+        var cile = [];
+        if (nav) cile.push(nav);
+        var popis = find('#description', blok);
+        if (popis) cile.push(popis);
+        var diskuze = find('#productDiscussion', blok);
+        if (diskuze) cile.push(diskuze);
+        var tabulka = findAll('table', blok).filter(function (t) {
+          return /Jméno značky|Kategorie|Záruka/i.test(t.textContent || '');
+        })[0];
+        if (tabulka) cile.push(tabulka);
+        var tisk = find('a[title*="Tisk"]', blok);
+        if (tisk) cile.push(tisk);
+
+        cile.forEach(function (cil) {
+          var e = cil;
+          while (e && e !== blok) {
+            if (!e.classList.contains('gp-tabs-nav')) e.classList.add('gp-pdp-flat');
+            e = e.parentElement;
+          }
+        });
+        log('PDP2 záložky: zploštěno ' + findAll('.gp-pdp-flat', blok).length + ' obalů');
+      }
+    },
+
   ];
 
 
