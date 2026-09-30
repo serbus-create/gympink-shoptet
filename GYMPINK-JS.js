@@ -929,6 +929,9 @@
             synchronizovat();
 
             obalVarianty.insertBefore(seznamVelikosti, obalVarianty.firstChild);
+            [['display', 'block'], ['height', 'auto'], ['min-height', '0'],
+             ['max-height', 'none'], ['overflow', 'visible'], ['position', 'relative']]
+              .forEach(function (kv) { obalVarianty.style.setProperty(kv[0], kv[1], 'important'); });
             vyber.classList.add('gp-select-hidden');
             vyber.setAttribute('aria-hidden', 'true');
             vyber.setAttribute('tabindex', '-1');
@@ -960,14 +963,16 @@
 
           var sloupce = {
             display: 'grid',
-            'grid-template-columns': 'minmax(0, .85fr) minmax(0, 1.15fr)',
+            'grid-template-columns': 'minmax(0, 1fr) minmax(0, 520px)',
             // poslední řádek pohltí přebytečnou výšku vysoké galerie (jinak
             // se rozdělí mezi všechny řádky a pod nadpisem vznikne mezera)
             'grid-template-rows': rezimB ? 'auto' : 'auto auto 1fr',
-            'column-gap': '40px',
+            'column-gap': '56px',
             'align-items': 'start',
             overflow: 'visible',
-            margin: '0' // vynulovat záporný okraj Bootstrap .row (-15 px)
+            // střed do 1 200 px (a zároveň vynulování záporného okraje .row)
+            'max-width': '1200px',
+            margin: '0 auto'
           };
 
           if (rezimB) {

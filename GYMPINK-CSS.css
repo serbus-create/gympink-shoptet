@@ -2337,8 +2337,8 @@ body.gp-pdp2 {
      celý blok by byl zúžený — přesně to se stalo při prvním nasazení. */
   body.gp-pdp2 .p-detail-inner.gp-pdp-modeA {
     display: grid !important;
-    grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr) !important;
-    column-gap: 40px !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 520px) !important;
+    column-gap: 56px !important;
     align-items: start !important;
     position: relative !important;
   }
@@ -2380,8 +2380,8 @@ body.gp-pdp2 {
   /* --- režim B: název i formulář v jednom sloupci vedle galerie --- */
   body.gp-pdp2 .p-detail-inner .gp-pdp-row2 {
     display: grid !important;
-    grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr) !important;
-    column-gap: 40px !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 520px) !important;
+    column-gap: 56px !important;
     align-items: start !important;
     overflow: visible !important;
     margin: 0 !important;
@@ -3202,5 +3202,36 @@ body.gp-pdp2 .gp-freeship.is-free .gp-freeship__fill {
   body.gp-pdp2 .gp-pdp-tabs #productDiscussion form input[type="submit"] {
     display: block !important;
     margin: 20px auto 0 !important;
+  }
+}
+
+
+/* ===================================================================
+   3.36  PDP2 — užší prodejní panel, velikosti nepřekryté tlačítkem
+   Panel: pevná šířka do 520 px (galerie bere zbytek), celé na střed do
+   1 200 px. Blok s velikostmi (.variant-list) dostane výšku podle
+   obsahu, aby políčka nezůstala pod řádkem množství + tlačítko.
+   =================================================================== */
+body.gp-pdp2 .variant-list {
+  display: block !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+@media (min-width: 901px) {
+  body.gp-pdp2 .p-detail-inner .gp-pdp-row2,
+  body.gp-pdp2 .p-detail-inner .gp-pdp-modeA {
+    max-width: 1200px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy {
+    max-width: 520px !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .add-to-cart {
+    margin-top: 4px !important;
+    position: relative !important;
+    z-index: 1 !important;
   }
 }
