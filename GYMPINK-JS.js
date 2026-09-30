@@ -571,6 +571,45 @@
       }
     },
 
+    {
+      nazev: 'Ostré fotky produktů — miniatura 423×318 nahrazena velkou verzí (1024×768) z data-micro-image',
+      spustit: function () {
+        // Diagnostika (DevTools): <img> má width=423 height=318 a v atributu
+        // data-micro-image adresu VELKÉ verze (/user/shop/big/…&x=1024&y=768
+        // s platným podpisem sg=). Miniatura 423×318 je krajinné plátno,
+        // do kterého Shoptet vloží portrétní fotku s bílými okraji →
+        // po roztažení do karty je malá, rozmazaná a odsazená od okraje.
+        // URL nikam nezapisujeme, bereme ji, co Shoptet sám vykreslil.
+        findAll('.product').forEach(function (karta) {
+          var img = find('a.image img, .img img', karta);
+          if (!img || img.getAttribute('data-gp-big')) return;
+
+          var url = img.getAttribute('data-micro-image') || '';
+          if (!url) {
+            var meta = find('meta[itemprop="image"]', karta);
+            url = meta ? (meta.getAttribute('content') || '') : '';
+          }
+          if (!url || url.indexOf('/user/shop/big/') === -1) return;
+
+          var puvodni = img.currentSrc || img.src;
+          img.setAttribute('data-gp-big', '1');
+
+          // Kdyby velká verze selhala, vrátit původní miniaturu (jednou).
+          function zaloha() {
+            img.removeEventListener('error', zaloha);
+            img.removeAttribute('srcset');
+            img.src = puvodni;
+          }
+          img.addEventListener('error', zaloha);
+
+          img.removeAttribute('srcset');
+          img.removeAttribute('data-srcset');
+          img.setAttribute('data-src', url);
+          img.src = url;
+        });
+      }
+    },
+
   ];
 
 

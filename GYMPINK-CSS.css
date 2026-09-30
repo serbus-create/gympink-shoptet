@@ -2109,7 +2109,10 @@ body.type-index .gp-drop .product .p a.image {
   max-width: none !important;
   margin: 0 !important;
   padding: 0 !important;
-  aspect-ratio: 3 / 4 !important;
+  /* 2:3 = poměr původních fotek. Shoptet je vkládá do krajinného plátna
+     4:3 s bílými okraji; při 2:3 a object-fit: cover se okraje ořežou
+     přesně a fotka lícuje s nadpisem. */
+  aspect-ratio: 2 / 3 !important;
   overflow: hidden !important;
   background: var(--gp-tile) !important;
 }
