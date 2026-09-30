@@ -1056,7 +1056,7 @@
           };
           if (ram === img) {
             vynutit(img, {
-              width: '100%', 'aspect-ratio': '3 / 4', height: 'auto', display: 'block',
+              width: '100%', 'aspect-ratio': (window.innerWidth <= 900 ? '2 / 3' : '3 / 4'), height: 'auto', display: 'block',
               'max-width': 'none', 'max-height': 'none', 'object-fit': 'cover',
               'object-position': 'center', margin: '0', order: '1'
             });
@@ -1145,7 +1145,7 @@
           if (ram !== hlavniFoto) {
             vynutit(ram, {
               order: '1', position: 'relative', display: 'block', width: '100%',
-              'max-width': 'none', 'aspect-ratio': '3 / 4', height: 'auto',
+              'max-width': 'none', 'aspect-ratio': (window.innerWidth <= 900 ? '2 / 3' : '3 / 4'), height: 'auto',
               'min-height': '0', overflow: 'hidden', float: 'none', margin: '0', padding: '0'
             });
           }
