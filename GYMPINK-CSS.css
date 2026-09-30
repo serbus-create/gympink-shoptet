@@ -3781,3 +3781,34 @@ footer.footer .custom-footer__onlinePayments img {
     transform: translateY(-2px) !important;
   }
 }
+
+
+/* ===================================================================
+   3.48  MOBIL — hlavička je vždy růžová (i na titulní straně nahoře)
+   Diagnostika (screenshot): na homepage je hlavička nahoře průhledná
+   (nad hero fotkou), na mobilu ale hero začíná až pod ní → za hlavičkou
+   je bílá stránka, bílé logo i ikony nejsou vidět. Na mobilu proto růžové
+   pozadí hned, bílé ikony a logo se stínem jako na desktopu.
+   =================================================================== */
+@media (max-width: 900px) {
+  body.type-index #header,
+  body.type-index #header:not(.gp-scrolled) {
+    background: var(--gp-header-bg) !important;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, .08) !important;
+  }
+
+  /* ikony a cena košíku bílé i po scrollu (jinak by se po scrollu přepnuly na tmavé) */
+  #header .top-nav-right a,
+  #header .top-nav-right a *,
+  #header .top-nav-right .btn-icon,
+  #header .top-nav-right .cart-price,
+  #header .cart-price {
+    color: #fff !important;
+    text-shadow: 0 1px 12px rgba(0, 0, 0, .55) !important;
+  }
+
+  /* logo: stejný jemný stín jako na desktopu, ať je čitelné na světle růžové */
+  #header .site-name img {
+    filter: drop-shadow(0 1px 8px rgba(0, 0, 0, .5)) !important;
+  }
+}
