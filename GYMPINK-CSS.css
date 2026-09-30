@@ -3235,3 +3235,25 @@ body.gp-pdp2 .variant-list {
     z-index: 1 !important;
   }
 }
+
+
+/* ===================================================================
+   3.37  PDP2 — galerie podle návrhu
+   Hlavní fotka: rámeček 3:4, fotka ho vyplní (cover, i s ořezem).
+   Miniatury: řada 5 čtverců pod fotkou, vybraná má tmavý rámeček.
+   Rozměry a umístění nastavuje JS inline (šablona jinak přebíjí),
+   tady jsou jen záloha a vzhled výběru.
+   =================================================================== */
+@media (min-width: 901px) {
+  body.gp-pdp2 .gp-pdp-main-img {
+    object-fit: cover !important;
+    object-position: center !important;
+    max-height: none !important;
+  }
+  body.gp-pdp2 .gp-pdp-gallery .p-thumbnail.highlighted,
+  body.gp-pdp2 .gp-pdp-gallery .highlighted > .p-thumbnail {
+    outline: 2px solid var(--gp-ink) !important;
+    outline-offset: -2px !important;
+    border-color: transparent !important;
+  }
+}

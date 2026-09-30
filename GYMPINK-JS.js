@@ -1001,29 +1001,91 @@
         }
         function galerieNaSloupec() {
           if (window.innerWidth <= 900) return;
-          if (!hlavniVetev || !miniaturyVetev || hlavniVetev === miniaturyVetev) return;
-          vynutit(galerie, { display: 'flex', 'flex-direction': 'column', 'align-items': 'stretch', gap: '8px' });
-          vynutit(hlavniVetev, {
-            order: '1', position: 'relative', width: '100%', 'max-width': 'none',
-            float: 'none', margin: '0'
+          if (!hlavniFoto) return;
+
+          // Kontejner galerie G = nejbližší společný rodič hlavní fotky a
+          // miniatur (mb = větev s fotkou, tb = větev s miniaturami).
+          // Když miniatury nejsou / leží v jednom obalu s fotkou, řešíme jen fotku.
+          var G = null, mb = null, tb = null;
+          if (miniaturyKontejner) {
+            G = spolecnyRodic(hlavniFoto, miniaturyKontejner);
+            if (G) {
+              mb = potomekObsahujici(G, hlavniFoto);
+              tb = potomekObsahujici(G, miniaturyKontejner);
+            }
+          }
+          if (!G || !mb || !tb || mb === tb) {
+            G = galerie;
+            mb = potomekObsahujici(galerie, hlavniFoto);
+            tb = null;
+          }
+          if (!mb) return;
+
+          vynutit(G, {
+            display: 'flex', 'flex-direction': 'column', 'align-items': 'stretch',
+            gap: '8px', width: '100%', 'max-width': 'none'
           });
-          vynutit(miniaturyVetev, {
-            order: '2', position: 'static', width: '100%', 'max-width': 'none',
-            height: 'auto', float: 'none', margin: '0', transform: 'none',
-            top: 'auto', left: 'auto', right: 'auto', bottom: 'auto'
-          });
-          if (miniaturyKontejner && miniaturyKontejner !== galerie) {
+
+          // ----- Rámeček hlavní fotky 3:4, fotka ho vyplní (cover) -----
+          var FOTO = {
+            width: '100%', height: '100%', 'max-width': 'none', 'max-height': 'none',
+            'object-fit': 'cover', 'object-position': 'center', margin: '0', transform: 'none'
+          };
+          if (mb === hlavniFoto) {
+            vynutit(hlavniFoto, {
+              width: '100%', 'aspect-ratio': '3 / 4', height: 'auto', display: 'block',
+              'max-width': 'none', 'max-height': 'none', 'object-fit': 'cover',
+              'object-position': 'center', margin: '0', order: '1'
+            });
+          } else {
+            vynutit(mb, {
+              order: '1', position: 'relative', display: 'block', width: '100%',
+              'max-width': 'none', 'aspect-ratio': '3 / 4', height: 'auto',
+              'min-height': '0', overflow: 'hidden', float: 'none', margin: '0', padding: '0'
+            });
+            // obaly mezi rámečkem a fotkou nesmí zakládat vlastní kontejner
+            var e = hlavniFoto.parentElement;
+            while (e && e !== mb) {
+              vynutit(e, {
+                position: 'static', display: 'block', width: 'auto', height: 'auto',
+                margin: '0', padding: '0', transform: 'none', float: 'none', 'max-width': 'none'
+              });
+              e = e.parentElement;
+            }
+            vynutit(hlavniFoto, Object.assign({ position: 'absolute', top: '0', left: '0' }, FOTO));
+          }
+
+          // ----- Miniatury: řada 5 čtverců pod fotkou -----
+          if (tb) {
+            vynutit(tb, {
+              order: '2', position: 'static', width: '100%', 'max-width': 'none', height: 'auto',
+              float: 'none', margin: '0', padding: '0', transform: 'none',
+              top: 'auto', left: 'auto', right: 'auto', bottom: 'auto'
+            });
+          }
+          if (miniaturyKontejner && miniaturyKontejner !== G) {
             vynutit(miniaturyKontejner, {
-              display: 'flex', 'flex-direction': 'row', 'flex-wrap': 'nowrap', gap: '6px',
-              width: '100%', height: 'auto', 'overflow-x': 'auto', position: 'static',
-              transform: 'none'
+              display: 'grid', 'grid-template-columns': 'repeat(5, minmax(0, 1fr))',
+              gap: '8px', width: '100%', height: 'auto', position: 'static',
+              transform: 'none', margin: '0', padding: '0', overflow: 'visible', float: 'none'
             });
             miniatury.forEach(function (m) {
               var polozka = potomekObsahujici(miniaturyKontejner, m) || m;
               vynutit(polozka, {
-                flex: '0 0 84px', width: '84px', height: 'auto', margin: '0',
-                float: 'none', position: 'static', transform: 'none'
+                position: 'relative', display: 'block', width: 'auto', height: 'auto',
+                'aspect-ratio': '1 / 1', margin: '0', padding: '0', float: 'none',
+                transform: 'none', overflow: 'hidden', 'max-width': 'none'
               });
+              if (polozka !== m) {
+                vynutit(m, { display: 'block', position: 'static', width: '100%', height: '100%', margin: '0' });
+              }
+              var mi = find('img', m);
+              if (mi) {
+                vynutit(mi, {
+                  position: 'absolute', top: '0', left: '0', width: '100%', height: '100%',
+                  'max-width': 'none', 'object-fit': 'cover', margin: '0'
+                });
+              }
             });
           }
         }
