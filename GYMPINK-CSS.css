@@ -3855,7 +3855,7 @@ footer.footer .custom-footer__onlinePayments img {
   .gp-search-left {
     display: flex !important;
     position: absolute !important;
-    left: 12px !important;
+    left: 18px !important; /* bylo 12 px – opticky moc u kraje displeje */
     top: 0 !important;
     bottom: 0 !important;
     align-items: center !important;
