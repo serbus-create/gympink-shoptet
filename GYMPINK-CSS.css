@@ -4360,6 +4360,10 @@ footer.footer .custom-footer__onlinePayments img {
     line-height: 1.08 !important;
     margin-bottom: 28px !important;
   }
+  body.type-index .wide-carousel .extended-banner-link {
+    font-size: 17px !important;
+    padding: 15px 38px !important;
+  }
 }
 
 /* iPad (768–1279 px): víc vlevo a větší */
@@ -4367,7 +4371,11 @@ footer.footer .custom-footer__onlinePayments img {
   body.type-index .wide-carousel .extended-banner-texts {
     padding-left: 6% !important;
     padding-right: 2% !important;
-    max-width: 56% !important;
+    max-width: 40% !important; /* užší box → nadpis se zalomí na 2 řádky a nejde na modelku */
+  }
+  body.type-index .wide-carousel .extended-banner-link {
+    font-size: 16px !important;
+    padding: 13px 30px !important;
   }
   body.type-index .wide-carousel .extended-banner-title {
     font-size: clamp(38px, 5vw, 58px) !important;
