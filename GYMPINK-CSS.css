@@ -3299,3 +3299,35 @@ body.gp-pdp2 .variant-list {
     order: 7 !important; flex: 0 0 100% !important;
   }
 }
+
+
+/* ===================================================================
+   3.39  PDP2 — příznaky ve sloupci, sleva červeně, cena bez odsazení
+   Paleta: Akce / sleva #d3312b (Novinka a Tip mají barvy z administrace).
+   =================================================================== */
+@media (min-width: 901px) {
+  body.gp-pdp2 .p-detail-inner .flags .flag-discount {
+    background: #d3312b !important;
+    background-color: #d3312b !important;
+    color: #fff !important;
+    text-align: left !important;
+  }
+  body.gp-pdp2 .p-detail-inner .flags .flag-discount * {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #fff !important;
+    font-size: 11px !important;
+    line-height: 1.25 !important;
+  }
+
+  /* cena: žádné vnitřní odsazení zleva, ať sedí s nadpisem a popisem */
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .p-final-price-wrapper,
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .p-final-price-wrapper > *,
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .p-final-price-wrapper .price-final,
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .p-final-price-wrapper .price-final-holder {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    text-indent: 0 !important;
+  }
+}

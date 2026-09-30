@@ -943,6 +943,15 @@
             [['display', 'block'], ['height', 'auto'], ['min-height', '0'],
              ['max-height', 'none'], ['overflow', 'visible'], ['position', 'relative']]
               .forEach(function (kv) { obalVarianty.style.setProperty(kv[0], kv[1], 'important'); });
+
+            // Nativní popisek "Varianta" (zbyl pod políčky) schováme; zůstane jen "Velikost".
+            findAll('.p-detail-inner label, .p-detail-inner span, .p-detail-inner div, .p-detail-inner p, .p-detail-inner strong')
+              .forEach(function (el) {
+                if (el.children.length === 0 && el.closest && !el.closest('.gp-sizes') &&
+                    /^\s*Varianta\s*$/i.test(el.textContent || '')) {
+                  el.style.setProperty('display', 'none', 'important');
+                }
+              });
             vyber.classList.add('gp-select-hidden');
             vyber.setAttribute('aria-hidden', 'true');
             vyber.setAttribute('tabindex', '-1');
@@ -1029,7 +1038,8 @@
           window.__gpGal = 'galerie: fotek=' + obrazky.length + ' miniatur=' + miniatury.length +
             '\n  hlavni: ' + popisEl(hlavniFoto) +
             '\n  kontejner miniatur: ' + popisEl(miniaturyKontejner) +
-            '\n  prvni miniatura: ' + popisEl(miniatury[0]);
+            '\n  prvni miniatura: ' + popisEl(miniatury[0]) +
+            '\n  potomci galerie: ' + Array.prototype.map.call(galerie.children, popisEl).join(' | ');
 
           // Kontejner galerie G = nejbližší společný rodič hlavní fotky a
           // miniatur (mb = větev s fotkou, tb = větev s miniaturami).
@@ -1090,6 +1100,17 @@
               float: 'none', margin: '0', padding: '0', transform: 'none',
               top: 'auto', left: 'auto', right: 'auto', bottom: 'auto'
             });
+            // Obaly MEZI kontejnerem miniatur a větví tb si nesly původní
+            // absolutní pozici / šířku (miniatury zůstaly drobné u pravého okraje).
+            var nahoru = miniaturyKontejner ? miniaturyKontejner.parentElement : null;
+            while (nahoru && nahoru !== G && nahoru !== tb) {
+              vynutit(nahoru, {
+                position: 'static', display: 'block', width: '100%', 'max-width': 'none',
+                height: 'auto', float: 'none', margin: '0', padding: '0', transform: 'none',
+                top: 'auto', left: 'auto', right: 'auto', bottom: 'auto', overflow: 'visible'
+              });
+              nahoru = nahoru.parentElement;
+            }
           }
           if (miniaturyKontejner && miniaturyKontejner !== G) {
             vynutit(miniaturyKontejner, {
@@ -1278,6 +1299,21 @@
       }
     },
 
+    {
+      nazev: 'PDP2 — příznaky (Novinka, Tip, sleva) do jednoho sloupce v rohu fotky',
+      spustit: function () {
+        if (!document.body.classList.contains('gp-pdp2')) return;
+        // Diagnostika (DevTools): dva kontejnery — .flags-default (Novinka, Tip)
+        // a .flags-extra (štítek slevy) — se oba kladly do stejného rohu
+        // a překrývaly se. Obsah extra přesuneme do default, extra schováme.
+        var vychozi = find('.p-detail-inner .flags-default');
+        var extra = find('.p-detail-inner .flags-extra');
+        if (vychozi && extra && vychozi !== extra) {
+          while (extra.firstChild) vychozi.appendChild(extra.firstChild);
+          extra.style.setProperty('display', 'none', 'important');
+        }
+      }
+    },
     {
       nazev: 'PDP2 — diagnostické okno (jen s ?debug=1 v adrese)',
       spustit: function () {
