@@ -3159,3 +3159,17 @@ body.gp-pdp2 .gp-freeship.is-free .gp-freeship__fill {
     gap: 32px !important;
   }
 }
+
+
+/* ===================================================================
+   3.34  PDP2 — obsah záložky na šířku čáry záložek
+   Obsah (popis, specifikace, diskuze) má stejnou šířku jako čára pod
+   záložkami; blok se vystředěním stará JS (měřením, viz krok záložek).
+   =================================================================== */
+@media (min-width: 901px) {
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}

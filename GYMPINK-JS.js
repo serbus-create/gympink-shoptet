@@ -1064,6 +1064,16 @@
             e = e.parentElement;
           }
         });
+        // Vnitřní sloupce popisu (col-md-8 apod.) do hloubky 3 od panelu:
+        // bez toho zůstane popis na ~2/3 šířky a zbytek je prázdný.
+        if (popis) {
+          findAll('[class*="col-"], .row', popis).forEach(function (el) {
+            var hloubka = 0;
+            var n = el.parentElement;
+            while (n && n !== popis && hloubka < 6) { hloubka++; n = n.parentElement; }
+            if (n === popis && hloubka <= 3) el.classList.add('gp-pdp-flat');
+          });
+        }
         log('PDP2 záložky: zploštěno ' + findAll('.gp-pdp-flat', blok).length + ' obalů');
 
         // ----- Nová záložka "Specifikace" (tabulka parametrů + Tisk/Zeptat se/Sdílet) -----
@@ -1148,6 +1158,22 @@
               .forEach(function (kv) { polozka.style.setProperty(kv[0], kv[1], 'important'); });
           });
         }
+
+        // ----- Vystředění bloku záložek na střed okna (měřením) -----
+        // Nadřazené obaly Tanga blok posouvají mimo střed (čára záložek
+        // byla o ~78 px vlevo). Změříme střed bloku a posuneme ho relativně.
+        function vystredit() {
+          blok.style.removeProperty('left');
+          if (window.innerWidth <= 900) { blok.style.removeProperty('position'); return; }
+          blok.style.setProperty('position', 'relative', 'important');
+          var r = blok.getBoundingClientRect();
+          var stredBloku = r.left + r.width / 2;
+          var stredOkna = document.documentElement.clientWidth / 2;
+          blok.style.setProperty('left', Math.round(stredOkna - stredBloku) + 'px', 'important');
+        }
+        vystredit();
+        window.addEventListener('resize', vystredit);
+        window.addEventListener('load', vystredit);
       }
     },
 
