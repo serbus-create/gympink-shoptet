@@ -1065,6 +1065,73 @@
           }
         });
         log('PDP2 záložky: zploštěno ' + findAll('.gp-pdp-flat', blok).length + ' obalů');
+
+        // ----- Nová záložka "Specifikace" (tabulka parametrů + Tisk/Zeptat se/Sdílet) -----
+        // Vzor má Specifikaci jako samostatnou záložku. Obsah se pouze PŘESUNE
+        // z popisu (nic nevkládáme), nativní odkazy zůstávají funkční.
+        if (nav && odkazPopis && popis && tabulka && !find('#gp-specifikace')) {
+          var liPopis = odkazPopis.closest('li');
+          var paneVychozi = popis.classList.contains('tab-pane') ? popis : popis.closest('.tab-pane');
+          if (liPopis && paneVychozi && paneVychozi.parentElement) {
+            // Ikony Tisk / Zeptat se / Sdílet = nejbližší společný obal těch odkazů.
+            var odkazyIkon = [
+              find('a[title*="Tisk"]', blok),
+              find('a[href*=":dotaz"]', blok),
+              find('a[title*="Sdílet"]', blok)
+            ].filter(Boolean);
+            var ikony = null;
+            if (odkazyIkon.length) {
+              ikony = odkazyIkon[0].parentElement;
+              odkazyIkon.slice(1).forEach(function (a) {
+                while (ikony && !ikony.contains(a)) ikony = ikony.parentElement;
+              });
+              // pojistka: obal nesmí obsahovat celý popis ani tabulku
+              if (ikony && (ikony.contains(tabulka) || (ikony.textContent || '').length > 400)) ikony = null;
+            }
+
+            var li = document.createElement('li');
+            li.className = (liPopis.className || '').replace(/\bactive\b/g, '').trim();
+            li.setAttribute('role', 'presentation');
+            var a = document.createElement('a');
+            a.href = '#gp-specifikace';
+            a.className = (odkazPopis.className || '').replace(/\bactive\b/g, '').trim();
+            a.setAttribute('role', 'tab');
+            a.textContent = 'Specifikace';
+            li.appendChild(a);
+            liPopis.parentNode.insertBefore(li, liPopis.nextSibling);
+
+            var pane = document.createElement('div');
+            pane.id = 'gp-specifikace';
+            pane.className = (paneVychozi.className || '')
+              .replace(/\b(active|in|show|fade)\b/g, '').replace(/\s+/g, ' ').trim() + ' gp-pdp-flat gp-spec';
+            pane.setAttribute('role', 'tabpanel');
+            pane.appendChild(tabulka.closest('table') || tabulka);
+            if (ikony) pane.appendChild(ikony);
+            paneVychozi.parentNode.insertBefore(pane, paneVychozi.nextSibling);
+
+            var vsechnyLi = function () { return Array.prototype.slice.call(li.parentElement.children); };
+            var vsechnyPane = function () { return Array.prototype.slice.call(pane.parentElement.children); };
+
+            a.addEventListener('click', function (e) {
+              e.preventDefault();
+              vsechnyLi().forEach(function (x) { x.classList.remove('active'); });
+              vsechnyPane().forEach(function (x) { x.classList.remove('active'); });
+              li.classList.add('active');
+              pane.classList.add('active');
+            });
+            // Kliknutí na nativní záložku (Popis / Diskuze) musí Specifikaci vypnout.
+            findAll('a', li.parentElement).forEach(function (jina) {
+              if (jina === a) return;
+              jina.addEventListener('click', function () {
+                setTimeout(function () {
+                  li.classList.remove('active');
+                  pane.classList.remove('active');
+                }, 0);
+              });
+            });
+            log('PDP2 záložky: vytvořena záložka Specifikace' + (ikony ? ' (s ikonami)' : ''));
+          }
+        }
       }
     },
 

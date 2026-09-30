@@ -3037,3 +3037,49 @@ body.gp-pdp2 .gp-freeship.is-free .gp-freeship__fill {
     background: none !important;
   }
 }
+
+
+/* ===================================================================
+   3.31  PDP2 — záložka "Specifikace" (vytvořená JS; obsah = přesunutá
+   tabulka parametrů a ikony Tisk / Zeptat se / Sdílet)
+   =================================================================== */
+@media (min-width: 901px) {
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane.active {
+    display: block !important;
+  }
+  body.gp-pdp2 .gp-spec table {
+    width: 100% !important;
+    max-width: 720px !important;
+    margin: 0 0 32px !important;
+    border-collapse: collapse !important;
+  }
+  body.gp-pdp2 .gp-spec table th,
+  body.gp-pdp2 .gp-spec table td {
+    padding: 14px 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--gp-line) !important;
+    font-size: 14px !important;
+    text-align: left !important;
+    vertical-align: top !important;
+    background: transparent !important;
+  }
+  body.gp-pdp2 .gp-spec table th {
+    width: 240px !important;
+    font-weight: 400 !important;
+    color: var(--gp-ink-soft) !important;
+  }
+  body.gp-pdp2 .gp-spec table td {
+    color: var(--gp-ink) !important;
+  }
+  /* ikony Tisk / Zeptat se / Sdílet pod tabulkou v řadě */
+  body.gp-pdp2 .gp-spec .social-links,
+  body.gp-pdp2 .gp-spec ul,
+  body.gp-pdp2 .gp-spec .link-icons {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 32px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+}
