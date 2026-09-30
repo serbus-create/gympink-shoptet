@@ -3125,3 +3125,37 @@ body.gp-pdp2 .gp-freeship.is-free .gp-freeship__fill {
     z-index: 2 !important;
   }
 }
+
+
+/* ===================================================================
+   3.33  PDP2 — obsah záložek (popis, specifikace, diskuze) na střed
+   Celý obsah záložky je sloupec široký 900 px vystředěný pod řadou
+   záložek. Jednotlivé odstavce už nemají vlastní max-width (dřív 860 px
+   zarovnané doleva, takže text nebyl uprostřed).
+   =================================================================== */
+@media (min-width: 901px) {
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane {
+    max-width: 900px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane p,
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane ul,
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane ol,
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane h2,
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane h3,
+  body.gp-pdp2 .gp-pdp-tabs .tab-pane h4 {
+    max-width: none !important;
+  }
+
+  /* Specifikace: tabulka i ikony uprostřed */
+  body.gp-pdp2 .gp-spec table {
+    margin: 0 auto 32px !important;
+  }
+  body.gp-pdp2 .gp-spec > *:not(table) {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 32px !important;
+  }
+}
