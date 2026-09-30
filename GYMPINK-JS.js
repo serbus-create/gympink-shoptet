@@ -701,60 +701,56 @@
       nazev: 'Detail produktu 2 (PDP2) — mřížka galerie/panel, značky tříd, řádek důvěry',
       spustit: function () {
         if (!document.body.classList.contains('gp-pdp2')) return;
-        var inner = find('.p-detail-inner');
-        if (!inner) return;
+        document.documentElement.setAttribute('data-gp-pdp2', 'lca-1'); // značka verze kroku
 
-        var galerie = find('.detail-img.p-image-wrapper', inner);
-        var nadpis = find('h1', inner);
-        var cenaRadek = find('.price.row', inner);
-        if (!galerie || !nadpis || !cenaRadek) {
+        // ----- Nalezení prvků -----
+        var galerie = find('.detail-img.p-image-wrapper') || find('.p-image-wrapper') || find('.detail-img');
+        var cenaRadek = find('.p-detail-inner .price.row') || find('.price.row');
+        var nadpis = find('.p-detail-inner h1') || find('h1');
+        if (!galerie || !cenaRadek || !nadpis) {
           log('PDP2 přeskočeno, nenalezeno: ' +
-              (!galerie ? '[galerie .detail-img.p-image-wrapper] ' : '') +
-              (!nadpis ? '[h1] ' : '') +
-              (!cenaRadek ? '[.price.row] ' : ''));
+              (!galerie ? '[galerie] ' : '') + (!cenaRadek ? '[.price.row] ' : '') + (!nadpis ? '[h1] ' : ''));
           return;
         }
 
-        var radek = galerie.parentElement;
-        if (!radek || radek === inner) {
-          log('PDP2 přeskočeno: rodič galerie je přímo .p-detail-inner');
-          return;
+        // Nejbližší společný rodič galerie a bloku s cenou = kontejner mřížky.
+        function spolecnyRodic(a, b) {
+          var p = a.parentElement;
+          while (p && !p.contains(b)) p = p.parentElement;
+          return p;
+        }
+        function potomekObsahujici(rodic, uzel) {
+          var n = uzel;
+          while (n && n.parentElement !== rodic) n = n.parentElement;
+          return n;
+        }
+        function predkoviDo(el, rodic) { // předkové el až po rodiče (bez něj)
+          var out = [];
+          var n = el.parentElement;
+          while (n && n !== rodic) { out.push(n); n = n.parentElement; }
+          return out;
         }
 
-        // Dva možné tvary stránky (po vypnutí POBO se objevil ten první):
-        //  B) nadpis I formulář (cena, tlačítko) jsou v JEDNOM sloupci uvnitř
-        //     řádku vedle galerie → mřížka na samotném řádku.
-        //  A) nadpis je v řádku, formulář je samostatný sloupec mimo řádek
-        //     → mřížka na .p-detail-inner (display: contents na řádku).
-        var info = Array.prototype.slice.call(radek.children).filter(function (d) {
-          return d.contains(nadpis);
-        })[0] || null;
-        var rezimB = !!(info && info !== galerie && info.contains(cenaRadek));
+        var L = spolecnyRodic(galerie, cenaRadek);
+        if (!L) { log('PDP2 přeskočeno: galerie a cena nemají společného rodiče'); return; }
+        var gb = potomekObsahujici(L, galerie);   // větev s galerií
+        var pb = potomekObsahujici(L, cenaRadek); // větev s cenou/formulářem
+        if (!gb || !pb || gb === pb) { log('PDP2 přeskočeno: větve galerie a ceny splývají'); return; }
 
-        var nakup = null;
-        if (!rezimB) {
-          nakup = cenaRadek.closest('.col-md-4') || cenaRadek.parentElement;
-          if (!nakup || nakup === info || radek.contains(nakup)) {
-            log('PDP2 přeskočeno: nepodařilo se určit sloupec formuláře');
-            return;
-          }
-        }
-        log('PDP2 režim ' + (rezimB ? 'B (nadpis i formulář v jednom sloupci)' : 'A (formulář zvlášť)'));
-        inner.classList.add(rezimB ? 'gp-pdp-modeB' : 'gp-pdp-modeA');
+        var rezimB = pb.contains(nadpis); // B: nadpis je ve stejném sloupci jako formulář
+        log('PDP2 režim ' + (rezimB ? 'B' : 'A') + ' | kontejner: ' + L.tagName.toLowerCase() +
+            '.' + String(L.className).trim().replace(/\s+/g, '.') +
+            ' | galerie větev: ' + gb.tagName.toLowerCase() + '.' + String(gb.className).trim().replace(/\s+/g, '.') +
+            ' | panel větev: ' + pb.tagName.toLowerCase() + '.' + String(pb.className).trim().replace(/\s+/g, '.'));
 
-        var zalozky = find(':scope > .shp-tabs-wrapper', inner) || find('.shp-tabs-wrapper', inner);
+        var zalozky = find(':scope > .shp-tabs-wrapper', L) || find('.shp-tabs-wrapper');
+        if (zalozky && !L.contains(zalozky)) zalozky = null;
 
-        // Značky tříd — CSS se opírá o ně, ne o křehké .row / .col-md-4.
-        galerie.classList.add('gp-pdp-gallery');
-        if (rezimB) {
-          radek.classList.add('gp-pdp-row2');
-          info.classList.add('gp-pdp-info');
-        } else {
-          radek.classList.add('gp-pdp-row');
-          if (info) info.classList.add('gp-pdp-title');
-          nakup.classList.add('gp-pdp-buy');
-          if (zalozky) zalozky.classList.add('gp-pdp-tabs');
-        }
+        // ----- Třídy pro CSS -----
+        gb.classList.add('gp-pdp-gallery');
+        pb.classList.add(rezimB ? 'gp-pdp-info' : 'gp-pdp-buy');
+        L.classList.add(rezimB ? 'gp-pdp-row2' : 'gp-pdp-modeA');
+        if (!rezimB && zalozky) zalozky.classList.add('gp-pdp-tabs');
 
         // Hlavní fotka galerie (první <img>, který není miniatura).
         var hlavniFoto = findAll('img', galerie).filter(function (i) {
@@ -764,9 +760,9 @@
 
         // ----- Řádek důvěry pod tlačítkem -----
         // JEDINÁ výjimka z pravidla "JS nevkládá obsah": krátké pevné
-        // položky. Jsou zapsané tady v poli, ať jdou snadno upravit.
-        // Pouze ověřitelná tvrzení (14 dní na vrácení = zákonné právo
-        // spotřebitele; platby = e-shop přijímá online platby).
+        // položky zapsané tady v poli DUVERA. Pouze ověřitelná tvrzení
+        // (14 dní na vrácení = zákonné právo spotřebitele; e-shop přijímá
+        // online platby).
         var DUVERA = [
           { href: '/doprava-a-platby/', text: 'Doprava a platby',
             ikona: '<path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0M15 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0M5 17H3V6a1 1 0 0 1 1-1h9v12M9 17h6M19 17h2v-6h-8M13 6h5l3 5"/>' },
@@ -775,7 +771,7 @@
           { text: 'Bezpečná online platba',
             ikona: '<path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1-8.5 15a12 12 0 0 1-8.5-15A12 12 0 0 0 12 3M11 11a1 1 0 1 0 2 0a1 1 0 1 0-2 0M12 12v2.5"/>' }
         ];
-        if (!find('.gp-trust', inner)) {
+        if (!find('.gp-trust')) {
           var seznam = document.createElement('ul');
           seznam.className = 'gp-trust';
           DUVERA.forEach(function (d) {
@@ -804,60 +800,39 @@
           nastaveni.forEach(function (n) { n[0].style.removeProperty(n[1]); });
           nastaveni = [];
         }
+        var NADPIS = {
+          'font-size': '26px', 'font-weight': '500', 'line-height': '1.2',
+          'text-transform': 'none', margin: '0 0 8px'
+        };
+        var SLOUPEC = { float: 'none', width: 'auto', 'max-width': 'none', padding: '0', margin: '0' };
+
         function aplikuj() {
           uklidit();
           if (window.innerWidth <= 900) return; // mobil: nativní chování šablony
 
-          var nadpisStyl = {
-            'font-size': '26px', 'font-weight': '500', 'line-height': '1.2',
-            'text-transform': 'none', margin: '0 0 8px'
+          var sloupce = {
+            display: 'grid',
+            'grid-template-columns': 'minmax(0, .85fr) minmax(0, 1.15fr)',
+            'column-gap': '40px',
+            'align-items': 'start',
+            overflow: 'visible'
           };
 
           if (rezimB) {
-            vynutit(radek, {
-              display: 'grid',
-              'grid-template-columns': 'minmax(0, .85fr) minmax(0, 1.15fr)',
-              'column-gap': '40px',
-              'align-items': 'start',
-              overflow: 'visible',
-              margin: '0'
-            });
-            vynutit(galerie, {
-              'grid-column': '1', 'grid-row': '1',
-              float: 'none', width: 'auto', 'max-width': 'none',
-              padding: '0', margin: '0', position: 'relative'
-            });
-            vynutit(info, {
-              'grid-column': '2', 'grid-row': '1',
-              float: 'none', width: 'auto', 'max-width': 'none',
-              padding: '0', margin: '0'
-            });
-            vynutit(nadpis, nadpisStyl);
+            vynutit(L, sloupce);
+            vynutit(gb, Object.assign({ 'grid-column': '1', 'grid-row': '1', position: 'relative' }, SLOUPEC));
+            vynutit(pb, Object.assign({ 'grid-column': '2', 'grid-row': '1' }, SLOUPEC));
+            vynutit(nadpis, NADPIS);
           } else {
-            vynutit(inner, {
-              display: 'grid',
-              'grid-template-columns': 'minmax(0, .85fr) minmax(0, 1.15fr)',
-              'column-gap': '40px',
-              'align-items': 'start',
-              position: 'relative'
-            });
-            vynutit(radek, { display: 'contents' });
-            if (info) vynutit(info, { display: 'contents' });
-            vynutit(galerie, {
-              'grid-column': '1', 'grid-row': '1 / span 3',
-              float: 'none', width: 'auto', 'max-width': 'none',
-              padding: '0', margin: '0'
-            });
-            vynutit(nadpis, {
-              'grid-column': '2', 'grid-row': '1',
-              'font-size': nadpisStyl['font-size'], 'font-weight': '500',
-              'line-height': '1.2', 'text-transform': 'none', margin: '0 0 8px'
-            });
-            vynutit(nakup, {
-              'grid-column': '2', 'grid-row': '2',
-              float: 'none', width: 'auto', 'max-width': 'none',
-              padding: '0', margin: '0', display: 'block', clear: 'none'
-            });
+            vynutit(L, Object.assign({ position: 'relative' }, sloupce));
+            // Všechny mezilehlé obaly kolem galerie a nadpisu zprůhlednit,
+            // aby se galerie a nadpis staly přímými položkami mřížky.
+            var obaly = predkoviDo(galerie, L).concat(predkoviDo(nadpis, L));
+            obaly.filter(function (o, i) { return obaly.indexOf(o) === i && o !== pb && !pb.contains(o); })
+              .forEach(function (o) { vynutit(o, { display: 'contents' }); });
+            vynutit(galerie, Object.assign({ 'grid-column': '1', 'grid-row': '1 / span 3' }, SLOUPEC));
+            vynutit(nadpis, Object.assign({ 'grid-column': '2', 'grid-row': '1' }, NADPIS));
+            vynutit(pb, Object.assign({ 'grid-column': '2', 'grid-row': '2', display: 'block', clear: 'none' }, SLOUPEC));
             if (zalozky) vynutit(zalozky, { 'grid-column': '1 / -1', 'grid-row': '4' });
           }
         }
