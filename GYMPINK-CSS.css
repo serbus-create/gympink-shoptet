@@ -3875,3 +3875,13 @@ footer.footer .custom-footer__onlinePayments img {
     text-shadow: 0 1px 12px rgba(0, 0, 0, .55) !important;
   }
 }
+
+
+/* 3.50  MOBIL — pseudo-prvky, které JS označil jako přebarvující lištu */
+@media (max-width: 900px) {
+  #header .gp-flat-pseudo::before,
+  #header .gp-flat-pseudo::after {
+    background: none !important;
+    box-shadow: none !important;
+  }
+}

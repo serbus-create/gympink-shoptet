@@ -1560,6 +1560,64 @@
       }
     },
     {
+      nazev: 'Mobil — barva lišty hlavičky přesně jako banner (auto-detekce prvků, které ji přebarvují)',
+      spustit: function () {
+        var hlavicka = find('#header');
+        if (!hlavicka || !document.elementsFromPoint) return;
+
+        function cilovaBarva() {
+          var b = '';
+          try { b = getComputedStyle(document.documentElement).getPropertyValue('--gp-header-bg'); } catch (e) {}
+          return (b && b.trim()) || '#efdde9';
+        }
+        function mocAlfa(barva) {
+          var m = String(barva || '').match(/rgba?\(([^)]+)\)/);
+          if (!m) return 0;
+          var casti = m[1].split(',').map(function (x) { return parseFloat(x); });
+          return casti.length > 3 ? casti[3] : 1;
+        }
+
+        // Mobilní lišta byla o pár jednotek jinde než banner (#ecdee8 vs #efdde9).
+        // Nevíme, který prvek ji přebarvuje → zeptáme se prohlížeče, co leží na
+        // levém okraji lišty, a všem prvkům uvnitř hlavičky s vlastním pozadím
+        // nastavíme naši barvu. Vysouvací menu (#navigation) se nemění.
+        function srovnat() {
+          if (window.innerWidth > 900) return;
+          var r = hlavicka.getBoundingClientRect();
+          if (r.height <= 0) return;
+          var barva = cilovaBarva();
+          var vrstvy = document.elementsFromPoint(3, r.top + r.height / 2);
+          vrstvy.forEach(function (el) {
+            if (el !== hlavicka && !hlavicka.contains(el)) return;
+            if (el.closest && el.closest('#navigation')) return;
+            var cs = getComputedStyle(el);
+            if (mocAlfa(cs.backgroundColor) > 0) {
+              el.style.setProperty('background-color', barva, 'important');
+            }
+            if (cs.backgroundImage && cs.backgroundImage !== 'none') {
+              el.style.setProperty('background-image', 'none', 'important');
+            }
+            ['::before', '::after'].forEach(function (ps) {
+              var p = getComputedStyle(el, ps);
+              if (p && p.content && p.content !== 'none' && mocAlfa(p.backgroundColor) > 0) {
+                el.classList.add('gp-flat-pseudo');
+              }
+            });
+          });
+        }
+
+        var casovac = null;
+        function odlozit() {
+          clearTimeout(casovac);
+          casovac = setTimeout(srovnat, 120);
+        }
+        srovnat();
+        window.addEventListener('load', srovnat);
+        window.addEventListener('resize', odlozit);
+        window.addEventListener('scroll', odlozit, { passive: true });
+      }
+    },
+    {
       nazev: 'PDP2 — diagnostické okno (jen s ?debug=1 v adrese)',
       spustit: function () {
         if (!document.body.classList.contains('gp-pdp2')) return;
