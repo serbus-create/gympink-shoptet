@@ -153,14 +153,32 @@
         var polozkaBlog = odkazBlog.closest('li') || odkazBlog;
         if (polozkaBlog.classList.contains('gp-blog-moved')) return; // už přesunuto
 
-        polozkaBlog.classList.add('gp-blog-moved');
+        // původní místo v nabídce (pro telefon — tam Blog patří zpátky do nabídky)
+        var puvodniMenu = polozkaBlog.parentElement;
+        var puvodniDalsi = polozkaBlog.nextElementSibling;
 
         // .top-nav-right je pravděpodobně position:absolute (mimo
         // normální tok), takže vložení JAKO SOUROZENEC před něj
         // nefungovalo — Blog zůstával v normálním toku hned za
         // logem. Řešení: vložit přímo DOVNITŘ, jako první prvek ve
         // stejném řádku s ikonami.
-        ikonyVpravo.insertBefore(polozkaBlog, ikonyVpravo.firstChild);
+        function umistitBlog() {
+          if (window.innerWidth < 768) {
+            // Telefon: v hlavičce je na Blog málo místa (schovává se), proto
+            // zpět do vysouvací nabídky, na původní místo mezi kategoriemi.
+            if (polozkaBlog.parentElement !== puvodniMenu) {
+              polozkaBlog.classList.remove('gp-blog-moved');
+              puvodniMenu.insertBefore(polozkaBlog,
+                puvodniDalsi && puvodniDalsi.parentElement === puvodniMenu ? puvodniDalsi : null);
+            }
+          } else if (polozkaBlog.parentElement !== ikonyVpravo) {
+            polozkaBlog.classList.add('gp-blog-moved');
+            ikonyVpravo.insertBefore(polozkaBlog, ikonyVpravo.firstChild);
+          }
+        }
+        polozkaBlog.classList.add('gp-blog-moved');
+        umistitBlog();
+        window.addEventListener('resize', umistitBlog);
       }
     },
 
