@@ -843,24 +843,29 @@ body.type-index .gp-banner-pair-item .extended-banner-link {
 .products.products-block {
   display: flex !important;
   flex-wrap: wrap !important;
-  gap: 24px 0 !important;
+  /* Varianta B: těsně — 4 px mezi fotkami, 26 px svisle (název + cena) */
+  gap: 26px 4px !important;
   width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
 }
 
 .products.products-block .product {
-  flex: 0 0 25% !important;
-  max-width: 25% !important;
+  /* 4 sloupce, 3 mezery po 4 px */
+  flex: 0 0 calc((100% - 12px) / 4) !important;
+  max-width: calc((100% - 12px) / 4) !important;
   width: auto !important;
   margin: 0 !important;
   padding: 0 !important;
 }
 
 @media (max-width: 900px) {
+  .products.products-block {
+    gap: 24px 4px !important;
+  }
   .products.products-block .product {
-    flex: 0 0 50% !important;
-    max-width: 50% !important;
+    flex: 0 0 calc((100% - 4px) / 2) !important;
+    max-width: calc((100% - 4px) / 2) !important;
   }
 }
 
@@ -949,21 +954,14 @@ body.type-index .gp-banner-pair-item .extended-banner-link {
    šířka) — sjednoceno na stejnou šířku jako ostatní, ať mřížka
    zůstane pravidelná. */
 .products.products-block .product.highlight-product {
-  flex: 0 0 calc(25% - 9px) !important;
-  max-width: calc(25% - 9px) !important;
+  flex: 0 0 calc((100% - 12px) / 4) !important;
+  max-width: calc((100% - 12px) / 4) !important;
 }
 
 @media (max-width: 900px) {
   .products.products-block .product.highlight-product {
-    flex: 0 0 calc(50% - 6px) !important;
-    max-width: calc(50% - 6px) !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .products.products-block .product.highlight-product {
-    flex: 0 0 100% !important;
-    max-width: 100% !important;
+    flex: 0 0 calc((100% - 4px) / 2) !important;
+    max-width: calc((100% - 4px) / 2) !important;
   }
 }
 
