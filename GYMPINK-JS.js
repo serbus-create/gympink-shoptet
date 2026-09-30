@@ -758,6 +758,26 @@
         })[0];
         if (hlavniFoto) hlavniFoto.classList.add('gp-pdp-main-img');
 
+        // Miniatury: najdeme jejich společný kontejner a větev galerie, ve
+        // které leží, a hlavní fotku ve své větvi. Složíme je pod sebe.
+        var miniatury = findAll('.p-thumbnail', galerie);
+        var hlavniVetev = hlavniFoto ? potomekObsahujici(galerie, hlavniFoto) : null;
+        var miniaturyKontejner = null;
+        var miniaturyVetev = null;
+        if (miniatury.length) {
+          miniaturyKontejner = miniatury[0].parentElement;
+          miniatury.slice(1).forEach(function (m) {
+            while (miniaturyKontejner && !miniaturyKontejner.contains(m)) {
+              miniaturyKontejner = miniaturyKontejner.parentElement;
+            }
+          });
+          if (miniaturyKontejner && galerie.contains(miniaturyKontejner)) {
+            miniaturyVetev = miniaturyKontejner === galerie
+              ? potomekObsahujici(galerie, miniatury[0])
+              : potomekObsahujici(galerie, miniaturyKontejner);
+          }
+        }
+
         // ----- Řádek důvěry pod tlačítkem -----
         // JEDINÁ výjimka z pravidla "JS nevkládá obsah": krátké pevné
         // položky zapsané tady v poli DUVERA. Pouze ověřitelná tvrzení
@@ -813,9 +833,13 @@
           var sloupce = {
             display: 'grid',
             'grid-template-columns': 'minmax(0, .85fr) minmax(0, 1.15fr)',
+            // poslední řádek pohltí přebytečnou výšku vysoké galerie (jinak
+            // se rozdělí mezi všechny řádky a pod nadpisem vznikne mezera)
+            'grid-template-rows': rezimB ? 'auto' : 'auto auto 1fr',
             'column-gap': '40px',
             'align-items': 'start',
-            overflow: 'visible'
+            overflow: 'visible',
+            margin: '0' // vynulovat záporný okraj Bootstrap .row (-15 px)
           };
 
           if (rezimB) {
@@ -834,6 +858,35 @@
             vynutit(nadpis, Object.assign({ 'grid-column': '2', 'grid-row': '1' }, NADPIS));
             vynutit(pb, Object.assign({ 'grid-column': '2', 'grid-row': '2', display: 'block', clear: 'none' }, SLOUPEC));
             if (zalozky) vynutit(zalozky, { 'grid-column': '1 / -1', 'grid-row': '4' });
+          }
+          galerieNaSloupec();
+        }
+        function galerieNaSloupec() {
+          if (window.innerWidth <= 900) return;
+          if (!hlavniVetev || !miniaturyVetev || hlavniVetev === miniaturyVetev) return;
+          vynutit(galerie, { display: 'flex', 'flex-direction': 'column', 'align-items': 'stretch', gap: '8px' });
+          vynutit(hlavniVetev, {
+            order: '1', position: 'relative', width: '100%', 'max-width': 'none',
+            float: 'none', margin: '0'
+          });
+          vynutit(miniaturyVetev, {
+            order: '2', position: 'static', width: '100%', 'max-width': 'none',
+            height: 'auto', float: 'none', margin: '0', transform: 'none',
+            top: 'auto', left: 'auto', right: 'auto', bottom: 'auto'
+          });
+          if (miniaturyKontejner && miniaturyKontejner !== galerie) {
+            vynutit(miniaturyKontejner, {
+              display: 'flex', 'flex-direction': 'row', 'flex-wrap': 'nowrap', gap: '6px',
+              width: '100%', height: 'auto', 'overflow-x': 'auto', position: 'static',
+              transform: 'none'
+            });
+            miniatury.forEach(function (m) {
+              var polozka = potomekObsahujici(miniaturyKontejner, m) || m;
+              vynutit(polozka, {
+                flex: '0 0 84px', width: '84px', height: 'auto', margin: '0',
+                float: 'none', position: 'static', transform: 'none'
+              });
+            });
           }
         }
         aplikuj();

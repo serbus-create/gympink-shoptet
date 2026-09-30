@@ -2423,12 +2423,15 @@ body.gp-pdp2 {
   }
 
   /* --- galerie: hlavní fotka 2:3 (ořízne bílé okraje v plátně 4:3) --- */
+  /* Fotku ukazujeme celou (žádný vynucený ořez) — u některých produktů by
+     se řezala hlava. Bílé okraje z plátna 4:3 splynou s bílou stránkou. */
   body.gp-pdp2 .gp-pdp-main-img {
     width: 100% !important;
-    aspect-ratio: 2 / 3 !important;
+    aspect-ratio: auto !important;
     height: auto !important;
-    object-fit: cover !important;
-    object-position: center !important;
+    max-height: 82vh !important;
+    object-fit: contain !important;
+    object-position: center top !important;
     display: block !important;
   }
 
@@ -2573,6 +2576,13 @@ body.gp-pdp2 {
   body.gp-pdp2 .add-to-cart .quantity {
     flex: 0 0 auto !important;
     align-self: stretch !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 88px !important;
+    padding: 0 14px !important;
+    border: 1px solid #b4b2a9 !important;
+    background: #fff !important;
   }
   body.gp-pdp2 .add-to-cart .btn.btn-conversion {
     flex: 1 1 auto !important;
