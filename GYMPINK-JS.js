@@ -1618,6 +1618,44 @@
       }
     },
     {
+      nazev: 'Diagnostika hlavičky (jen s ?debug=1, na kterékoli stránce a šířce)',
+      spustit: function () {
+        if (!/[?&]debug=1(&|$)/.test(location.search)) return;
+        var h = find('#header');
+        if (!h) return;
+        var okno = document.createElement('pre');
+        okno.style.cssText = 'position:fixed;left:6px;bottom:6px;z-index:99999;max-width:96vw;' +
+          'max-height:55vh;overflow:auto;background:#fff;color:#111;border:1px solid #333;' +
+          'padding:6px;font:10px/1.3 monospace;white-space:pre-wrap;margin:0';
+        document.body.appendChild(okno);
+        function popis(el, hloubka) {
+          var r = el.getBoundingClientRect();
+          var c = getComputedStyle(el);
+          var tr = el.getAttribute('class');
+          return new Array(hloubka + 1).join('  ') + el.tagName.toLowerCase() +
+            (el.id ? '#' + el.id : '') + (tr ? '.' + tr.trim().replace(/\s+/g, '.') : '') +
+            ' [' + Math.round(r.left) + ',' + Math.round(r.top) + ' ' + Math.round(r.width) + 'x' +
+            Math.round(r.height) + '] disp=' + c.display + ' bg=' + c.backgroundColor;
+        }
+        function projit(el, hloubka, out) {
+          if (out.length > 70 || hloubka > 5) return;
+          var r = el.getBoundingClientRect();
+          if (r.width > 0 && r.height > 0 && getComputedStyle(el).display !== 'none') {
+            out.push(popis(el, hloubka));
+          }
+          Array.prototype.forEach.call(el.children, function (ch) { projit(ch, hloubka + 1, out); });
+        }
+        function obnovit() {
+          var out = ['šířka okna: ' + window.innerWidth + '  |  html: ' +
+            (document.documentElement.getAttribute('class') || '')];
+          projit(h, 0, out);
+          okno.textContent = out.join('\n');
+        }
+        setTimeout(obnovit, 900);
+        okno.addEventListener('click', obnovit);
+      }
+    },
+    {
       nazev: 'PDP2 — diagnostické okno (jen s ?debug=1 v adrese)',
       spustit: function () {
         if (!document.body.classList.contains('gp-pdp2')) return;
