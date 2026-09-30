@@ -176,8 +176,7 @@
             ikonyVpravo.insertBefore(polozkaBlog, ikonyVpravo.firstChild);
           }
         }
-        polozkaBlog.classList.add('gp-blog-moved');
-        umistitBlog();
+        umistitBlog(); // telefon: zůstane v nabídce bez třídy; tablet a desktop: do rohu hlavičky
         window.addEventListener('resize', umistitBlog);
       }
     },

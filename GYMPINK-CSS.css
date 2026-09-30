@@ -4334,10 +4334,11 @@ footer.footer .custom-footer__onlinePayments img {
    Diagnostika (živý web): ikona účtu je 20 px široká, ale její <li> má
    50 px, košík má navíc odsazení 20 px a mezi nimi je mezera 22 px →
    72 px mezi ikonami. Nativní pravidla šířku nepustí, proto se ikona
-   přisune záporným okrajem (30 px prázdné části + 12 px navíc → 14 px).
+   přisune záporným okrajem a posunem (výsledná mezera mezi ikonami ~15 px).
    =================================================================== */
 @media (min-width: 768px) and (max-width: 1279px) {
   #header .nav-list.top-nav-right > li.subnav-left {
     margin-right: -42px !important;
+    transform: translateX(16px) !important;
   }
 }
