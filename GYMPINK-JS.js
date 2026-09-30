@@ -1656,6 +1656,107 @@
       }
     },
     {
+      nazev: 'Tablet (768–900 px) — čistá lišta: bílé plochy pryč, vlastní hamburger a nabídka z odkazů menu',
+      spustit: function () {
+        var hlavicka = find('#header');
+        var ikony = find('.top-nav-right', hlavicka || document);
+        if (!hlavicka || !ikony) return;
+        if (find('.gp-burger', hlavicka)) return; // už postaveno
+
+        // Šablona přepíná mobilní hlavičku (s hamburgerem) až pod 768 px. V pásmu
+        // 768–900 px jsme měli naše mobilní úpravy, ale bez hamburgeru a s
+        // bílým polem hledání → nabídka byla nedostupná. Tady si nabídku
+        // postavíme sami z odkazů, které v menu skutečně jsou.
+        var tablet = window.matchMedia ? window.matchMedia('(min-width: 768px) and (max-width: 900px)') : null;
+        function jeTablet() {
+          return tablet ? tablet.matches : (window.innerWidth >= 768 && window.innerWidth <= 900);
+        }
+
+        // ----- odkazy (kategorie + přesunutý Blog), bez Novinek a Bestsellers (ty klientka skrývá) -----
+        var odkazy = findAll('#navigation .menu-level-1 > li > a', hlavicka)
+          .concat(findAll('.gp-blog-moved a', hlavicka));
+        var videne = {};
+        var polozky = [];
+        odkazy.forEach(function (a) {
+          var href = a.getAttribute('href') || '';
+          var text = (a.textContent || '').replace(/\s+/g, ' ').trim();
+          if (!href || !text || videne[href]) return;
+          if (/\/(novinky|bestsellers)\/?$/i.test(href)) return;
+          videne[href] = true;
+          polozky.push({ href: href, text: text });
+        });
+
+        // ----- hamburger -----
+        var li = document.createElement('li');
+        li.className = 'gp-burger-li';
+        var tlacitko = document.createElement('button');
+        tlacitko.type = 'button';
+        tlacitko.className = 'gp-burger';
+        tlacitko.setAttribute('aria-label', 'Menu');
+        tlacitko.setAttribute('aria-expanded', 'false');
+        tlacitko.innerHTML = '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+        li.appendChild(tlacitko);
+        ikony.appendChild(li);
+
+        // ----- vysouvací nabídka pod lištou -----
+        var panel = document.createElement('nav');
+        panel.className = 'gp-tablet-nav';
+        panel.setAttribute('aria-label', 'Hlavní nabídka');
+        polozky.forEach(function (p) {
+          var a = document.createElement('a');
+          a.href = p.href;
+          a.textContent = p.text;
+          panel.appendChild(a);
+        });
+        hlavicka.appendChild(panel);
+
+        function zavrit() {
+          panel.classList.remove('is-open');
+          tlacitko.setAttribute('aria-expanded', 'false');
+        }
+        function prepnout() {
+          var otevreno = panel.classList.toggle('is-open');
+          tlacitko.setAttribute('aria-expanded', otevreno ? 'true' : 'false');
+        }
+        tlacitko.addEventListener('click', function (e) { e.stopPropagation(); prepnout(); });
+        panel.addEventListener('click', function (e) {
+          if (e.target && e.target.tagName === 'A') zavrit();
+        });
+        document.addEventListener('click', function (e) {
+          if (!panel.contains(e.target) && !li.contains(e.target)) zavrit();
+        });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') zavrit(); });
+
+        // ----- bílé plochy v liště (nativní pole hledání apod.) schovat, jen na tabletu -----
+        var schovane = [];
+        function bilePlochy() {
+          if (!jeTablet()) {
+            schovane.forEach(function (el) { el.style.removeProperty('display'); });
+            schovane = [];
+            zavrit();
+            return;
+          }
+          findAll('*', hlavicka).forEach(function (el) {
+            if (schovane.indexOf(el) !== -1) return;
+            if (el.closest('.gp-tablet-nav, #navigation, .gp-burger-li, .gp-search-left')) return;
+            var cs = getComputedStyle(el);
+            if (cs.display === 'none' || cs.visibility === 'hidden') return;
+            if (cs.backgroundColor !== 'rgb(255, 255, 255)') return;
+            var r = el.getBoundingClientRect();
+            if (r.width < 60 || r.height < 20) return;
+            if (r.width > window.innerWidth * 0.6) return; // celé obaly nechat
+            el.style.setProperty('display', 'none', 'important');
+            schovane.push(el);
+          });
+        }
+        var casovac = null;
+        function odlozit() { clearTimeout(casovac); casovac = setTimeout(bilePlochy, 100); }
+        bilePlochy();
+        window.addEventListener('load', bilePlochy);
+        window.addEventListener('resize', odlozit);
+      }
+    },
+    {
       nazev: 'PDP2 — diagnostické okno (jen s ?debug=1 v adrese)',
       spustit: function () {
         if (!document.body.classList.contains('gp-pdp2')) return;
