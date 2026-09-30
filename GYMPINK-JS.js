@@ -1547,7 +1547,7 @@
 
         // Idempotentní přepínání podle šířky okna (mobil ≤ 900 px = vlevo).
         function ulozit() {
-          if (window.innerWidth <= 900) {
+          if (window.innerWidth <= 1279) {
             if (polozka.parentNode !== box) box.appendChild(polozka);
           } else if (polozka.parentNode === box) {
             var kam = (puvodniDalsi && puvodniDalsi.parentNode === puvodniRodic)
@@ -1582,14 +1582,14 @@
         // levém okraji lišty, a všem prvkům uvnitř hlavičky s vlastním pozadím
         // nastavíme naši barvu. Vysouvací menu (#navigation) se nemění.
         function srovnat() {
-          if (window.innerWidth > 900) return;
+          if (window.innerWidth > 1279) return;
           var r = hlavicka.getBoundingClientRect();
           if (r.height <= 0) return;
           var barva = cilovaBarva();
           var vrstvy = document.elementsFromPoint(3, r.top + r.height / 2);
           vrstvy.forEach(function (el) {
             if (el !== hlavicka && !hlavicka.contains(el)) return;
-            if (el.closest && el.closest('#navigation')) return;
+            if (el.closest && el.closest('#navigation, .gp-tablet-nav')) return;
             var cs = getComputedStyle(el);
             if (mocAlfa(cs.backgroundColor) > 0) {
               el.style.setProperty('background-color', barva, 'important');
@@ -1667,9 +1667,9 @@
         // 768–900 px jsme měli naše mobilní úpravy, ale bez hamburgeru a s
         // bílým polem hledání → nabídka byla nedostupná. Tady si nabídku
         // postavíme sami z odkazů, které v menu skutečně jsou.
-        var tablet = window.matchMedia ? window.matchMedia('(min-width: 768px) and (max-width: 900px)') : null;
+        var tablet = window.matchMedia ? window.matchMedia('(min-width: 768px) and (max-width: 1279px)') : null;
         function jeTablet() {
-          return tablet ? tablet.matches : (window.innerWidth >= 768 && window.innerWidth <= 900);
+          return tablet ? tablet.matches : (window.innerWidth >= 768 && window.innerWidth <= 1279);
         }
 
         // ----- odkazy (kategorie + přesunutý Blog), bez Novinek a Bestsellers (ty klientka skrývá) -----
@@ -1754,6 +1754,34 @@
         bilePlochy();
         window.addEventListener('load', bilePlochy);
         window.addEventListener('resize', odlozit);
+      }
+    },
+    {
+      nazev: 'Kompaktní hlavička (< 1280 px) — hero na titulní straně přesně navazuje na lištu (zakrytí i mezera se změří)',
+      spustit: function () {
+        if (!document.body.classList.contains('type-index')) return;
+        var hlavicka = find('#header');
+        var obal = find('.wide-carousel');
+        if (!hlavicka || !obal) return;
+
+        // Hlavička je pod 1280 px fixní a sama plní roli řádku, hero pod ní
+        // ale šablona (nativní tablet do ~991 px rezervuje jiné místo, nad
+        // 991 px žádné) → lišta zakrývala horní část banneru. Změříme, o kolik
+        // hero zasahuje pod lištu, a o tolik ho odsuneme.
+        function dorovnat() {
+          obal.style.removeProperty('margin-top');
+          if (window.innerWidth < 768 || window.innerWidth > 1279) return;
+          var spodekLisy = hlavicka.getBoundingClientRect().bottom;
+          var vrchHero = obal.getBoundingClientRect().top;
+          // kladné = lišta zakrývá banner (odsunout dolů), záporné = bílá mezera
+          // mezi lištou a bannerem (přitáhnout nahoru)
+          var zasah = Math.round(spodekLisy - vrchHero);
+          if (Math.abs(zasah) >= 1) obal.style.setProperty('margin-top', zasah + 'px', 'important');
+        }
+        dorovnat();
+        window.addEventListener('load', dorovnat);
+        var cas = null;
+        window.addEventListener('resize', function () { clearTimeout(cas); cas = setTimeout(dorovnat, 100); });
       }
     },
     {
