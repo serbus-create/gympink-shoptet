@@ -2369,6 +2369,51 @@ body.gp-pdp2 {
     grid-row: 4 !important;
   }
 
+  /* --- režim B: název i formulář v jednom sloupci vedle galerie --- */
+  body.gp-pdp2 .p-detail-inner .gp-pdp-row2 {
+    display: grid !important;
+    grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr) !important;
+    column-gap: 40px !important;
+    align-items: start !important;
+    overflow: visible !important;
+    margin: 0 !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-row2 > .gp-pdp-gallery {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    float: none !important;
+    width: auto !important;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    position: relative !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-row2 > .gp-pdp-info {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    float: none !important;
+    width: auto !important;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-info h1 {
+    margin: 0 0 8px !important;
+    font-size: 26px !important;
+    font-weight: 500 !important;
+    line-height: 1.2 !important;
+    text-transform: none !important;
+    color: var(--gp-ink) !important;
+  }
+
+  /* obrázek v galerii nesmí zůstat v úzkém nativním boxu */
+  body.gp-pdp2 .gp-pdp-gallery .p-image,
+  body.gp-pdp2 .gp-pdp-gallery .p-image a {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
   /* --- galerie: hlavní fotka 2:3 (ořízne bílé okraje v plátně 4:3) --- */
   body.gp-pdp2 .gp-pdp-main-img {
     width: 100% !important;
@@ -2504,10 +2549,18 @@ body.gp-pdp2 {
     align-items: stretch !important;
     gap: 8px !important;
   }
-  body.gp-pdp2 .p-final-price-wrapper .price {
+  body.gp-pdp2 .p-final-price-wrapper .price,
+  body.gp-pdp2 .p-detail-inner .price-final,
+  body.gp-pdp2 .p-detail-inner .price-final strong,
+  body.gp-pdp2 .p-detail-inner .p-final-price-wrapper strong,
+  body.gp-pdp2 .p-detail-inner .price.row .price {
     font-size: 30px !important;
     font-weight: 500 !important;
+    line-height: 1.1 !important;
     color: var(--gp-ink) !important;
+  }
+  body.gp-pdp2 .add-to-cart .btn.btn-conversion {
+    white-space: nowrap !important;
   }
   body.gp-pdp2 .add-to-cart .quantity {
     flex: 0 0 auto !important;

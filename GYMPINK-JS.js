@@ -704,23 +704,43 @@
         var inner = find('.p-detail-inner');
         if (!inner) return;
 
-        // ----- Nalezení prvků (selektory ověřené v DevTools, viz CSS 3.10) -----
         var galerie = find('.detail-img.p-image-wrapper', inner);
         var nadpis = find('h1', inner);
-        var nadpisSloupec = nadpis ? nadpis.closest('.col-md-4') : null;
-        var nakup = find(':scope > .col-md-4.pull-left', inner) || find('.col-md-4.pull-left', inner);
-        var radek = galerie ? galerie.parentElement : null;
-        if (!galerie || !nadpis || !nadpisSloupec || !nakup || !radek) return;
-        if (radek.contains(nakup)) return; // špatná shoda
+        var cenaRadek = find('.price.row', inner);
+        if (!galerie || !nadpis || !cenaRadek) return;
+
+        var radek = galerie.parentElement;
+        if (!radek || radek === inner) return;
+
+        // Dva možné tvary stránky (po vypnutí POBO se objevil ten první):
+        //  B) nadpis I formulář (cena, tlačítko) jsou v JEDNOM sloupci uvnitř
+        //     řádku vedle galerie → mřížka na samotném řádku.
+        //  A) nadpis je v řádku, formulář je samostatný sloupec mimo řádek
+        //     → mřížka na .p-detail-inner (display: contents na řádku).
+        var info = Array.prototype.slice.call(radek.children).filter(function (d) {
+          return d.contains(nadpis);
+        })[0] || null;
+        var rezimB = !!(info && info !== galerie && info.contains(cenaRadek));
+
+        var nakup = null;
+        if (!rezimB) {
+          nakup = cenaRadek.closest('.col-md-4') || cenaRadek.parentElement;
+          if (!nakup || nakup === info || radek.contains(nakup)) return;
+        }
 
         var zalozky = find(':scope > .shp-tabs-wrapper', inner) || find('.shp-tabs-wrapper', inner);
 
         // Značky tříd — CSS se opírá o ně, ne o křehké .row / .col-md-4.
-        radek.classList.add('gp-pdp-row');
-        nadpisSloupec.classList.add('gp-pdp-title');
         galerie.classList.add('gp-pdp-gallery');
-        nakup.classList.add('gp-pdp-buy');
-        if (zalozky) zalozky.classList.add('gp-pdp-tabs');
+        if (rezimB) {
+          radek.classList.add('gp-pdp-row2');
+          info.classList.add('gp-pdp-info');
+        } else {
+          radek.classList.add('gp-pdp-row');
+          if (info) info.classList.add('gp-pdp-title');
+          nakup.classList.add('gp-pdp-buy');
+          if (zalozky) zalozky.classList.add('gp-pdp-tabs');
+        }
 
         // Hlavní fotka galerie (první <img>, který není miniatura).
         var hlavniFoto = findAll('img', galerie).filter(function (i) {
@@ -741,8 +761,7 @@
           { text: 'Bezpečná online platba',
             ikona: '<path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1-8.5 15a12 12 0 0 1-8.5-15A12 12 0 0 0 12 3M11 11a1 1 0 1 0 2 0a1 1 0 1 0-2 0M12 12v2.5"/>' }
         ];
-        if (!find('.gp-trust', nakup)) {
-          var cenaRadek = find('.price.row', nakup);
+        if (!find('.gp-trust', inner)) {
           var seznam = document.createElement('ul');
           seznam.className = 'gp-trust';
           DUVERA.forEach(function (d) {
@@ -753,10 +772,8 @@
               : svg + '<span>' + d.text + '</span>';
             seznam.appendChild(li);
           });
-          if (cenaRadek && cenaRadek.parentNode) {
+          if (cenaRadek.parentNode) {
             cenaRadek.parentNode.insertBefore(seznam, cenaRadek.nextSibling);
-          } else {
-            nakup.appendChild(seznam);
           }
         }
 
@@ -776,27 +793,59 @@
         function aplikuj() {
           uklidit();
           if (window.innerWidth <= 900) return; // mobil: nativní chování šablony
-          vynutit(inner, {
-            display: 'grid',
-            'grid-template-columns': 'minmax(0, .85fr) minmax(0, 1.15fr)',
-            'column-gap': '40px',
-            'align-items': 'start',
-            position: 'relative'
-          });
-          vynutit(radek, { display: 'contents' });
-          vynutit(nadpisSloupec, { display: 'contents' });
-          vynutit(galerie, {
-            'grid-column': '1', 'grid-row': '1 / span 3',
-            float: 'none', width: 'auto', 'max-width': 'none',
-            padding: '0', margin: '0'
-          });
-          vynutit(nadpis, { 'grid-column': '2', 'grid-row': '1' });
-          vynutit(nakup, {
-            'grid-column': '2', 'grid-row': '2',
-            float: 'none', width: 'auto', 'max-width': 'none',
-            padding: '0', margin: '0', display: 'block', clear: 'none'
-          });
-          if (zalozky) vynutit(zalozky, { 'grid-column': '1 / -1', 'grid-row': '4' });
+
+          var nadpisStyl = {
+            'font-size': '26px', 'font-weight': '500', 'line-height': '1.2',
+            'text-transform': 'none', margin: '0 0 8px'
+          };
+
+          if (rezimB) {
+            vynutit(radek, {
+              display: 'grid',
+              'grid-template-columns': 'minmax(0, .85fr) minmax(0, 1.15fr)',
+              'column-gap': '40px',
+              'align-items': 'start',
+              overflow: 'visible',
+              margin: '0'
+            });
+            vynutit(galerie, {
+              'grid-column': '1', 'grid-row': '1',
+              float: 'none', width: 'auto', 'max-width': 'none',
+              padding: '0', margin: '0', position: 'relative'
+            });
+            vynutit(info, {
+              'grid-column': '2', 'grid-row': '1',
+              float: 'none', width: 'auto', 'max-width': 'none',
+              padding: '0', margin: '0'
+            });
+            vynutit(nadpis, nadpisStyl);
+          } else {
+            vynutit(inner, {
+              display: 'grid',
+              'grid-template-columns': 'minmax(0, .85fr) minmax(0, 1.15fr)',
+              'column-gap': '40px',
+              'align-items': 'start',
+              position: 'relative'
+            });
+            vynutit(radek, { display: 'contents' });
+            if (info) vynutit(info, { display: 'contents' });
+            vynutit(galerie, {
+              'grid-column': '1', 'grid-row': '1 / span 3',
+              float: 'none', width: 'auto', 'max-width': 'none',
+              padding: '0', margin: '0'
+            });
+            vynutit(nadpis, {
+              'grid-column': '2', 'grid-row': '1',
+              'font-size': nadpisStyl['font-size'], 'font-weight': '500',
+              'line-height': '1.2', 'text-transform': 'none', margin: '0 0 8px'
+            });
+            vynutit(nakup, {
+              'grid-column': '2', 'grid-row': '2',
+              float: 'none', width: 'auto', 'max-width': 'none',
+              padding: '0', margin: '0', display: 'block', clear: 'none'
+            });
+            if (zalozky) vynutit(zalozky, { 'grid-column': '1 / -1', 'grid-row': '4' });
+          }
         }
         aplikuj();
         window.addEventListener('resize', aplikuj);
