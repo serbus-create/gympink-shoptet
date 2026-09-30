@@ -179,7 +179,12 @@
 
         function odsadit() {
           var vyska = hlavicka.getBoundingClientRect().height;
-          obsah.style.setProperty('padding-top', (vyska + 4) + 'px', 'important');
+          // Na některých stránkách (detail produktu na telefonu a iPadu) už
+          // šablona odsazuje celý obal (.overall-wrapper) — druhé odsazení by
+          // nad drobečkovou navigací udělalo ~60 px prázdného místa navíc.
+          var obal = find('.overall-wrapper');
+          var uzMa = obal ? (parseFloat(getComputedStyle(obal).paddingTop) || 0) : 0;
+          obsah.style.setProperty('padding-top', Math.max(0, vyska + 4 - uzMa) + 'px', 'important');
         }
 
         odsadit();
