@@ -1517,6 +1517,10 @@
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); prepnout(); }
           });
         });
+
+        // Poslední rozbalovací sekce (dole se zavírá linkou) — jen mobilní vzhled.
+        var vsechnyAkordeony = findAll('.gp-acc', paticka);
+        if (vsechnyAkordeony.length) vsechnyAkordeony[vsechnyAkordeony.length - 1].classList.add('gp-acc-last');
       }
     },
     {

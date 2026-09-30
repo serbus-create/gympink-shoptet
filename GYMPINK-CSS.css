@@ -3746,3 +3746,28 @@ footer.footer .custom-footer__onlinePayments img {
   max-width: 100% !important;
   margin: 4px 0 0 0 !important;
 }
+
+
+/* ===================================================================
+   3.46  ZÁPATÍ E (mobil) — jedna čistá linka místo dvou
+   Nativní světlá linka pod nadpisem sloupce (na desktopu v pořádku)
+   se na mobilu zdvojovala s oddělovací linkou rozbalovací sekce.
+   Zůstává jen linka nad každou sekcí a závěrečná linka pod poslední.
+   =================================================================== */
+@media (max-width: 900px) {
+  footer.footer .pageElement__heading {
+    border-bottom: 0 !important;
+    box-shadow: none !important;
+  }
+  footer.footer .pageElement__heading::before {
+    display: none !important;
+    content: none !important;
+  }
+  footer.footer .custom-footer > * {
+    border-bottom: 0 !important;
+    box-shadow: none !important;
+  }
+  footer.footer .gp-acc-last {
+    border-bottom: 1px solid #d9c3d0 !important;
+  }
+}
