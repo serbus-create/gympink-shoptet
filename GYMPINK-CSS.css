@@ -3688,3 +3688,61 @@ footer.footer .gp-social-handle {
 footer.footer .custom-footer__contact .social-icons a:hover .gp-social-handle {
   color: #a3336f !important;
 }
+
+
+/* ===================================================================
+   3.45  ZÁPATÍ E — vlastní kontaktní řádky, srovnané doleva
+   Ikony ve sloupci širokém 24 px, text začíná vždy na stejné svislici,
+   všechno zarovnané s claimem nad tím. Nativní ikony/hover (černý kruh)
+   se nepoužívají — schovává je JS.
+   =================================================================== */
+footer.footer .gp-contact {
+  list-style: none !important;
+  margin: 0 0 8px !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+}
+footer.footer .gp-contact li {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+footer.footer .gp-contact a {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  color: var(--gp-ink) !important;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+  text-decoration: none !important;
+}
+footer.footer .gp-contact a::before,
+footer.footer .gp-contact a::after {
+  display: none !important;
+  content: none !important;
+}
+footer.footer .gp-contact a:hover {
+  background: none !important;
+  color: #a3336f !important;
+}
+footer.footer .gp-contact svg {
+  flex: 0 0 24px !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: block !important;
+  color: inherit !important;
+}
+
+/* platební karty: přirozená velikost (nativně roztažené = rozmazané), u levé hrany */
+footer.footer .custom-footer__onlinePayments img {
+  width: auto !important;
+  height: auto !important;
+  max-width: 100% !important;
+  margin: 4px 0 0 0 !important;
+}

@@ -1400,6 +1400,56 @@
           kontakt.insertBefore(claim, kontakt.firstChild);
         }
 
+        // ----- Kontaktní řádky: vlastní, srovnané (ikona + text), z údajů z administrace -----
+        // Nativní řádky (e-mail s ikonou, sociální ikony) měly každý jiné odsazení a při
+        // najetí černý kruh. Údaje (e-mail, odkaz na Instagram) čteme z nich, takže se
+        // dál mění v administraci. Nativní řádky se jen schovají.
+        if (kontakt && !find('.gp-contact', kontakt)) {
+          var potomekKontaktu = function (uzel) {
+            var n = uzel;
+            while (n && n.parentElement !== kontakt) n = n.parentElement;
+            return n;
+          };
+          var emailOdkaz = find('a.project-email', kontakt) || find('a[href^="mailto:"]', kontakt);
+          var igOdkaz = find('a[href*="instagram.com"]', kontakt);
+          var seznamKontakt = document.createElement('ul');
+          seznamKontakt.className = 'gp-contact';
+          var SVG_MAIL = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>';
+          var SVG_IG = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".7" fill="currentColor"/></svg>';
+          function pridatRadek(href, text, svg, novaZalozka) {
+            var li = document.createElement('li');
+            var a = document.createElement('a');
+            a.href = href;
+            if (novaZalozka) { a.target = '_blank'; a.rel = 'noopener'; }
+            a.innerHTML = svg;
+            var t = document.createElement('span');
+            t.textContent = text;
+            a.appendChild(t);
+            li.appendChild(a);
+            seznamKontakt.appendChild(li);
+          }
+          if (emailOdkaz) {
+            var adresa = (emailOdkaz.getAttribute('href') || '').replace(/^mailto:/i, '').trim() ||
+                         (emailOdkaz.textContent || '').trim();
+            if (adresa) pridatRadek('mailto:' + adresa, adresa, SVG_MAIL, false);
+          }
+          if (igOdkaz) {
+            var jm = (igOdkaz.getAttribute('href') || '').match(/instagram\.com\/([^\/?#]+)/i);
+            pridatRadek(igOdkaz.href, jm ? '@' + jm[1] : 'Instagram', SVG_IG, true);
+          }
+          if (seznamKontakt.children.length) {
+            var claimEl = find('.gp-footer-claim', kontakt);
+            kontakt.insertBefore(seznamKontakt, claimEl ? claimEl.nextSibling : kontakt.firstChild);
+            [emailOdkaz, igOdkaz].forEach(function (odkazNat) {
+              if (!odkazNat) return;
+              var vetev = potomekKontaktu(odkazNat);
+              if (vetev && vetev !== seznamKontakt && vetev !== claimEl) {
+                vetev.style.setProperty('display', 'none', 'important');
+              }
+            });
+          }
+        }
+
         // ----- Podpis: "Vytvořil Shoptet" (nativní) + " a " + logo vhs. -----
         // Logo je bílé, bez oranžového čtverce a bez ™ (v malé velikosti nečitelné),
         // ať drží barvy webu. Odkaz vede na web agentury.
@@ -1422,17 +1472,6 @@
           titul.parentNode.insertBefore(spojka, titul.nextSibling);
           titul.parentNode.insertBefore(odkaz, spojka.nextSibling);
         }
-
-        // ----- Instagram: vedle ikony doplnit @jméno z odkazu nastaveného v administraci -----
-        findAll('.custom-footer__contact a[href*="instagram.com"]', paticka).forEach(function (odkazIG) {
-          if (find('.gp-social-handle', odkazIG)) return;
-          var shoda = (odkazIG.getAttribute('href') || '').match(/instagram\.com\/([^\/?#]+)/i);
-          if (!shoda) return;
-          var jmeno = document.createElement('span');
-          jmeno.className = 'gp-social-handle';
-          jmeno.textContent = '@' + shoda[1];
-          odkazIG.appendChild(jmeno);
-        });
 
         // ----- Sloupce Blog / Informace poznáme podle TEXTU nadpisu -----
         // (třídy __articles / __section2 se ukázaly jako prohozené oproti očekávání)
