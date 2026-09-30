@@ -1066,14 +1066,15 @@
         });
         // Vnitřní sloupce popisu (col-md-8 apod.) do hloubky 3 od panelu:
         // bez toho zůstane popis na ~2/3 šířky a zbytek je prázdný.
-        if (popis) {
-          findAll('[class*="col-"], .row', popis).forEach(function (el) {
+        [popis, diskuze].forEach(function (panel) {
+          if (!panel) return;
+          findAll('[class*="col-"], .row', panel).forEach(function (el) {
             var hloubka = 0;
             var n = el.parentElement;
-            while (n && n !== popis && hloubka < 6) { hloubka++; n = n.parentElement; }
-            if (n === popis && hloubka <= 3) el.classList.add('gp-pdp-flat');
+            while (n && n !== panel && hloubka < 6) { hloubka++; n = n.parentElement; }
+            if (n === panel && hloubka <= 3) el.classList.add('gp-pdp-flat');
           });
-        }
+        });
         log('PDP2 záložky: zploštěno ' + findAll('.gp-pdp-flat', blok).length + ' obalů');
 
         // ----- Nová záložka "Specifikace" (tabulka parametrů + Tisk/Zeptat se/Sdílet) -----
@@ -1115,7 +1116,12 @@
             pane.className = (paneVychozi.className || '')
               .replace(/\b(active|in|show|fade)\b/g, '').replace(/\s+/g, ' ').trim() + ' gp-pdp-flat gp-spec';
             pane.setAttribute('role', 'tabpanel');
-            pane.appendChild(tabulka.closest('table') || tabulka);
+            var tabulkaEl = tabulka.closest('table') || tabulka;
+            pane.appendChild(tabulkaEl);
+            // Šablona tabulce přebíjí šířku (zůstala zúžená na obsah) → inline !important.
+            [['display', 'table'], ['width', '100%'], ['max-width', '720px'],
+             ['margin', '0 auto 32px'], ['float', 'none']]
+              .forEach(function (kv) { tabulkaEl.style.setProperty(kv[0], kv[1], 'important'); });
             if (ikony) pane.appendChild(ikony);
             paneVychozi.parentNode.insertBefore(pane, paneVychozi.nextSibling);
 

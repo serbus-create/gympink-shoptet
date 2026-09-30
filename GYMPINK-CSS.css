@@ -3071,17 +3071,6 @@ body.gp-pdp2 .gp-freeship.is-free .gp-freeship__fill {
   body.gp-pdp2 .gp-spec table td {
     color: var(--gp-ink) !important;
   }
-  /* ikony Tisk / Zeptat se / Sdílet pod tabulkou v řadě */
-  body.gp-pdp2 .gp-spec .social-links,
-  body.gp-pdp2 .gp-spec ul,
-  body.gp-pdp2 .gp-spec .link-icons {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 32px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    list-style: none !important;
-  }
 }
 
 
@@ -3152,12 +3141,6 @@ body.gp-pdp2 .gp-freeship.is-free .gp-freeship__fill {
   body.gp-pdp2 .gp-spec table {
     margin: 0 auto 32px !important;
   }
-  body.gp-pdp2 .gp-spec > *:not(table) {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    gap: 32px !important;
-  }
 }
 
 
@@ -3171,5 +3154,53 @@ body.gp-pdp2 .gp-freeship.is-free .gp-freeship__fill {
     max-width: none !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
+  }
+}
+
+
+/* ===================================================================
+   3.35  PDP2 — Specifikace a Diskuze uprostřed
+   Ikony Tisk / Zeptat se / Sdílet: nativní rozložení (ikona nad
+   popiskem) zůstává, vystředí se jen celý blok (fit-content + auto).
+   Tabulku doplňuje inline styl z JS (šablona jí přebíjí šířku).
+   Diskuze: nadpis, věta i formulář uprostřed, formulář max 640 px.
+   =================================================================== */
+@media (min-width: 901px) {
+  body.gp-pdp2 .gp-spec > *:not(table) {
+    display: flow-root !important;
+    float: none !important;
+    width: fit-content !important;
+    max-width: 100% !important;
+    margin: 8px auto 0 !important;
+    padding: 0 !important;
+  }
+
+  body.gp-pdp2 .gp-pdp-tabs #productDiscussion {
+    text-align: center !important;
+  }
+  body.gp-pdp2 .gp-pdp-tabs #productDiscussion h2,
+  body.gp-pdp2 .gp-pdp-tabs #productDiscussion h3,
+  body.gp-pdp2 .gp-pdp-tabs #productDiscussion > p,
+  body.gp-pdp2 .gp-pdp-tabs #productDiscussion .no-comments {
+    text-align: center !important;
+    max-width: none !important;
+  }
+  body.gp-pdp2 .gp-pdp-tabs #productDiscussion form {
+    max-width: 640px !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    text-align: left !important;
+  }
+  body.gp-pdp2 .gp-pdp-tabs #productDiscussion form input[type="text"],
+  body.gp-pdp2 .gp-pdp-tabs #productDiscussion form input[type="email"],
+  body.gp-pdp2 .gp-pdp-tabs #productDiscussion form textarea {
+    width: 100% !important;
+    max-width: none !important;
+  }
+  body.gp-pdp2 .gp-pdp-tabs #productDiscussion form .btn,
+  body.gp-pdp2 .gp-pdp-tabs #productDiscussion form button[type="submit"],
+  body.gp-pdp2 .gp-pdp-tabs #productDiscussion form input[type="submit"] {
+    display: block !important;
+    margin: 20px auto 0 !important;
   }
 }
