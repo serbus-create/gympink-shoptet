@@ -3343,3 +3343,57 @@ body.gp-pdp2 .gp-thumbs::after {
   display: none !important;
   content: none !important;
 }
+
+
+/* ===================================================================
+   3.41  PDP2 — VLASTNÍ řada miniatur pod fotkou (návrh: 5 čtverců)
+   JS postaví .gp-thumbgrid z nativních miniatur (ty schová, ale ponechá
+   funkční). Klik na .gp-thumb vyvolá klik na původní miniaturu.
+   Na mobilu (≤ 900 px) se vlastní řada nezobrazuje, platí nativní.
+   =================================================================== */
+body.gp-pdp2 .gp-thumbgrid {
+  display: none !important;
+}
+@media (min-width: 901px) {
+  body.gp-pdp2 .gp-thumbgrid {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    order: 2 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  body.gp-pdp2 .gp-thumb {
+    position: relative !important;
+    display: block !important;
+    aspect-ratio: 1 / 1 !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 1px solid #e6e3de !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+    overflow: hidden !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
+  }
+  body.gp-pdp2 .gp-thumb img {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    object-fit: cover !important;
+    margin: 0 !important;
+  }
+  body.gp-pdp2 .gp-thumb.is-on {
+    outline: 2px solid var(--gp-ink) !important;
+    outline-offset: -2px !important;
+  }
+  body.gp-pdp2 .gp-thumb:hover:not(.is-on) {
+    border-color: var(--gp-ink) !important;
+  }
+}

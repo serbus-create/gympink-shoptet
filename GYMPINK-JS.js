@@ -1032,113 +1032,151 @@
             ? '.' + el.className.trim().replace(/\s+/g, '.') : '') +
             ' [' + Math.round(r.width) + 'x' + Math.round(r.height) + ']';
         }
-        function galerieNaSloupec() {
-          if (window.innerWidth <= 900) return;
-          if (!hlavniFoto) { window.__gpGal = 'galerie: hlavní fotka NENALEZENA'; return; }
-          window.__gpGal = 'galerie: fotek=' + obrazky.length + ' miniatur=' + miniatury.length +
-            '\n  hlavni: ' + popisEl(hlavniFoto) +
-            '\n  kontejner miniatur: ' + popisEl(miniaturyKontejner) +
-            '\n  prvni miniatura: ' + popisEl(miniatury[0]) +
-            '\n  potomci galerie: ' + Array.prototype.map.call(galerie.children, popisEl).join(' | ');
 
-          // Kontejner galerie G = nejbližší společný rodič hlavní fotky a
-          // miniatur (mb = větev s fotkou, tb = větev s miniaturami).
-          // Když miniatury nejsou / leží v jednom obalu s fotkou, řešíme jen fotku.
-          var G = null, mb = null, tb = null;
-          if (miniaturyKontejner) {
-            G = spolecnyRodic(hlavniFoto, miniaturyKontejner);
-            if (G) {
-              mb = potomekObsahujici(G, hlavniFoto);
-              tb = potomekObsahujici(G, miniaturyKontejner);
-            }
-          }
-          if (!G || !mb || !tb || mb === tb) {
-            G = galerie;
-            mb = potomekObsahujici(galerie, hlavniFoto);
-            tb = null;
-          }
-          if (!mb) return;
+        // ================= GALERIE =================
+        // Hlavní fotka: rámeček 3:4, fotka ho vyplní (cover).
+        // Miniatury: nativní se schovají (zůstanou v DOM a fungují), pod
+        // rámečkem se postaví VLASTNÍ řada čtverců. Klik na vlastní miniaturu
+        // vyvolá klik na původní → přepínání fotek dělá dál Shoptet.
+        var ramFotky = null;
+        var mrizMiniatur = null;
+        var pozorovateleGalerie = false;
 
-          vynutit(G, {
-            display: 'flex', 'flex-direction': 'column', 'align-items': 'stretch',
-            gap: '8px', width: '100%', 'max-width': 'none'
-          });
-
-          // ----- Rámeček hlavní fotky 3:4, fotka ho vyplní (cover) -----
+        function stylovatFotku(img, ram) {
           var FOTO = {
             width: '100%', height: '100%', 'max-width': 'none', 'max-height': 'none',
             'object-fit': 'cover', 'object-position': 'center', margin: '0', transform: 'none'
           };
-          if (mb === hlavniFoto) {
-            vynutit(hlavniFoto, {
+          if (ram === img) {
+            vynutit(img, {
               width: '100%', 'aspect-ratio': '3 / 4', height: 'auto', display: 'block',
               'max-width': 'none', 'max-height': 'none', 'object-fit': 'cover',
               'object-position': 'center', margin: '0', order: '1'
             });
-          } else {
-            vynutit(mb, {
+            return;
+          }
+          var e = img.parentElement;
+          while (e && e !== ram) {
+            vynutit(e, {
+              position: 'static', display: 'block', width: 'auto', height: 'auto',
+              margin: '0', padding: '0', transform: 'none', float: 'none', 'max-width': 'none'
+            });
+            e = e.parentElement;
+          }
+          vynutit(img, Object.assign({ position: 'absolute', top: '0', left: '0' }, FOTO));
+        }
+
+        function synchronizovatMiniatury() {
+          if (!mrizMiniatur) return;
+          miniatury.forEach(function (m, i) {
+            var zapnuto = m.classList.contains('highlighted') ||
+              (m.parentElement && m.parentElement.classList.contains('highlighted'));
+            var b = mrizMiniatur.children[i];
+            if (b) {
+              b.classList.toggle('is-on', !!zapnuto);
+              b.setAttribute('aria-pressed', zapnuto ? 'true' : 'false');
+            }
+          });
+        }
+
+        function postavitMriz() {
+          mrizMiniatur = document.createElement('div');
+          mrizMiniatur.className = 'gp-thumbgrid';
+          miniatury.forEach(function (m, i) {
+            var zdroj = m.tagName === 'IMG' ? m : find('img', m);
+            var adresa = zdroj ? (zdroj.getAttribute('data-src') || zdroj.currentSrc || zdroj.src || '') : '';
+            if (!adresa || /^data:/.test(adresa)) adresa = m.getAttribute('href') || adresa;
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'gp-thumb';
+            b.setAttribute('aria-label', 'Fotka ' + (i + 1));
+            var ni = document.createElement('img');
+            ni.src = adresa;
+            ni.alt = '';
+            ni.loading = 'lazy';
+            b.appendChild(ni);
+            b.addEventListener('click', function () {
+              m.click(); // přepnutí fotky dělá původní kód Shoptetu
+              setTimeout(synchronizovatMiniatury, 80);
+              setTimeout(synchronizovatMiniatury, 400);
+            });
+            mrizMiniatur.appendChild(b);
+          });
+          galerie.appendChild(mrizMiniatur);
+          synchronizovatMiniatury();
+        }
+
+        function obnovitFotku() {
+          if (window.innerWidth <= 900 || !ramFotky) return;
+          // Když Shoptet při přepnutí fotky vytvoří nový <img>, dostane rámeček a cover.
+          findAll('img', ramFotky).forEach(function (im) {
+            if (im.style.getPropertyValue('position') === 'absolute') return;
+            if (im.closest('.flags')) return;
+            if (im.getBoundingClientRect().width < 200) return;
+            im.classList.add('gp-pdp-main-img');
+            stylovatFotku(im, ramFotky);
+          });
+        }
+
+        function galerieNaSloupec() {
+          if (window.innerWidth <= 900) return;
+          if (!hlavniFoto) { window.__gpGal = 'galerie: hlavní fotka NENALEZENA'; return; }
+          var ram = potomekObsahujici(galerie, hlavniFoto);
+          if (!ram) { window.__gpGal = 'galerie: rámeček nenalezen'; return; }
+          ramFotky = ram;
+          window.__gpGal = 'galerie: fotek=' + obrazky.length + ' miniatur=' + miniatury.length +
+            '\n  hlavni: ' + popisEl(hlavniFoto) +
+            '\n  ramecek: ' + popisEl(ram) +
+            '\n  kontejner miniatur: ' + popisEl(miniaturyKontejner) +
+            '\n  vlastni rada: ' + popisEl(mrizMiniatur) +
+            '\n  potomci galerie: ' + Array.prototype.map.call(galerie.children, popisEl).join(' | ');
+
+          vynutit(galerie, {
+            display: 'flex', 'flex-direction': 'column', 'align-items': 'stretch',
+            gap: '8px', width: '100%', 'max-width': 'none', position: 'relative'
+          });
+
+          if (ram !== hlavniFoto) {
+            vynutit(ram, {
               order: '1', position: 'relative', display: 'block', width: '100%',
               'max-width': 'none', 'aspect-ratio': '3 / 4', height: 'auto',
               'min-height': '0', overflow: 'hidden', float: 'none', margin: '0', padding: '0'
             });
-            // obaly mezi rámečkem a fotkou nesmí zakládat vlastní kontejner
-            var e = hlavniFoto.parentElement;
-            while (e && e !== mb) {
-              vynutit(e, {
-                position: 'static', display: 'block', width: 'auto', height: 'auto',
-                margin: '0', padding: '0', transform: 'none', float: 'none', 'max-width': 'none'
-              });
-              e = e.parentElement;
+          }
+          stylovatFotku(hlavniFoto, ram);
+
+          if (miniatury.length && miniaturyKontejner) {
+            // Nativní miniatury = nejvyšší předek kontejneru, který neobsahuje hlavní fotku.
+            var natMin = miniaturyKontejner;
+            while (natMin.parentElement && natMin.parentElement !== galerie &&
+                   !natMin.parentElement.contains(hlavniFoto)) {
+              natMin = natMin.parentElement;
             }
-            vynutit(hlavniFoto, Object.assign({ position: 'absolute', top: '0', left: '0' }, FOTO));
+            if (natMin !== ram && !natMin.contains(hlavniFoto) && galerie.contains(natMin)) {
+              vynutit(natMin, {
+                position: 'absolute', width: '1px', height: '1px', margin: '-1px', padding: '0',
+                border: '0', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', opacity: '0',
+                'pointer-events': 'none'
+              });
+            }
+            if (!mrizMiniatur) postavitMriz();
           }
 
-          // ----- Miniatury: řada 5 čtverců pod fotkou -----
-          if (tb) {
-            vynutit(tb, {
-              order: '2', position: 'static', width: '100%', 'max-width': 'none', height: 'auto',
-              float: 'none', margin: '0', padding: '0', transform: 'none',
-              top: 'auto', left: 'auto', right: 'auto', bottom: 'auto'
-            });
-            // Obaly MEZI kontejnerem miniatur a větví tb si nesly původní
-            // absolutní pozici / šířku (miniatury zůstaly drobné u pravého okraje).
-            var nahoru = miniaturyKontejner ? miniaturyKontejner.parentElement : null;
-            while (nahoru && nahoru !== G && nahoru !== tb) {
-              vynutit(nahoru, {
-                position: 'static', display: 'block', width: '100%', 'max-width': 'none',
-                height: 'auto', float: 'none', margin: '0', padding: '0', transform: 'none',
-                top: 'auto', left: 'auto', right: 'auto', bottom: 'auto', overflow: 'visible'
+          if (!pozorovateleGalerie && window.MutationObserver) {
+            pozorovateleGalerie = true;
+            if (miniaturyKontejner) {
+              new MutationObserver(synchronizovatMiniatury).observe(miniaturyKontejner, {
+                attributes: true, attributeFilter: ['class'], subtree: true
               });
-              nahoru = nahoru.parentElement;
             }
-          }
-          if (miniaturyKontejner && miniaturyKontejner !== G) {
-            miniaturyKontejner.classList.add('gp-thumbs');
-            vynutit(miniaturyKontejner, {
-              display: 'grid', 'grid-template-columns': 'repeat(5, minmax(0, 1fr))',
-              gap: '8px', width: '100%', height: 'auto', position: 'static',
-              transform: 'none', margin: '0', padding: '0', overflow: 'visible', float: 'none'
-            });
-            miniatury.forEach(function (m) {
-              var polozka = potomekObsahujici(miniaturyKontejner, m) || m;
-              vynutit(polozka, {
-                position: 'relative', display: 'block', width: 'auto', height: 'auto',
-                'aspect-ratio': '1 / 1', margin: '0', padding: '0', float: 'none',
-                transform: 'none', overflow: 'hidden', 'max-width': 'none'
-              });
-              if (polozka !== m) {
-                vynutit(m, { display: 'block', position: 'static', width: '100%', height: '100%', margin: '0' });
-              }
-              var mi = m.tagName === 'IMG' ? m : find('img', m);
-              if (mi) {
-                vynutit(mi, {
-                  position: 'absolute', top: '0', left: '0', width: '100%', height: '100%',
-                  'max-width': 'none', 'object-fit': 'cover', margin: '0'
-                });
-              }
-            });
+            var casObnoveni = null;
+            new MutationObserver(function () {
+              clearTimeout(casObnoveni);
+              casObnoveni = setTimeout(obnovitFotku, 80);
+            }).observe(ram, { childList: true, subtree: true });
           }
         }
+
         // Cena je odsazená zprava (~16 px) proti nadpisu a popisu, příčina není
         // ve stylech na prvku. Změříme, kde skutečně začíná velká cena, a
         // posuneme obal ceny o rozdíl (obě řádky ceny se posunou stejně).
@@ -1360,7 +1398,7 @@
         }
         function obnovit() {
           okno.textContent = (window.__gpGal ? window.__gpGal + '\n\n' : '') +
-            ['.gp-pdp-gallery', '.gp-pdp-main-img', '.gp-thumbs', '.gp-thumbs > *:first-child',
+            ['.gp-pdp-gallery', '.gp-pdp-main-img', '.gp-thumbgrid', '.gp-thumbgrid > *:first-child',
              '.p-final-price-wrapper', '.gp-pdp-buy', '.p-short-description', '.variant-list',
              '.gp-sizes', '.add-to-cart'].map(popis).join('\n');
         }
