@@ -3771,3 +3771,13 @@ footer.footer .custom-footer__onlinePayments img {
     border-bottom: 1px solid #d9c3d0 !important;
   }
 }
+
+
+/* ===================================================================
+   3.47  ZÁPATÍ E (desktop) — logo vhs. o 2 px výš, ať sedí na řádku s textem
+   =================================================================== */
+@media (min-width: 901px) {
+  footer.footer .gp-vhs {
+    transform: translateY(-2px) !important;
+  }
+}
