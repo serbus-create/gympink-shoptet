@@ -2480,6 +2480,10 @@ body.gp-pdp2 {
     display: block !important;
   }
 
+}
+
+/* 3.27b — prodejní panel, příznaky, cena, tlačítko, důvěra: všechny šířky */
+@media (min-width: 0px) {
   /* --- příznaky (štítky) v rohu galerie, varianta A --- */
   body.gp-pdp2 .p-detail-inner .flags {
     position: absolute !important;
@@ -2758,7 +2762,7 @@ body.gp-pdp2 .gp-size--out.is-on {
   text-decoration: line-through !important;
 }
 
-@media (min-width: 901px) {
+@media (min-width: 0px) {
   /* formulář a řádek s cenou se "rozpustí" — jejich děti jsou položky mřížky */
   body.gp-pdp2 .p-detail-inner .gp-pdp-buy form.pr-action,
   body.gp-pdp2 .p-detail-inner .gp-pdp-buy .price.row {
@@ -3264,7 +3268,7 @@ body.gp-pdp2 .variant-list {
   max-height: none !important;
   overflow: visible !important;
 }
-@media (min-width: 901px) {
+@media (min-width: 0px) {
   body.gp-pdp2 .p-detail-inner .gp-pdp-row2,
   body.gp-pdp2 .p-detail-inner .gp-pdp-modeA {
     max-width: 1200px !important;
@@ -3289,7 +3293,7 @@ body.gp-pdp2 .variant-list {
    Rozměry a umístění nastavuje JS inline (šablona jinak přebíjí),
    tady jsou jen záloha a vzhled výběru.
    =================================================================== */
-@media (min-width: 901px) {
+@media (min-width: 0px) {
   body.gp-pdp2 .gp-pdp-main-img {
     object-fit: cover !important;
     object-position: center !important;
@@ -3311,7 +3315,7 @@ body.gp-pdp2 .variant-list {
    v přirozené výšce. Cena a dostupnost sdílejí první řádek, ostatní
    zabírají 100 % šířky. Formulář a .price.row jsou display: contents.
    =================================================================== */
-@media (min-width: 901px) {
+@media (min-width: 0px) {
   body.gp-pdp2 .p-detail-inner .gp-pdp-buy {
     display: flex !important;
     flex-direction: row !important;
@@ -3350,7 +3354,7 @@ body.gp-pdp2 .variant-list {
    3.39  PDP2 — příznaky ve sloupci, sleva červeně, cena bez odsazení
    Paleta: Akce / sleva #d3312b (Novinka a Tip mají barvy z administrace).
    =================================================================== */
-@media (min-width: 901px) {
+@media (min-width: 0px) {
   body.gp-pdp2 .p-detail-inner .flags .flag-discount {
     background: #d3312b !important;
     background-color: #d3312b !important;
@@ -3394,12 +3398,12 @@ body.gp-pdp2 .gp-thumbs::after {
    3.41  PDP2 — VLASTNÍ řada miniatur pod fotkou (návrh: 5 čtverců)
    JS postaví .gp-thumbgrid z nativních miniatur (ty schová, ale ponechá
    funkční). Klik na .gp-thumb vyvolá klik na původní miniaturu.
-   Na mobilu (≤ 900 px) se vlastní řada nezobrazuje, platí nativní.
+   Zobrazuje se na všech šířkách (telefon, iPad i desktop).
    =================================================================== */
 body.gp-pdp2 .gp-thumbgrid {
   display: none !important;
 }
-@media (min-width: 901px) {
+@media (min-width: 0px) {
   body.gp-pdp2 .gp-thumbgrid {
     display: grid !important;
     grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
@@ -4115,5 +4119,139 @@ footer.footer .custom-footer__onlinePayments img {
     text-align: center !important;
     padding: 0 !important;
     box-shadow: 0 0 0 2px var(--gp-header-bg, #efdde9) !important;
+  }
+}
+
+
+/* ===================================================================
+   3.56  DETAIL PRODUKTU — telefon a iPad na výšku (≤ 900 px)
+   Koncept: jeden sloupec. Fotka přes celou šířku (3:4) s příznakem
+   v rohu a řadou 5 miniatur → název → cena + dostupnost → krátký popis
+   → velikosti → množství + „Do košíku“ → odpočet dopravy → 3 ikony
+   důvěry → záložky. Na iPadu je sloupec vystředěný (max 560 px).
+   Diagnostika (živý web, 390 px): pod 992 px Bootstrap schovává
+   .btn-conversion a ukazuje jen ikonové .btn-cart (popisek v sr-only)
+   → tlačítko bylo černé a bez textu. Proto zapínáme .btn-conversion.
+   =================================================================== */
+@media (max-width: 991px) {
+  body.gp-pdp2 .add-to-cart .btn.btn-conversion {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  body.gp-pdp2 .add-to-cart .btn.btn-cart {
+    display: none !important;
+  }
+}
+
+@media (max-width: 900px) {
+  /* sloupec: fotka → název → panel (název je v DOM před fotkou) */
+  body.gp-pdp2 .p-detail-inner .row.gp-pdp-modeA {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    max-width: 560px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+  }
+  body.gp-pdp2 .p-detail-inner .row.gp-pdp-modeA::before,
+  body.gp-pdp2 .p-detail-inner .row.gp-pdp-modeA::after {
+    display: none !important;
+    content: none !important;
+  }
+  body.gp-pdp2 .p-detail-inner .row.gp-pdp-modeA > .gp-pdp-gallery {
+    order: 1 !important;
+    float: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  body.gp-pdp2 .p-detail-inner .row.gp-pdp-modeA > :not(.gp-pdp-gallery):not(.gp-pdp-buy) {
+    order: 2 !important;
+    float: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 16px 16px 0 !important;
+  }
+  body.gp-pdp2 .p-detail-inner .row.gp-pdp-modeA > .gp-pdp-buy {
+    order: 3 !important;
+    float: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 6px 16px 8px !important;
+  }
+
+  /* miniatury: 5 čtverců pod fotkou se stejným okrajem jako text */
+  body.gp-pdp2 .gp-thumbgrid {
+    box-sizing: border-box !important;
+    padding: 0 16px !important;
+    margin-top: 2px !important;
+  }
+
+  /* název */
+  body.gp-pdp2 .p-detail-inner h1 {
+    margin: 0 !important;
+    font-size: 22px !important;
+    font-weight: 500 !important;
+    line-height: 1.25 !important;
+    text-transform: none !important;
+    text-align: left !important;
+    color: var(--gp-ink) !important;
+  }
+
+  /* cena + dostupnost na jednom řádku, vlevo */
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .p-final-price-wrapper,
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .p-final-price-wrapper > *,
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .order-availability {
+    text-align: left !important;
+  }
+  body.gp-pdp2 .p-final-price-wrapper .price,
+  body.gp-pdp2 .p-detail-inner .price-final,
+  body.gp-pdp2 .p-detail-inner .price-final strong,
+  body.gp-pdp2 .p-detail-inner .p-final-price-wrapper strong,
+  body.gp-pdp2 .p-detail-inner .price.row .price {
+    font-size: 24px !important;
+  }
+
+  /* krátký popis: vlevo, běžná velikost */
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy > .p-short-description,
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy > .p-short-description * {
+    text-align: left !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy > .p-short-description {
+    margin: 12px 0 14px !important;
+  }
+
+  /* velikosti: větší dotykové plochy */
+  body.gp-pdp2 .gp-size {
+    min-width: 52px !important;
+    height: 46px !important;
+    font-size: 14px !important;
+  }
+
+  /* množství + tlačítko na jednom řádku */
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .add-to-cart {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+  body.gp-pdp2 .add-to-cart .btn.btn-conversion {
+    min-height: 52px !important;
+  }
+
+  /* odpočet dopravy a ikony důvěry */
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .gp-freeship {
+    margin-top: 14px !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .gp-trust {
+    margin-top: 16px !important;
+    margin-bottom: 8px !important;
   }
 }

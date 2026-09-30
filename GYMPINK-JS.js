@@ -982,7 +982,11 @@
 
         function aplikuj() {
           uklidit();
-          if (window.innerWidth <= 900) return; // mobil: nativní chování šablony
+          if (window.innerWidth <= 900) {
+            // telefon / iPad na výšku: jeden sloupec (CSS 3.56), galerii ale stavíme stejně
+            try { galerieNaSloupec(); } catch (chyba) { log('PDP2 galerie (mobil) CHYBA: ' + chyba.message); }
+            return;
+          }
 
           var sloupce = {
             display: 'grid',
@@ -1110,7 +1114,7 @@
         }
 
         function obnovitFotku() {
-          if (window.innerWidth <= 900 || !ramFotky) return;
+          if (!ramFotky) return;
           // Když Shoptet při přepnutí fotky vytvoří nový <img>, dostane rámeček a cover.
           findAll('img', ramFotky).forEach(function (im) {
             if (im.style.getPropertyValue('position') === 'absolute') return;
@@ -1122,7 +1126,6 @@
         }
 
         function galerieNaSloupec() {
-          if (window.innerWidth <= 900) return;
           if (!hlavniFoto) { window.__gpGal = 'galerie: hlavní fotka NENALEZENA'; return; }
           var ram = potomekObsahujici(galerie, hlavniFoto);
           if (!ram) { window.__gpGal = 'galerie: rámeček nenalezen'; return; }
