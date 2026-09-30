@@ -4193,7 +4193,11 @@ footer.footer .custom-footer__onlinePayments img {
   }
   /* clearfix pseudo-prvky jsou ve flexu položky a odsouvaly cenu o mezeru */
   body.gp-pdp2 .p-detail-inner .row.gp-pdp-modeA > .gp-pdp-buy::before,
-  body.gp-pdp2 .p-detail-inner .row.gp-pdp-modeA > .gp-pdp-buy::after {
+  body.gp-pdp2 .p-detail-inner .row.gp-pdp-modeA > .gp-pdp-buy::after,
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy form.pr-action::before,
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy form.pr-action::after,
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .price.row::before,
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .price.row::after {
     display: none !important;
     content: none !important;
   }
@@ -4257,6 +4261,11 @@ footer.footer .custom-footer__onlinePayments img {
   }
   body.gp-pdp2 .add-to-cart .btn.btn-conversion {
     min-height: 52px !important;
+  }
+  body.gp-pdp2 .add-to-cart .quantity {
+    height: 52px !important;
+    min-height: 52px !important;
+    box-sizing: border-box !important;
   }
 
   /* odpočet dopravy a ikony důvěry */
