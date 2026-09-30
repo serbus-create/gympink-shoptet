@@ -213,6 +213,28 @@ body.type-index #header:not(.gp-scrolled) .top-nav-right .btn-icon {
   #header [data-testid="headerCartPrice"] {
     color: #fff !important;
   }
+
+  /* "Svítivý" bílý text na růžové liště (po scrollu i na podstránkách):
+     stejný tmavý stín jako nahoře nad hero fotkou, ať písmo nesplyne. */
+  #header .menu-level-1 a,
+  #header .top-nav-right a,
+  #header .top-nav-right a *,
+  #header .top-nav-right .btn-icon,
+  #header .top-nav-right .cart-price,
+  #header .cart-price,
+  #header .gp-blog-moved a,
+  body.type-index #header.gp-scrolled .menu-level-1 a,
+  body.type-index #header.gp-scrolled .top-nav-right a,
+  body.type-index #header.gp-scrolled .top-nav-right a *,
+  body.type-index #header.gp-scrolled .top-nav-right .btn-icon,
+  body.type-index #header.gp-scrolled .gp-blog-moved a {
+    text-shadow: 0 1px 12px rgba(0, 0, 0, .55) !important;
+  }
+
+  /* Bílé logo — stejný efekt (drop-shadow respektuje průhlednost loga). */
+  #header .site-name img {
+    filter: drop-shadow(0 1px 8px rgba(0, 0, 0, .5)) !important;
+  }
 }
 
 
