@@ -250,7 +250,10 @@
     {
       nazev: 'Logo GymPink v levém horním rohu patičky (odkaz na domovskou stránku)',
       spustit: function () {
-        // Patička je na všech typech stránek — bez omezení na type-index.
+        // Od varianty E logo v patičce nahrazuje claim (viz krok "Zápatí").
+        // Krok necháváme kvůli historii, ale nic nevkládá.
+        return;
+        // eslint-disable-next-line no-unreachable
         var paticka = find('footer.footer');
         var zdrojoveLogo = find('.site-name img');
         if (!paticka || !zdrojoveLogo) return;
@@ -1376,6 +1379,68 @@
           while (extra.firstChild) vychozi.appendChild(extra.firstChild);
           extra.style.setProperty('display', 'none', 'important');
         }
+      }
+    },
+    {
+      nazev: 'Zápatí (varianta E) — claim, podpis "a vhs.", rozbalovací sekce na mobilu',
+      spustit: function () {
+        var paticka = find('footer.footer');
+        if (!paticka) return;
+
+        // ----- Claim značky (nahoře ve sloupci Kontakt) -----
+        var CLAIM = 'Your fitness lovebrand';
+        var kontakt = find('.custom-footer__contact', paticka);
+        if (kontakt && !find('.gp-footer-claim', kontakt)) {
+          var claim = document.createElement('p');
+          claim.className = 'gp-footer-claim';
+          claim.appendChild(document.createTextNode(CLAIM));
+          var tecka = document.createElement('span');
+          tecka.textContent = '.';
+          claim.appendChild(tecka);
+          kontakt.insertBefore(claim, kontakt.firstChild);
+        }
+
+        // ----- Podpis: "Vytvořil Shoptet" (nativní) + " a " + logo vhs. -----
+        // Logo je bílé, bez oranžového čtverce a bez ™ (v malé velikosti nečitelné),
+        // ať drží barvy webu. Odkaz vede na web agentury.
+        var titul = find('.footer-bottom a.title', paticka);
+        if (titul && !find('.gp-vhs', paticka)) {
+          var spojka = document.createElement('span');
+          spojka.className = 'gp-vhs-a';
+          spojka.textContent = 'a';
+          var odkaz = document.createElement('a');
+          odkaz.className = 'gp-vhs';
+          odkaz.href = 'https://www.v-h-s.cz';
+          odkaz.target = '_blank';
+          odkaz.rel = 'noopener';
+          odkaz.setAttribute('aria-label', 'vhs.');
+          var logo = document.createElement('img');
+          logo.alt = 'vhs.';
+          logo.height = 16;
+          logo.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAE4AAAAgCAYAAAC8VE43AAAHZklEQVR42u2aa4xdVRXH/+veOzOVaVpaW2uDLY+U1sYSYyDGVEoMAXwkUlQiwQaV1FSCjQZjiDHKB2MiioTIF0WDqRH8QGMQXwRpiARIAz4qGMEWG7HWOLVMpy2ktffOOT8/sHZY7uxz5s6QmpR0Jzvnnr3X2o+1116P/7nS/6EABvSytrXAF4G3+XtHp8v/CKibvV8B3Acc4ZVym7f3TqV9nfTFmlkFLJB0jaQtki7yrlpSJWnsVFSI3sm8npJGJX1O0mckrQwCw58j/vu04NK1M7Np4CpJ3/DmSpJJSraMU9kEnSyDXLnGPS7p6XRrG+az04J71a7xysP+Kel9kva7gOrXi9M7aSGAmdXAiJlNSLr7tOBmbe4wSS+83sKsnm9sWAHWfg1z79lpu7ZDBrfmMZ8Fx2GSMLNqDh69E+wnmU2ltJdZCc6Zq9dwJRv5g8BsBoH1zGwwgyDMzOphBOaCroYQcHeuAuwBCyW9w0MTK3i8FHPVkp4zswnA0mQe3F4gaTxoXi3piKRnJB2fQaMHHroslXSJpHd7zFdJel7SQ2b2mF/7TpPwQl8FLJa0QdKFks6WtEBSV9JhSfsk/VbSY2Z2KOOdlVp/heHLjnRSKZUCHmih3+w0N/r7IPRN+3MbcDNwoGWcXwLnNuW0qQ1YCNwKTAyxl38BXwPG55QrAxcCx3xT00BVqH2gBj5eENwmX0g/0AI8CLzJaT5dEFwqdfj9Nx8j0Q7C+35gTb7JILRVwLNhrIGvZR+wEXgX8KjvsR/odgEr5yq8W1o2FhfeC7ZEQXjfd5oT/nwKmBfG39Iwfhr7aeAC4AxgvW+2Dv1po88A84COIy6pjgehnXDeNNeNYR3nAMfD2Gm9fwDekMYdGr0ARn3x8Qrlm9sLjOSC84VvCLwvA6u8f2wGjat8E5c4XRr/usJakvC2pLQuHORnM5q47g3ASDpIYHsm2MTzkRKa0xrHmVlf0lZ3BFagwQ32+Q1ecoE/u5K+bWZ/9U1VLV619rH3S9rp16T2he903m4IJdI6PpmBBZK0MYwXx5ek1e6xOz7HncHpTQe6M2adAoYrt6NB69LpfDViZ4Hve94/BSxzLewEuhtanMNTAexMmrwIeDGzgen5MrAs0/w/ZVoWtXkvcFZ2w+7N9vdH4My4hqEzB2f4VoPUE911rvKVu/CEtX3Q+x8wswMeS0X33hYnlfqOSjqU9SctGZe0KkN3pryPwprPc42+AVhiZpWZbXLNvUvSFyS9x8wOh7h0Vg6i43WXn1Suden9Sj+ZMX9eE2je623dTDO3tGjck1HjghbtLGh/+n210yS79aWCjaOghRPuyC5rCJ7nlKsmLbmj4Z6nE93sp5Ii7o95+z4PKplrMu+8aU0HW7RzcQZffVfSPxwY7Rc0L2U3yyR9StLDwG7g88mBvZYkPy1iuwuhkwkg5ZFXAOeY2QBYIelSb/+1mR3z9IkhrmOj/Pw52cK7KPSZZwAbJf3dUWcL0HxyeN3MIayWdLukHcByz6kt18JwE60oON9s18yOS/pOAQYyn3SepE3e9lFJ8/339paNziWZnmzpW5jBVz0z2+XfM25zT90Jhx0F2AtKMZB0saSf+bWPpqJrZphZ7ZUUfpVgpaR1d3te120wuNc63Ye9/3lJj3pb3RB6zLZMtfQtjlphZtMuxBfN7GYzWyHpSknbfJxuQRE64WpfJOkTbqq64SPTmGckbwUWuWMBsE7JxpjZQUn3hNPKBbdW0k2S1jnND8zshGvsbDWuqe9QC8/SV5dsAOuA+4HngCeAq8zs52Z2vQMQt7gGdwrzJe17f+YovyzpWa9/lrQb+CGwrLjHkM6sCTlqXfBWyYMdBd5cyvWCV72+xas+nmxJxrOpxas+Eda6AHihsL4N8VstsBL4TcHTpjEfDrTfbAEHfgeMd0qQt2vdbkm/Kmhd7q1+4VBTtwTNuEDmD4EJ0gCOlkzFauBMn+/tDh0NXHP6TnOrw1U9YNTM9rlH7WdgaZp7r8+93D9nVsE2pjpwqOpDM6EBd8wAsZukbS0xEL65d7Z49DXAGyNS7II8v2G+StIS9+aSNOECSznmqNOsBy53+9cBRp32pQwZTk7jPm87y9OvbrCNFr7SVW6iWgNic6Sj8mtWh+C4chhorJSqhKu3DngpQFR1qOnq3pmBBiPAnjBX5Enm4ycNmOIgQFy/j0k7cKm3TwfYCuDeQLPC+acLJirRb239qJzZmlK5PdJm8Y8B8xvsT6msD/x3DUHf92uVeLb6AeXlEWAzcJNDY3n5UYCqUsbz02D/YgU4mGx6I37vg404FHPEE++DwGGHoc6Ohj1PX4DFTjcJHPIxYp3yMfcAHwh89wSewwWeSeAvwLnxn1DAecDXHbc70SDw2vG+HwOXFw7bgKXAQwXePcDFM0Io2beFt4Soe0zSATPrR5oWzV3i9qJTiO9qSVNm9p9svuXBblnGU0majB943DlVAbVZ63W5AwPHJP3bncBuMzsSTAph3riGy9w+z/OQ5EEzOwp0/guJ+BlqWxmi0gAAAABJRU5ErkJggg==';
+          odkaz.appendChild(logo);
+          titul.parentNode.insertBefore(spojka, titul.nextSibling);
+          titul.parentNode.insertBefore(odkaz, spojka.nextSibling);
+        }
+
+        // ----- Mobil: Informace a Blog jako rozbalovací sekce (CSS je řídí jen ≤ 900 px) -----
+        ['.custom-footer__section2', '.custom-footer__articles'].forEach(function (sel) {
+          var sloupec = find(sel, paticka);
+          var nadpis = sloupec ? find('.pageElement__heading', sloupec) : null;
+          if (!sloupec || !nadpis || sloupec.classList.contains('gp-acc')) return;
+          sloupec.classList.add('gp-acc');
+          nadpis.setAttribute('role', 'button');
+          nadpis.setAttribute('tabindex', '0');
+          nadpis.setAttribute('aria-expanded', 'false');
+          function prepnout() {
+            var otevreno = sloupec.classList.toggle('is-open');
+            nadpis.setAttribute('aria-expanded', otevreno ? 'true' : 'false');
+          }
+          nadpis.addEventListener('click', prepnout);
+          nadpis.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); prepnout(); }
+          });
+        });
       }
     },
     {

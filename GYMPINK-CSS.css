@@ -3397,3 +3397,200 @@ body.gp-pdp2 .gp-thumbgrid {
     border-color: var(--gp-ink) !important;
   }
 }
+
+
+/* ===================================================================
+   3.42  ZÁPATÍ — varianta E (dvě úrovně se sdělením)
+   Diagnostika (DevTools, ověřeno dříve): footer.footer
+     > .container.footer-rows > .row.custom-footer.elements-4
+         > .custom-footer__contact / __section2 (Informace) /
+           __articles (Blog) / __onlinePayments
+     > .container.footer-bottom > span(a.image + a.title) + span.copyright
+   Desktop: vlevo claim + kontakt + platby, uprostřed Informace, vpravo Blog;
+   dole švestkový pruh s copyrightem vlevo a podpisem vpravo.
+   Mobil: claim, kontakt, platby, Informace a Blog jako rozbalovací sekce.
+   Logo v patičce nahrazuje claim; podpis "a vhs." vkládá JS.
+   =================================================================== */
+footer.footer .gp-footer-logo {
+  display: none !important;
+}
+
+footer.footer .footer-rows {
+  padding-top: 44px !important;
+  padding-bottom: 34px !important;
+}
+
+/* clearfix pseudo-prvky Bootstrapu by se v mřížce staly položkami */
+footer.footer .custom-footer::before,
+footer.footer .custom-footer::after,
+footer.footer .footer-bottom::before,
+footer.footer .footer-bottom::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* claim */
+footer.footer .gp-footer-claim {
+  margin: 0 0 18px !important;
+  font-size: 30px !important;
+  font-weight: 500 !important;
+  line-height: 1.15 !important;
+  color: var(--gp-ink) !important;
+}
+footer.footer .gp-footer-claim span {
+  color: var(--gp-cta, #a3336f) !important;
+}
+
+/* nadpisy sloupců ve švestkové */
+footer.footer .pageElement__heading {
+  color: #a3336f !important;
+  letter-spacing: .09em !important;
+}
+
+/* nadpisy Kontakt a Platby nahrazuje claim / logo karet — zůstávají jen pro čtečky */
+footer.footer .custom-footer__contact .pageElement__heading,
+footer.footer .custom-footer__onlinePayments .pageElement__heading {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+}
+
+/* odkazy tmavě, při najetí švestkově */
+footer.footer .custom-footer a {
+  color: var(--gp-ink) !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+}
+footer.footer .custom-footer a:hover {
+  color: #a3336f !important;
+}
+footer.footer .custom-footer__articles a {
+  display: block !important;
+  text-transform: none !important;
+  font-weight: 400 !important;
+}
+footer.footer .custom-footer__onlinePayments {
+  text-align: left !important;
+}
+
+/* spodní švestkový pruh: copyright vlevo, podpis vpravo */
+footer.footer .footer-bottom {
+  background: #a3336f !important;
+  border-top: 0 !important;
+  margin: 0 !important;
+  padding-top: 14px !important;
+  padding-bottom: 14px !important;
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+footer.footer .footer-bottom,
+footer.footer .footer-bottom a,
+footer.footer .footer-bottom .copyright {
+  color: #fff !important;
+  font-size: 12px !important;
+}
+footer.footer .footer-bottom > span:first-child {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+/* malé barevné logo Shoptetu převedeme na bílé, ať drží paletu */
+footer.footer .footer-bottom a.image img {
+  height: 18px !important;
+  filter: brightness(0) invert(1) !important;
+}
+footer.footer .gp-vhs {
+  display: inline-flex !important;
+  align-items: center !important;
+  line-height: 0 !important;
+}
+footer.footer .gp-vhs img {
+  height: 16px !important;
+  width: auto !important;
+  display: block !important;
+}
+
+/* desktop: mřížka sloupců */
+@media (min-width: 901px) {
+  footer.footer .custom-footer {
+    display: grid !important;
+    grid-template-columns: 1.25fr 1fr 1fr !important;
+    grid-template-areas:
+      "kontakt informace blog"
+      "platby  informace blog" !important;
+    column-gap: 40px !important;
+    row-gap: 18px !important;
+    align-items: start !important;
+    width: 100% !important;
+    margin: 0 !important;
+    float: none !important;
+  }
+  footer.footer .custom-footer > * {
+    float: none !important;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  footer.footer .custom-footer__contact        { grid-area: kontakt !important; }
+  footer.footer .custom-footer__section2       { grid-area: informace !important; }
+  footer.footer .custom-footer__articles       { grid-area: blog !important; }
+  footer.footer .custom-footer__onlinePayments { grid-area: platby !important; }
+}
+
+/* mobil */
+@media (max-width: 900px) {
+  footer.footer .footer-rows {
+    padding-top: 30px !important;
+    padding-bottom: 20px !important;
+  }
+  footer.footer .custom-footer {
+    display: block !important;
+  }
+  footer.footer .custom-footer > * {
+    float: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 0 16px !important;
+    padding: 0 !important;
+  }
+  footer.footer .gp-footer-claim {
+    font-size: 26px !important;
+  }
+  footer.footer .gp-acc > .pageElement__heading {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 14px 0 !important;
+    border-top: 1px solid #d9c3d0 !important;
+    cursor: pointer !important;
+  }
+  footer.footer .gp-acc > .pageElement__heading::after {
+    content: "+" !important;
+    font-size: 20px !important;
+    font-weight: 400 !important;
+    letter-spacing: 0 !important;
+  }
+  footer.footer .gp-acc.is-open > .pageElement__heading::after {
+    content: "\2212" !important;
+  }
+  footer.footer .gp-acc:not(.is-open) > *:not(.pageElement__heading) {
+    display: none !important;
+  }
+  footer.footer .gp-acc.is-open {
+    padding-bottom: 6px !important;
+  }
+  footer.footer .footer-bottom {
+    flex-direction: column-reverse !important;
+    align-items: flex-start !important;
+  }
+}
