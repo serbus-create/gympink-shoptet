@@ -4094,3 +4094,26 @@ footer.footer .custom-footer__onlinePayments img {
     gap: 22px !important;
   }
 }
+
+
+/* ===================================================================
+   3.55  POČET KUSŮ V KOŠÍKU (tablet + telefon)
+   Diagnostika (živý web, iframe 390 px): počet je v
+   <i data-testid="headerCartCount"> uvnitř a.cart-count. Hlavička
+   vynucuje bílou barvu ikon, takže kolečko i číslo byly bílé a počet
+   nebyl vidět. Kolečko dostane švestkovou barvu, číslo zůstane bílé.
+   Bez změny display, aby prázdný košík dál nezobrazoval "0".
+   =================================================================== */
+@media (max-width: 1279px) {
+  #header a.cart-count > i[data-testid="headerCartCount"] {
+    background: var(--gp-cta, #a3336f) !important;
+    color: #fff !important;
+    text-shadow: none !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    line-height: 20px !important;
+    text-align: center !important;
+    padding: 0 !important;
+    box-shadow: 0 0 0 2px var(--gp-header-bg, #efdde9) !important;
+  }
+}
