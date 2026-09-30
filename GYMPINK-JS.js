@@ -32,14 +32,13 @@
      ----------------------------------------------------------------- */
 
   /**
-   * Nový vzhled detailu produktu (PDP2) je zatím jen pro testování:
-   * zapíná se na produktu BABY PINK legíny, nebo kdekoli přidáním
-   * ?pdp=2 k adrese. Ostatní produkty zůstávají beze změny.
-   * Až bude hotovo, stačí funkci změnit na `return true`.
+   * Nový vzhled detailu produktu (PDP2) platí pro VŠECHNY produkty.
+   * Záchranná pojistka: přidáním ?pdp=0 k adrese produktu se zobrazí
+   * původní vzhled (pro porovnání / když se u konkrétního produktu něco
+   * rozbije). Třída se navíc dává jen tam, kde existuje .p-detail-inner.
    */
   function jePdp2() {
-    return /^\/leginy-baby-pink\/?$/.test(location.pathname) ||
-           /[?&]pdp=2(&|$)/.test(location.search);
+    return !/[?&]pdp=0(&|$)/.test(location.search);
   }
 
   /**
