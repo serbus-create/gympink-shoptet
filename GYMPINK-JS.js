@@ -784,7 +784,7 @@
         // (14 dní na vrácení = zákonné právo spotřebitele; e-shop přijímá
         // online platby).
         var DUVERA = [
-          { href: '/doprava-a-platby/', text: 'Zásilkovna od 89 Kč',
+          { href: '/doprava-a-platby/', text: 'Doprava zdarma od 2 000 Kč',
             ikona: '<path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0M15 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0M5 17H3V6a1 1 0 0 1 1-1h9v12M9 17h6M19 17h2v-6h-8M13 6h5l3 5"/>' },
           { text: '14 dní na vrácení',
             ikona: '<path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 5v4h4M4 13a8.1 8.1 0 0 0 15.5 2M20 19v-4h-4"/>' },
