@@ -459,6 +459,80 @@
       }
     },
 
+    {
+      nazev: 'Homepage — skupina produktů jako vodorovný pás (nadpis + Zobrazit vše + šipky)',
+      spustit: function () {
+        if (!document.body.classList.contains('type-index')) return;
+
+        // Skupiny produktů na titulní straně: #products-1, #products-2, ...
+        findAll('.products-inline[class*="homepage-products-"]').forEach(function (skupina) {
+          if (skupina.closest('.gp-drop')) return; // už zpracováno
+
+          // Nadpis skupiny je sourozenec těsně před ní.
+          var nadpis = skupina.previousElementSibling;
+          if (!nadpis || !nadpis.classList.contains('homepage-group-title')) nadpis = null;
+
+          // Obal: [hlavička: nadpis + nástroje] + pás produktů
+          var obal = document.createElement('div');
+          obal.className = 'gp-drop';
+          skupina.parentNode.insertBefore(obal, nadpis || skupina);
+
+          var hlavicka = document.createElement('div');
+          hlavicka.className = 'gp-drop-head';
+          obal.appendChild(hlavicka);
+          if (nadpis) hlavicka.appendChild(nadpis);
+
+          // Nástroje vpravo. Odkaz "Zobrazit vše" míří na /novinky/ —
+          // JEDINÁ pevně zapsaná hodnota (ovládací prvek, ne obsah).
+          var nastroje = document.createElement('div');
+          nastroje.className = 'gp-drop-tools';
+
+          var vse = document.createElement('a');
+          vse.className = 'gp-drop-all';
+          vse.href = '/novinky/';
+          vse.textContent = 'Zobrazit vše';
+          nastroje.appendChild(vse);
+
+          function tlacitko(trida, popisek, znak) {
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'gp-drop-arrow ' + trida;
+            b.setAttribute('aria-label', popisek);
+            b.innerHTML = znak;
+            return b;
+          }
+          var zpet = tlacitko('gp-drop-prev', 'Předchozí produkty',
+            '<svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 1L1 7l6 6"/></svg>');
+          var dal = tlacitko('gp-drop-next', 'Další produkty',
+            '<svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1l6 6-6 6"/></svg>');
+          nastroje.appendChild(zpet);
+          nastroje.appendChild(dal);
+          hlavicka.appendChild(nastroje);
+
+          obal.appendChild(skupina);
+
+          function krok() { return Math.max(200, Math.round(skupina.clientWidth * 0.8)); }
+          zpet.addEventListener('click', function () {
+            skupina.scrollBy({ left: -krok(), behavior: 'smooth' });
+          });
+          dal.addEventListener('click', function () {
+            skupina.scrollBy({ left: krok(), behavior: 'smooth' });
+          });
+
+          function stav() {
+            var max = skupina.scrollWidth - skupina.clientWidth - 2;
+            zpet.disabled = skupina.scrollLeft <= 2;
+            dal.disabled = skupina.scrollLeft >= max;
+            zpet.style.opacity = zpet.disabled ? '.35' : '1';
+            dal.style.opacity = dal.disabled ? '.35' : '1';
+          }
+          skupina.addEventListener('scroll', stav, { passive: true });
+          window.addEventListener('resize', stav);
+          stav();
+        });
+      }
+    },
+
   ];
 
 

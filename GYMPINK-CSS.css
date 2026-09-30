@@ -1981,3 +1981,220 @@ body.type-index .gp-banner-big .extended-banner-link {
 #navigation a[href$="/bestsellers/"] {
   display: none !important;
 }
+
+
+/* ===================================================================
+   3.25  HOMEPAGE — skupina produktů jako vodorovný pás ("Nový drop")
+   Vzor: hlavička s nadpisem vlevo a "Zobrazit vše" + šipkami vpravo,
+   pod tím řada portrétních karet (3:4) s názvem a cenou.
+   Nativní struktura (z DevTools): #products-N.products-inline
+     > .product > .p > a.image (img) + .p-in > .p-in-in (a.name,
+       .ratings-wrapper[štítky + dostupnost]) + .p-bottom (cena, Detail)
+   JS (krok "Homepage — skupina produktů jako vodorovný pás") obalí
+   nadpis + skupinu do .gp-drop a přidá odkaz + šipky.
+   Název sekce se mění v administraci (Produkty na titulní straně).
+   PRVNÍ NASAZENÍ — selektory ceny/tlačítka doladit podle DevTools.
+   =================================================================== */
+body.type-index .gp-drop {
+  padding: 0 32px !important;
+  margin: 64px 0 0 !important;
+}
+
+body.type-index .gp-drop-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  margin: 0 0 18px !important;
+}
+
+body.type-index .gp-drop-head .homepage-group-title {
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+  font-size: clamp(20px, 1.9vw, 26px) !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  color: var(--gp-ink) !important;
+}
+
+body.type-index .gp-drop-tools {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex: 0 0 auto !important;
+}
+
+body.type-index .gp-drop-all {
+  font-size: 14px !important;
+  color: var(--gp-ink) !important;
+  text-decoration: none !important;
+  margin-right: 4px !important;
+}
+
+body.type-index .gp-drop-all:hover {
+  text-decoration: underline !important;
+}
+
+body.type-index .gp-drop-arrow {
+  width: 34px !important;
+  height: 34px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  border: 1px solid var(--gp-line) !important;
+  background: #fff !important;
+  color: var(--gp-ink) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  line-height: 1 !important;
+}
+
+body.type-index .gp-drop-arrow:hover:not(:disabled) {
+  border-color: var(--gp-ink) !important;
+}
+
+/* Pás */
+body.type-index .gp-drop .products-inline {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  gap: 8px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scroll-snap-type: x mandatory !important;
+  scrollbar-width: none !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+body.type-index .gp-drop .products-inline::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* Karta */
+body.type-index .gp-drop .products-inline > .product {
+  flex: 0 0 calc((100% - 32px) / 4.5) !important;
+  width: auto !important;
+  max-width: none !important;
+  float: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  scroll-snap-align: start !important;
+}
+
+body.type-index .gp-drop .product .p {
+  display: block !important;
+  position: relative !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Fotka — portrét 3:4, bez rámečku */
+body.type-index .gp-drop .product .p a.image {
+  display: block !important;
+  position: relative !important;
+  float: none !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  aspect-ratio: 3 / 4 !important;
+  overflow: hidden !important;
+  background: var(--gp-tile) !important;
+}
+
+body.type-index .gp-drop .product .p a.image img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+/* Texty pod fotkou */
+body.type-index .gp-drop .product .p .p-in,
+body.type-index .gp-drop .product .p .p-in-in {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex: none !important;
+  text-align: left !important;
+}
+
+body.type-index .gp-drop .product .p a.name {
+  display: block !important;
+  margin: 10px 0 2px !important;
+  padding: 0 !important;
+  font-size: 14px !important;
+  line-height: 1.35 !important;
+  font-weight: 400 !important;
+  color: var(--gp-ink) !important;
+  text-align: left !important;
+}
+
+/* Cena pod názvem, vlevo */
+body.type-index .gp-drop .product .p .p-bottom {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+  flex: none !important;
+}
+
+body.type-index .gp-drop .product .p .p-bottom .prices,
+body.type-index .gp-drop .product .p .p-bottom .price,
+body.type-index .gp-drop .product .p .p-bottom .price-final,
+body.type-index .gp-drop .product .p .p-bottom .price-final strong {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  color: var(--gp-ink-soft) !important;
+}
+
+/* Skryto: štítky + "Skladem" + hodnocení, tlačítko Detail */
+body.type-index .gp-drop .product .p .ratings-wrapper,
+body.type-index .gp-drop .product .p .flags,
+body.type-index .gp-drop .product .p .p-tools,
+body.type-index .gp-drop .product .p .tools-wrap,
+body.type-index .gp-drop .product .p .p-bottom .btn,
+body.type-index .gp-drop .product .p .p-bottom .availability {
+  display: none !important;
+}
+
+/* Tablet / mobil: posun prstem, šipky pryč, víc karet vedle sebe */
+@media (max-width: 900px) {
+  body.type-index .gp-drop {
+    padding: 0 16px !important;
+    margin-top: 40px !important;
+  }
+  body.type-index .gp-drop-arrow {
+    display: none !important;
+  }
+  body.type-index .gp-drop .products-inline > .product {
+    flex: 0 0 calc((100% - 16px) / 2.5) !important;
+  }
+}
+
+@media (max-width: 600px) {
+  body.type-index .gp-drop .products-inline > .product {
+    flex: 0 0 calc((100% - 8px) / 1.5) !important;
+  }
+}
