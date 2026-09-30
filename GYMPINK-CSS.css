@@ -3257,3 +3257,45 @@ body.gp-pdp2 .variant-list {
     border-color: transparent !important;
   }
 }
+
+
+/* ===================================================================
+   3.38  PDP2 — prodejní panel jako sloupec (flex + order), ne mřížka
+   Mřížka dávala řádku s velikostmi menší výšku, než jsou políčka, a
+   množství + tlačítko je překrylo. Ve sloupci se prvky skládají pod sebe
+   v přirozené výšce. Cena a dostupnost sdílejí první řádek, ostatní
+   zabírají 100 % šířky. Formulář a .price.row jsou display: contents.
+   =================================================================== */
+@media (min-width: 901px) {
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: baseline !important;
+    column-gap: 14px !important;
+    row-gap: 0 !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .p-final-price-wrapper {
+    order: 1 !important; flex: 0 0 auto !important; width: auto !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .order-availability {
+    order: 2 !important; flex: 1 1 0 !important; min-width: 0 !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy > .p-short-description {
+    order: 3 !important; flex: 0 0 100% !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .variant-list {
+    order: 4 !important; flex: 0 0 100% !important;
+    margin-bottom: 20px !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .add-to-cart {
+    order: 5 !important; flex: 0 0 100% !important;
+    margin-top: 0 !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .gp-freeship {
+    order: 6 !important; flex: 0 0 100% !important;
+  }
+  body.gp-pdp2 .p-detail-inner .gp-pdp-buy .gp-trust {
+    order: 7 !important; flex: 0 0 100% !important;
+  }
+}

@@ -991,8 +991,9 @@
             vynutit(nadpis, Object.assign({ 'grid-column': '2', 'grid-row': '1' }, NADPIS));
             vynutit(pb, Object.assign({
               'grid-column': '2', 'grid-row': '2', clear: 'none',
-              // panel je sám mřížka: cena | dostupnost, popis, velikosti, nákup, důvěra
-              display: 'grid', 'grid-template-columns': 'auto 1fr',
+              // panel je sloupec s obtékáním: cena + dostupnost na jednom řádku,
+              // ostatní prvky každý na vlastním (řazení řeší CSS přes order)
+              display: 'flex', 'flex-direction': 'row', 'flex-wrap': 'wrap',
               'column-gap': '14px', 'align-items': 'baseline'
             }, SLOUPEC));
             if (zalozky) vynutit(zalozky, { 'grid-column': '1 / -1', 'grid-row': '4' });
@@ -1247,6 +1248,33 @@
         vystredit();
         window.addEventListener('resize', vystredit);
         window.addEventListener('load', vystredit);
+      }
+    },
+
+    {
+      nazev: 'PDP2 — diagnostické okno (jen s ?debug=1 v adrese)',
+      spustit: function () {
+        if (!document.body.classList.contains('gp-pdp2')) return;
+        if (!/[?&]debug=1(&|$)/.test(location.search)) return;
+        var okno = document.createElement('pre');
+        okno.style.cssText = 'position:fixed;right:8px;bottom:8px;z-index:99999;max-width:560px;max-height:60vh;overflow:auto;background:#fff;color:#111;border:1px solid #333;padding:8px;font:11px/1.35 monospace;white-space:pre-wrap;margin:0';
+        document.body.appendChild(okno);
+        function popis(sel) {
+          var el = find(sel);
+          if (!el) return sel + ': NENALEZENO';
+          var r = el.getBoundingClientRect();
+          var c = getComputedStyle(el);
+          return sel + '\n   top=' + Math.round(r.top + window.scrollY) + ' vyska=' + Math.round(r.height) +
+            ' sirka=' + Math.round(r.width) + '\n   display=' + c.display + ' position=' + c.position +
+            ' margin-top=' + c.marginTop + ' order=' + c.order + ' flex=' + c.flex +
+            ' overflow=' + c.overflow;
+        }
+        function obnovit() {
+          okno.textContent = ['.gp-pdp-buy', '.p-short-description', '.variant-list', '.gp-sizes',
+            '.gp-size', '.add-to-cart', '.gp-freeship', '.gp-trust'].map(popis).join('\n');
+        }
+        setTimeout(obnovit, 900);
+        okno.addEventListener('click', obnovit);
       }
     },
 
