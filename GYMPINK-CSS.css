@@ -4399,3 +4399,39 @@ footer.footer .custom-footer__onlinePayments img {
     margin-bottom: 16px !important;
   }
 }
+
+
+/* ===================================================================
+   3.60  ZÁPATÍ — spodní švestkový pruh na telefonu a iPadu (≤ 900 px)
+   Diagnostika (živý web, 390 px): podpis „Vytvořil Shoptet a vhs.“ má
+   nativní levý okraj 20 px, copyright ne → řádky nelícovaly a oba byly
+   u levého okraje. Teď jsou oba řádky vycentrované (copyright nahoře,
+   podpis pod ním), odchylka od středu < 1 px.
+   =================================================================== */
+@media (max-width: 900px) {
+  footer.footer .footer-bottom {
+    flex-direction: column-reverse !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 10px !important;
+  }
+  footer.footer .footer-bottom > span {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+    max-width: 100% !important;
+    float: none !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+  footer.footer .footer-bottom > span:first-child {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  footer.footer .footer-bottom .copyright {
+    display: block !important;
+    text-align: center !important;
+  }
+}
