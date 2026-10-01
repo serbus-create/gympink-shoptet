@@ -1986,7 +1986,8 @@
           }
           var kratky = text.replace(/^Moje\s+/i, '');
           kratky = kratky.charAt(0).toUpperCase() + kratky.slice(1);
-          a.textContent = kratky;
+          // v záložce kratší popisek („Diskuze u produktů“ → „Diskuze“), dlaždice mají plný
+          a.textContent = kratky.replace(/\s+u produktů$/i, '');
           odkazy.push({ href: href, text: kratky, klic: klic(href) });
         });
 
