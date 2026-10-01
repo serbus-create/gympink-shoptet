@@ -1920,6 +1920,211 @@
       }
     },
 
+    {
+      nazev: 'Klientské centrum — záložky místo postranního menu, přehled s dlaždicemi',
+      spustit: function () {
+        if (!document.body.classList.contains('customer-page')) return;
+        var seznam = find('.sidebar-left .client-center-box ul');
+        if (!seznam || find('.gp-klient-hero')) return;
+        document.body.classList.add('gp-klient');
+
+        var ZDARMA_OD = 2000; // Kč — doprava zdarma od (potvrzeno majitelkou e-shopu)
+        var SVG = function (cesty) {
+          return '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" ' +
+            'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + cesty + '</svg>';
+        };
+        var IKONY = {
+          objednavky: SVG('<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>'),
+          nastaveni: SVG('<circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/>'),
+          platby: SVG('<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h4"/>'),
+          doklady: SVG('<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/>'),
+          zalohove: SVG('<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>'),
+          dobropisy: SVG('<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 11h6M11 8l-2 3 2 3"/>'),
+          dodaci: SVG('<path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17" r="1.8"/><circle cx="17" cy="17" r="1.8"/>'),
+          prijate: SVG('<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 15l2 2 4-4"/>'),
+          diskuze: SVG('<path d="M4 5h16v11H9l-5 4z"/>')
+        };
+        var CHEVRON = SVG('<path d="M9 6l6 6-6 6"/>');
+        var klic = function (href) {
+          if (/objednavky/.test(href)) return 'objednavky';
+          if (/nastaveni/.test(href)) return 'nastaveni';
+          if (/platby/.test(href) && !/prijat|danove/.test(href)) return 'platby';
+          if (/proforma/.test(href)) return 'zalohove';
+          if (/dobropis/.test(href)) return 'dobropisy';
+          if (/dodaci/.test(href)) return 'dodaci';
+          if (/prijat|danove-doklady-platba/.test(href)) return 'prijate';
+          if (/diskuze/.test(href)) return 'diskuze';
+          if (/doklady/.test(href)) return 'doklady';
+          return 'doklady';
+        };
+        var POPIS = {
+          objednavky: 'Stav a historie nákupů', nastaveni: 'Adresa a kontakt',
+          platby: 'Přehled plateb', doklady: 'Faktury a doklady',
+          zalohove: 'Zálohové faktury', dobropisy: 'Vrácené platby',
+          dodaci: 'Dodací listy', prijate: 'Potvrzení o platbě', diskuze: 'Dotazy u produktů'
+        };
+
+        // ----- Menu: první položka (jméno) → „Přehled“, ostatní bez „Moje“ -----
+        var jmeno = '';
+        var odkazy = [];
+        findAll('li', seznam).forEach(function (li, i) {
+          var a = find('a', li);
+          if (!a) return;
+          var href = a.getAttribute('href') || '';
+          if (li.classList.contains('logout')) { li.classList.add('gp-klient-logout'); return; }
+          var text = (a.textContent || '').replace(/\s+/g, ' ').trim();
+          if (i === 0 || href.replace(/\/+$/, '') === '/klient') {
+            jmeno = text;
+            a.textContent = 'Přehled';
+            li.classList.add('gp-klient-home');
+            return;
+          }
+          var kratky = text.replace(/^Moje\s+/i, '');
+          kratky = kratky.charAt(0).toUpperCase() + kratky.slice(1);
+          a.textContent = kratky;
+          odkazy.push({ href: href, text: kratky, klic: klic(href) });
+        });
+
+        // ----- Přehled (jen úvodní stránka /klient/) -----
+        if (!/^\/klient\/?$/.test(location.pathname)) return;
+        var obsah = find('main#content .content-inner');
+        var nadpis = obsah && find('h1', obsah);
+        if (!obsah || !nadpis) return;
+
+        var hero = document.createElement('div');
+        hero.className = 'gp-klient-hero';
+        obsah.insertBefore(hero, nadpis);
+        hero.appendChild(nadpis); // nativní H1 zůstává (je to popisek nad pozdravem)
+        var pozdrav = document.createElement('p');
+        pozdrav.className = 'gp-klient-hello';
+        pozdrav.appendChild(document.createTextNode('Vítej zpět'));
+        if (jmeno) {
+          var jm = document.createElement('small');
+          jm.textContent = jmeno;
+          pozdrav.appendChild(jm);
+        }
+        hero.appendChild(pozdrav);
+
+        // Tři dlaždice: objednávky (nativní zpráva), košík, doprava zdarma
+        var staty = document.createElement('div');
+        staty.className = 'gp-klient-stats';
+        hero.parentNode.insertBefore(staty, hero.nextSibling);
+        var dlazdice = function (popisek) {
+          var d = document.createElement('div');
+          d.className = 'gp-klient-stat';
+          var l = document.createElement('span');
+          l.className = 'gp-klient-stat__label';
+          l.textContent = popisek;
+          d.appendChild(l);
+          staty.appendChild(d);
+          return d;
+        };
+        var zprava = findAll('p', obsah).filter(function (el) {
+          return /objednávk/i.test(el.textContent || '') && !hero.contains(el);
+        })[0];
+        var objHref = (odkazy.filter(function (o) { return o.klic === 'objednavky'; })[0] || {}).href;
+        if (zprava) {
+          var d1 = dlazdice('Objednávky');
+          zprava.classList.add('gp-klient-stat__value');
+          d1.appendChild(zprava); // nativní text zůstává
+          if (objHref) {
+            var o1 = document.createElement('a');
+            o1.className = 'gp-klient-stat__link';
+            o1.href = objHref;
+            o1.textContent = 'Zobrazit objednávky';
+            d1.appendChild(o1);
+          }
+        }
+        var d2 = dlazdice('V košíku');
+        var h2 = document.createElement('p');
+        h2.className = 'gp-klient-stat__value';
+        var o2 = document.createElement('a');
+        o2.className = 'gp-klient-stat__link';
+        d2.appendChild(h2);
+        d2.appendChild(o2);
+        var d3 = dlazdice('Doprava zdarma od ' + ZDARMA_OD.toLocaleString('cs-CZ') + ' Kč');
+        var h3 = document.createElement('p');
+        h3.className = 'gp-klient-stat__value';
+        var draha = document.createElement('div');
+        draha.className = 'gp-klient-bar';
+        var vypln = document.createElement('div');
+        vypln.className = 'gp-klient-bar__fill';
+        draha.appendChild(vypln);
+        d3.appendChild(h3);
+        d3.appendChild(draha);
+
+        var cena = function () {
+          var odkaz = find('#header a[href*="/kosik/"]') || find('a[href*="/kosik/"]');
+          if (!odkaz) return null;
+          var t = (odkaz.textContent || '').replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+          if (/prázdn/i.test(t)) return 0;
+          var m = t.match(/(\d[\d\s.,]*)\s*Kč/);
+          if (!m) return null;
+          var c = parseFloat(m[1].replace(/\s/g, '').replace(',', '.'));
+          return isNaN(c) ? null : c;
+        };
+        var fmt = function (n) { return Math.round(n).toLocaleString('cs-CZ'); };
+        var pocet = function () {
+          var el = find('#header [data-testid="headerCartCount"]');
+          var n = el ? parseInt((el.textContent || '').replace(/\D/g, ''), 10) : NaN;
+          return isNaN(n) ? null : n;
+        };
+        var obnov = function () {
+          var k = cena();
+          var n = pocet();
+          if (k === null) k = 0;
+          if (k > 0) {
+            var slovo = n === 1 ? 'položka' : (n >= 2 && n <= 4 ? 'položky' : 'položek');
+            h2.textContent = (n ? n + ' ' + slovo + ' · ' : '') + fmt(k) + ' Kč';
+            o2.textContent = 'Dokončit nákup';
+            o2.href = (find('#header a[href*="/kosik/"]') || {}).href || '/kosik/';
+          } else {
+            h2.textContent = 'Košík je prázdný';
+            o2.textContent = 'Prohlédnout novinky';
+            o2.href = '/';
+          }
+          var zbyva = Math.max(0, Math.ceil(ZDARMA_OD - k));
+          h3.textContent = zbyva === 0 ? 'Máš dopravu zdarma' : (k === 0 ? 'Nakup nad ' + fmt(ZDARMA_OD) + ' Kč' : 'Zbývá ' + fmt(zbyva) + ' Kč');
+          vypln.style.width = Math.min(100, (k / ZDARMA_OD) * 100) + '%';
+          d3.classList.toggle('is-free', zbyva === 0);
+        };
+        obnov();
+        var casovac = null;
+        new MutationObserver(function () {
+          clearTimeout(casovac);
+          casovac = setTimeout(obnov, 150);
+        }).observe(find('#header') || document.body, { childList: true, subtree: true, characterData: true });
+
+        // Mřížka sekcí (z nativního menu — co je zapnuté v administraci, to je tady)
+        var mrizka = document.createElement('div');
+        mrizka.className = 'gp-klient-grid';
+        odkazy.forEach(function (o) {
+          var a = document.createElement('a');
+          a.className = 'gp-klient-item';
+          a.href = o.href;
+          var ik = document.createElement('span');
+          ik.className = 'gp-klient-item__icon';
+          ik.innerHTML = IKONY[o.klic] || IKONY.doklady;
+          var tx = document.createElement('span');
+          tx.className = 'gp-klient-item__text';
+          var s = document.createElement('strong');
+          s.textContent = o.text;
+          var m = document.createElement('small');
+          m.textContent = POPIS[o.klic] || '';
+          tx.appendChild(s);
+          tx.appendChild(m);
+          var ch = document.createElement('span');
+          ch.className = 'gp-klient-item__go';
+          ch.innerHTML = CHEVRON;
+          a.appendChild(ik);
+          a.appendChild(tx);
+          a.appendChild(ch);
+          mrizka.appendChild(a);
+        });
+        staty.parentNode.insertBefore(mrizka, staty.nextSibling);
+      }
+    },
+
   ];
 
 
