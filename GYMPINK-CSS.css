@@ -4517,6 +4517,7 @@ body.gp-klient .client-center-box li.active a strong {
 }
 body.gp-klient .client-center-box li.gp-klient-logout {
   margin-left: auto !important;
+  order: 99 !important;
 }
 body.gp-klient .client-center-box li.gp-klient-logout a {
   background: transparent !important;
@@ -4698,6 +4699,7 @@ body.gp-klient .gp-klient-item__go svg {
   }
   body.gp-klient .client-center-box li.gp-klient-logout {
     margin-left: 8px !important;
+    order: 99 !important;
   }
   body.gp-klient .gp-klient-hero {
     padding: 24px 20px 26px;

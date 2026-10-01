@@ -1986,7 +1986,7 @@
         });
 
         // ----- Přehled (jen úvodní stránka /klient/) -----
-        if (!/^\/klient\/?$/.test(location.pathname)) return;
+        if (!document.body.classList.contains('in-klient')) return; // jen úvodní stránka účtu
         var obsah = find('main#content .content-inner');
         var nadpis = obsah && find('h1', obsah);
         if (!obsah || !nadpis) return;
