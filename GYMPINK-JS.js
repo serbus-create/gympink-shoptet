@@ -2273,6 +2273,234 @@
       }
     },
 
+    {
+      nazev: 'Nákupní proces — košík, doprava a platba, prázdný košík, stepper',
+      spustit: function () {
+        var b = document.body;
+        var jeKosik = b.classList.contains('in-kosik');
+        var jeKrok1 = b.classList.contains('in-krok-1');
+        var jeKrok2 = b.classList.contains('in-krok-2');
+        if (!jeKosik && !jeKrok1 && !jeKrok2) return;
+
+        var el = function (tag, trida, text) {
+          var e = document.createElement(tag);
+          if (trida) e.className = trida;
+          if (text) e.textContent = text;
+          return e;
+        };
+        var fmt = function (n) { return Math.round(n).toLocaleString('cs-CZ'); };
+        var ZDARMA_OD = 2000; // Kč — doprava zdarma od (potvrzeno majitelkou e-shopu)
+
+        // ----- Stepper: na telefonu krátké popisky (Košík / Platba / Údaje) -----
+        var KRATKE = ['Košík', 'Platba', 'Údaje'];
+        var zkratStepper = function () {
+          findAll('ol.cart-header li').forEach(function (li, i) {
+            var cil = find('a', li) || find('strong', li) || li;
+            if (!KRATKE[i] || find('.gp-full', cil)) return;
+            var cely = (cil.textContent || '').replace(/\s+/g, ' ').trim();
+            if (!cely) return;
+            cil.textContent = '';
+            cil.appendChild(el('span', 'gp-full', cely));
+            cil.appendChild(el('span', 'gp-short', KRATKE[i]));
+          });
+        };
+        zkratStepper();
+        if (jeKrok2) return; // zbytek kroku 2 řeší samostatný krok výše
+
+        b.classList.add('gp-order');
+        b.classList.add(jeKosik ? 'gp-cart' : 'gp-step1');
+
+        // ----- Společné: spodní lišta na tablet/telefon (klik jde na nativní tlačítko) -----
+        var lista = null;
+        var listaCastka = null;
+        var listaObserver = null;
+        var nastavListu = function (nativni, dalsi, popisek, cena) {
+          if (!nativni || !dalsi) return;
+          if (!lista || !document.body.contains(lista)) {
+            lista = el('div', 'gp-order-bar');
+            var soucet = el('div', 'gp-order-bar__sum');
+            soucet.appendChild(el('span', '', 'Celkem'));
+            listaCastka = el('strong', '', '');
+            soucet.appendChild(listaCastka);
+            var tlacitko = el('button', 'gp-order-btn is-primary', popisek);
+            tlacitko.type = 'button';
+            tlacitko.addEventListener('click', function () {
+              var n = lista && lista._nativni;
+              if (n) n.click();
+            });
+            lista.appendChild(soucet);
+            lista.appendChild(tlacitko);
+            document.body.appendChild(lista);
+          }
+          lista._nativni = nativni;
+          listaCastka.textContent = cena || '';
+          if ('IntersectionObserver' in window) {
+            if (listaObserver) listaObserver.disconnect();
+            listaObserver = new IntersectionObserver(function (zaznamy) {
+              lista.classList.toggle('is-hidden', zaznamy[0].isIntersecting);
+            });
+            listaObserver.observe(dalsi);
+          }
+        };
+
+        // ================= KROK 1: doprava a platba =================
+        if (jeKrok1) {
+          var srovnejKrok1 = function () {
+            var obsah = find('#checkoutContent');
+            if (!obsah) return false;
+            var souhrn = find('.order-summary', obsah);
+            var dalsi = find('.next-step', obsah);
+            if (souhrn && dalsi && dalsi.parentNode !== souhrn) souhrn.appendChild(dalsi);
+            var cenaEl = find('.order-summary-item.price strong.price-primary', obsah) || find('strong.price-primary', obsah);
+            nastavListu(find('#orderFormButton', obsah) || find('.next-step .btn-conversion', obsah), dalsi, 'Pokračovat',
+              cenaEl ? cenaEl.textContent.replace(/\s+/g, ' ').trim() : '');
+            return true;
+          };
+          if (!srovnejKrok1()) {
+            var po1 = new MutationObserver(function () { if (srovnejKrok1()) po1.disconnect(); });
+            po1.observe(document.body, { childList: true, subtree: true });
+            setTimeout(function () { po1.disconnect(); }, 8000);
+          }
+          var cas1 = null;
+          var obs1 = find('#checkoutContent');
+          if (obs1) {
+            new MutationObserver(function () { clearTimeout(cas1); cas1 = setTimeout(srovnejKrok1, 200); })
+              .observe(obs1, { childList: true, subtree: true });
+          }
+          return;
+        }
+
+        // ================= KOŠÍK a PRÁZDNÝ KOŠÍK =================
+        var SV = function (cesty) {
+          return '<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#1a1a1a" stroke-width="1.6" ' +
+            'stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">' + cesty + '</svg>';
+        };
+        var SILUETY = {
+          leginy: SV('<path d="M7 3h10l1.5 18h-4.2L12 10l-2.3 11H5.5z"/><path d="M7 6.5h10"/>'),
+          sortky: SV('<path d="M6 5h12l2 12h-5.5L12 10.5 9.5 17H4z"/><path d="M6.4 8h11.2"/>'),
+          topy: SV('<path d="M8 3l-1 7 1 11h8l1-11-1-7h-2a2 2 0 0 1-4 0z"/><path d="M8 13h8"/>'),
+          overal: SV('<path d="M8 3l-1 6 2 3-1 9h3l1-7 1 7h3l-1-9 2-3-1-6h-2a2 2 0 0 1-4 0z"/>'),
+          mikina: SV('<path d="M9 3L4 6v6l3 1v8h10v-8l3-1V6l-5-3a3 3 0 0 1-6 0z"/><path d="M12 8v4M9 16h6"/>')
+        };
+        var siluetaPodle = function (nazev) {
+          var n = (nazev || '').toLowerCase();
+          if (/legín|legin/.test(n)) return SILUETY.leginy;
+          if (/šort|sort/.test(n)) return SILUETY.sortky;
+          if (/top/.test(n)) return SILUETY.topy;
+          if (/overal/.test(n)) return SILUETY.overal;
+          return SILUETY.mikina;
+        };
+
+        var sestavPrazdny = function (vnitrek) {
+          if (find('.gp-empty-cats', vnitrek)) return;
+          var nadpis = find('h1.cart-heading', vnitrek) || find('h1', vnitrek);
+          var boxy = find('.empty-cart-boxes', vnitrek);
+          if (!nadpis || !boxy) return;
+          var odkazy = findAll('li a', boxy).filter(function (a) {
+            return !/bestsell|novink/i.test(a.textContent || '');
+          });
+          var novinky = findAll('li a', boxy).filter(function (a) { return /novink/i.test(a.textContent || ''); })[0];
+
+          nadpis.parentNode.insertBefore(el('span', 'gp-empty-eyebrow', 'Nákupní košík'), nadpis);
+          var pod = el('p', 'gp-empty-sub', 'Podívej se na nový drop nebo začni u oblíbené kategorie.');
+          nadpis.parentNode.insertBefore(pod, nadpis.nextSibling);
+          var cta = el('a', 'gp-order-btn is-primary gp-empty-cta', 'Prohlédnout novinky');
+          cta.href = (novinky && novinky.getAttribute('href')) || '/';
+          pod.parentNode.insertBefore(cta, pod.nextSibling);
+
+          var dlazdice = el('div', 'gp-empty-cats');
+          odkazy.forEach(function (a) {
+            var t = el('a', 'gp-empty-cat');
+            t.href = a.getAttribute('href') || '#';
+            var ikona = el('span', 'gp-empty-cat__icon');
+            ikona.innerHTML = siluetaPodle(a.textContent);
+            t.appendChild(ikona);
+            t.appendChild(el('span', 'gp-empty-cat__name', (a.textContent || '').trim()));
+            dlazdice.appendChild(t);
+          });
+          boxy.parentNode.insertBefore(dlazdice, boxy);
+          boxy.classList.add('gp-empty-boxes');
+        };
+
+        var koupon = null;
+        var sestavKosik = function () {
+          zkratStepper();
+          var obal = find('#cart-wrapper');
+          var vnitrek = obal && find('.cart-inner', obal);
+          if (!vnitrek) return;
+          if (vnitrek.classList.contains('cart-empty')) { sestavPrazdny(vnitrek); return; }
+
+          var tabulka = find('table.cart-table', vnitrek);
+          var souhrn = find('.summary', vnitrek);
+          if (!tabulka || !souhrn) return;
+
+          var cenaEl = find('.price-wrap strong.price-primary', souhrn) || find('strong.price-primary', souhrn);
+          var cenaText = cenaEl ? cenaEl.textContent.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim() : '';
+          var m = cenaText.match(/(\d[\d\s.,]*)\s*Kč/);
+          var cena = m ? parseFloat(m[1].replace(/\s/g, '').replace(',', '.')) : null;
+
+          // pruh „doprava zdarma“ nad položkami
+          var pruh = find('.gp-cart-ship', vnitrek);
+          if (!pruh) {
+            pruh = el('div', 'gp-cart-ship');
+            var ik = el('span', 'gp-cart-ship__icon');
+            ik.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" ' +
+              'stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/>' +
+              '<circle cx="7" cy="17" r="1.8"/><circle cx="17" cy="17" r="1.8"/></svg>';
+            pruh.appendChild(ik);
+            pruh.appendChild(el('span', 'gp-cart-ship__text'));
+            var draha = el('span', 'gp-cart-ship__bar');
+            draha.appendChild(el('span', 'gp-cart-ship__fill'));
+            pruh.appendChild(draha);
+            vnitrek.insertBefore(pruh, tabulka);
+          }
+          if (cena !== null) {
+            var zbyva = Math.max(0, Math.ceil(ZDARMA_OD - cena));
+            find('.gp-cart-ship__text', pruh).textContent = zbyva === 0 ? 'Máš dopravu zdarma' : 'Do dopravy zdarma ti zbývá ' + fmt(zbyva) + ' Kč';
+            find('.gp-cart-ship__fill', pruh).style.width = Math.min(100, (cena / ZDARMA_OD) * 100) + '%';
+            pruh.classList.toggle('is-free', zbyva === 0);
+          }
+
+          // nativní „Bonusy“ skryjeme, pokud je v nich jen doprava zdarma (ukazuje ji pruh)
+          var extras = find('.extras-wrap', souhrn);
+          if (extras) {
+            var polozky = findAll('.extra', extras);
+            var jenDoprava = polozky.length > 0 && polozky.every(function (x) { return x.classList.contains('delivery'); });
+            extras.classList.toggle('gp-extras-hide', jenDoprava || polozky.length === 0);
+          }
+
+          // kupón na telefonu sbalený („Mám slevový kód +“)
+          var kuponBox = find('.discounts-wrap', souhrn);
+          if (kuponBox && !find('.gp-coupon-toggle', souhrn)) {
+            var prepinac = el('button', 'gp-coupon-toggle', 'Mám slevový kód');
+            prepinac.type = 'button';
+            prepinac.setAttribute('aria-expanded', 'false');
+            prepinac.addEventListener('click', function () {
+              var otevreno = kuponBox.classList.toggle('is-open');
+              prepinac.classList.toggle('is-open', otevreno);
+              prepinac.setAttribute('aria-expanded', otevreno ? 'true' : 'false');
+            });
+            kuponBox.parentNode.insertBefore(prepinac, kuponBox);
+            var pole = find('input', kuponBox);
+            if (pole && pole.value) { kuponBox.classList.add('is-open'); prepinac.classList.add('is-open'); }
+          }
+
+          nastavListu(find('#continue-order-button', souhrn) || find('.next-step .btn-conversion', souhrn),
+            find('.next-step', souhrn), 'Pokračovat', cenaText);
+        };
+
+        sestavKosik();
+        var obalKosiku = find('#cart-wrapper');
+        if (obalKosiku) {
+          var casKosik = null;
+          new MutationObserver(function () {
+            clearTimeout(casKosik);
+            casKosik = setTimeout(sestavKosik, 200);
+          }).observe(obalKosiku, { childList: true, subtree: true });
+        }
+      }
+    },
+
   ];
 
 

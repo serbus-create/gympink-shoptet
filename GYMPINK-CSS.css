@@ -4913,12 +4913,41 @@ body.gp-order ol.cart-header li {
   text-transform: uppercase;
   text-align: left !important;
 }
-body.gp-order ol.cart-header li::before,
 body.gp-order ol.cart-header li::after,
 body.gp-order ol.cart-header li *::before,
 body.gp-order ol.cart-header li *::after {
   display: none !important;
   content: none !important;
+}
+body.gp-order ol.cart-header {
+  counter-reset: gp-step;
+}
+body.gp-order ol.cart-header li {
+  display: flex !important;
+  align-items: baseline;
+  gap: 0.5em;
+  white-space: nowrap;
+}
+body.gp-order ol.cart-header li::before {
+  counter-increment: gp-step;
+  content: "0" counter(gp-step);
+  display: inline !important;
+  font-weight: 500;
+  color: var(--gp-ink-soft, #6b6b6b);
+}
+body.gp-order ol.cart-header li.active::before {
+  color: var(--gp-cta, #a3336f);
+}
+body.gp-order ol.cart-header .gp-short {
+  display: none;
+}
+@media (max-width: 575px) {
+  body.gp-order ol.cart-header .gp-full {
+    display: none;
+  }
+  body.gp-order ol.cart-header .gp-short {
+    display: inline;
+  }
 }
 body.gp-order ol.cart-header li.completed {
   border-top-color: var(--gp-ink, #1a1a1a);
@@ -5345,4 +5374,691 @@ body.gp-order #checkoutContent .order-summary .next-step .btn-conversion .order-
   line-height: 1.3 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.1em !important;
+}
+
+
+
+/* ===================================================================
+   3.64  NÁKUPNÍ KOŠÍK (/kosik/), DOPRAVA A PLATBA (krok 1), PRÁZDNÝ KOŠÍK
+   Diagnostika (živý web):
+   • košík: #cart-wrapper > ol.cart-header + div.cart-inner > table.cart-table
+     (tr.removeable > td.cart-p-image, td.p-name, td.p-quantity, td.p-price,
+     td.p-total) + div.summary.row (kupón, bonusy, div.price-wrap s tlačítky);
+   • krok 1: #checkoutContent > form#order-form (.co-delivery-method,
+     .co-payment-method; #order-shipping-methods > .radio-wrapper > input + label)
+     + .order-summary + .next-step;
+   • prázdný košík: .cart-inner.cart-empty > h1 + .empty-cart-boxes
+     (seznam kategorií + vyhledávání).
+   Vše pod body.gp-order (+ gp-cart / gp-step1). Ostré rohy, 4px/čárové oddělení.
+   =================================================================== */
+
+/* ----- košík: dvousloupcové rozložení ----- */
+body.gp-cart .cart-inner:not(.cart-empty) {
+  padding: 0 !important;
+}
+@media (min-width: 992px) {
+  body.gp-cart .cart-inner:not(.cart-empty) {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    column-gap: 40px;
+    align-items: start;
+  }
+  body.gp-cart .cart-inner > .gp-cart-ship,
+  body.gp-cart .cart-inner > table.cart-table {
+    grid-column: 1;
+  }
+  body.gp-cart .cart-inner > .summary.row {
+    display: contents;
+  }
+  body.gp-cart .summary.row::before,
+  body.gp-cart .summary.row::after {
+    display: none !important;
+  }
+  body.gp-cart .summary > .col-md-6:first-child {
+    grid-column: 1;
+  }
+  body.gp-cart .summary > .price-wrap {
+    grid-column: 2;
+    grid-row: 1 / span 4;
+    position: sticky;
+    top: 24px;
+  }
+}
+body.gp-cart .summary > [class*="col-"] {
+  float: none !important;
+  width: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* ----- pruh „doprava zdarma“ ----- */
+body.gp-cart .gp-cart-ship {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 12px;
+  padding: 12px 16px;
+  background: var(--gp-header-bg, #efdde9);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gp-ink, #1a1a1a);
+}
+body.gp-cart .gp-cart-ship__icon {
+  display: flex;
+  flex: 0 0 auto;
+  color: var(--gp-cta, #a3336f);
+}
+body.gp-cart .gp-cart-ship__text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+body.gp-cart .gp-cart-ship__bar {
+  flex: 0 0 90px;
+  height: 4px;
+  background: #fff;
+}
+body.gp-cart .gp-cart-ship__fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--gp-cta, #a3336f);
+  transition: width 0.4s ease;
+}
+
+/* ----- řádky košíku: z tabulky na ostré karty ----- */
+body.gp-cart table.cart-table,
+body.gp-cart table.cart-table tbody {
+  display: block;
+  width: 100%;
+  border: 0 !important;
+}
+body.gp-cart table.cart-table tr {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto auto auto 32px;
+  grid-template-areas: "img name qty price total x";
+  align-items: center;
+  column-gap: 16px;
+  padding: 14px 0;
+  border: 0 !important;
+  border-bottom: 1px solid var(--gp-line, #e6e3de) !important;
+}
+body.gp-cart table.cart-table td {
+  display: block;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+body.gp-cart table.cart-table .p-label {
+  display: none !important;
+}
+body.gp-cart table.cart-table td.cart-p-image {
+  grid-area: img;
+}
+body.gp-cart table.cart-table td.cart-p-image img {
+  display: block;
+  width: 72px;
+  height: 96px;
+  object-fit: cover;
+  background: var(--gp-header-bg, #efdde9);
+}
+body.gp-cart table.cart-table td.p-name {
+  grid-area: name;
+  min-width: 0;
+}
+body.gp-cart table.cart-table td.p-name a.main-link {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-transform: none;
+  color: var(--gp-ink, #1a1a1a);
+  text-decoration: none;
+}
+body.gp-cart table.cart-table td.p-name .main-link-variant {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--gp-ink-soft, #6b6b6b);
+}
+body.gp-cart table.cart-table .cart-p-availability {
+  margin-top: 4px;
+  font-size: 12px;
+}
+body.gp-cart table.cart-table .cart-p-availability strong {
+  font-weight: 500;
+}
+body.gp-cart table.cart-table td.p-quantity {
+  grid-area: qty;
+}
+body.gp-cart table.cart-table td.p-price {
+  grid-area: price;
+  text-align: right;
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--gp-ink-soft, #6b6b6b);
+}
+body.gp-cart table.cart-table td.p-price strong {
+  font-size: 12px;
+  font-weight: 400;
+}
+body.gp-cart table.cart-table td.p-total {
+  display: contents !important;
+}
+body.gp-cart table.cart-table td.p-total > strong.price-final {
+  grid-area: total;
+  min-width: 76px;
+  text-align: right;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 500;
+}
+body.gp-cart table.cart-table td.p-total > form {
+  grid-area: x;
+  margin: 0;
+}
+
+/* množství: ostrý stepper − 1 + */
+body.gp-cart span.quantity {
+  display: inline-flex !important;
+  align-items: stretch;
+  position: relative;
+  width: auto !important;
+  height: 36px;
+  border: 1px solid #cfccc6;
+  border-radius: 0;
+  background: #fff;
+}
+body.gp-cart span.quantity .increase-tooltip,
+body.gp-cart span.quantity .decrease-tooltip {
+  display: none !important;
+}
+body.gp-cart span.quantity label {
+  order: 2;
+  display: flex;
+  margin: 0;
+}
+body.gp-cart span.quantity input.amount {
+  width: 36px !important;
+  height: 34px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-left: 1px solid #cfccc6 !important;
+  border-right: 1px solid #cfccc6 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  font-size: 13px;
+  text-align: center;
+}
+body.gp-cart span.quantity button.increase,
+body.gp-cart span.quantity button.decrease {
+  position: static !important;
+  transform: none !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 34px;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--gp-ink, #1a1a1a);
+}
+body.gp-cart span.quantity button.decrease { order: 1; }
+body.gp-cart span.quantity button.increase { order: 3; }
+body.gp-cart span.quantity button::before,
+body.gp-cart span.quantity button::after {
+  content: none !important;
+}
+
+/* odstranění položky: křížek */
+body.gp-cart button.remove-item {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: 0 !important;
+  cursor: pointer;
+}
+body.gp-cart button.remove-item::before,
+body.gp-cart button.remove-item::after {
+  content: "" !important;
+  position: absolute;
+  left: 8px;
+  top: 15px;
+  width: 16px;
+  height: 2px;
+  background: var(--gp-ink-soft, #6b6b6b);
+  transform: rotate(45deg);
+}
+body.gp-cart button.remove-item::after {
+  transform: rotate(-45deg);
+}
+body.gp-cart button.remove-item:hover::before,
+body.gp-cart button.remove-item:hover::after {
+  background: var(--gp-cta, #a3336f);
+}
+
+/* ----- kupón ----- */
+body.gp-cart .summary > .col-md-6:first-child {
+  margin-top: 16px;
+}
+body.gp-cart .summary h2.h4 {
+  margin: 0 0 8px !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+body.gp-cart .discount-coupon form {
+  display: flex !important;
+  gap: 6px;
+}
+body.gp-cart .discount-coupon input#discountCouponCode {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 44px !important;
+  padding: 0 12px !important;
+  border: 1px solid #cfccc6 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-size: 14px;
+}
+body.gp-cart .discount-coupon button.btn {
+  flex: 0 0 auto;
+  height: 44px;
+  padding: 0 20px !important;
+  border: 2px solid var(--gp-ink, #1a1a1a) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--gp-ink, #1a1a1a) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: none !important;
+}
+body.gp-cart .gp-extras-hide {
+  display: none !important;
+}
+body.gp-cart .gp-coupon-toggle {
+  display: none;
+}
+
+/* ----- karta souhrnu (celkem + tlačítka) ----- */
+body.gp-cart .summary > .price-wrap {
+  padding: 20px !important;
+  background: #fff;
+  border: 1px solid var(--gp-line, #e6e3de);
+  border-radius: 0;
+}
+body.gp-cart .price-wrapper {
+  display: flex !important;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 0 0 14px !important;
+  margin: 0 !important;
+  border-bottom: 1px solid var(--gp-ink, #1a1a1a);
+}
+body.gp-cart .price-wrapper .price-label {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+body.gp-cart .price-wrapper strong.price-primary {
+  font-size: 26px !important;
+  font-weight: 300 !important;
+  white-space: nowrap;
+}
+body.gp-cart .price-wrap .next-step {
+  display: flex !important;
+  flex-direction: column-reverse;
+  gap: 10px;
+  margin: 16px 0 0 !important;
+  padding: 0 !important;
+}
+body.gp-cart .price-wrap .next-step .btn-conversion,
+body.gp-step1 .order-summary .next-step .btn-conversion {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 100% !important;
+  min-height: 52px;
+  padding: 0 16px !important;
+  border: 2px solid var(--gp-cta, #a3336f) !important;
+  border-radius: 0 !important;
+  background: var(--gp-cta, #a3336f) !important;
+  color: #fff !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  box-shadow: none !important;
+}
+body.gp-cart .price-wrap .next-step .btn-conversion:hover,
+body.gp-step1 .order-summary .next-step .btn-conversion:hover {
+  background: #8a2a5e !important;
+  border-color: #8a2a5e !important;
+}
+body.gp-cart .price-wrap .next-step .next-step-back,
+body.gp-step1 .order-summary .next-step .next-step-back {
+  width: 100% !important;
+  padding: 6px 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  text-align: center;
+  text-decoration: underline;
+  color: var(--gp-ink-soft, #6b6b6b) !important;
+}
+
+/* ----- krok 1: volby dopravy a platby jako ostré dlaždice ----- */
+body.gp-step1 #checkoutContent h2.order-icon {
+  background: none !important;
+  padding-left: 0 !important;
+}
+body.gp-step1 .shipping-billing-table .radio-wrapper,
+body.gp-step1 .co-payment-method .radio-wrapper {
+  position: relative;
+  margin: 8px 0 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+body.gp-step1 .radio-wrapper > input[type="radio"] {
+  position: absolute !important;
+  opacity: 0 !important;
+  width: 1px !important;
+  height: 1px !important;
+  pointer-events: none;
+}
+body.gp-step1 .radio-wrapper > label {
+  position: relative;
+  display: flex !important;
+  align-items: center;
+  gap: 14px;
+  min-height: 56px;
+  margin: 0 !important;
+  padding: 14px 16px 14px 52px !important;
+  border: 1px solid #cfccc6;
+  border-radius: 0;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 400;
+  text-transform: none;
+}
+body.gp-step1 .radio-wrapper > label::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 16px !important;
+  top: 50% !important;
+  width: 20px !important;
+  height: 20px !important;
+  margin: -10px 0 0 !important;
+  border: 2px solid var(--gp-ink, #1a1a1a) !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-sizing: border-box;
+}
+body.gp-step1 .radio-wrapper > label::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 21px !important;
+  top: 50% !important;
+  width: 10px !important;
+  height: 5px !important;
+  margin: -5px 0 0 !important;
+  border: 0 !important;
+  border-left: 2px solid #fff !important;
+  border-bottom: 2px solid #fff !important;
+  background: transparent !important;
+  transform: rotate(-45deg);
+  opacity: 0;
+}
+body.gp-step1 .radio-wrapper > input:checked + label {
+  border: 2px solid var(--gp-ink, #1a1a1a);
+  padding: 13px 15px 13px 51px !important;
+  background: #faf5f9;
+}
+body.gp-step1 .radio-wrapper > input:checked + label::before {
+  background: var(--gp-cta, #a3336f) !important;
+  border-color: var(--gp-cta, #a3336f) !important;
+}
+body.gp-step1 .radio-wrapper > input:checked + label::after {
+  opacity: 1;
+}
+body.gp-step1 .radio-wrapper > input:disabled + label {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+body.gp-step1 .radio-wrapper > label .payment-info {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: block;
+}
+body.gp-step1 .radio-wrapper > label .shipping-billing-name {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: none;
+}
+body.gp-step1 .radio-wrapper > label .sublabel {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+}
+body.gp-step1 .radio-wrapper > label .payment-logo {
+  flex: 0 0 auto;
+}
+body.gp-step1 .radio-wrapper > label .payment-logo img {
+  display: block;
+  max-height: 24px;
+  width: auto;
+}
+body.gp-step1 .radio-wrapper > label .payment-shipping-price {
+  flex: 0 0 auto;
+  min-width: 56px;
+  text-align: right;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gp-ink, #1a1a1a) !important;
+}
+body.gp-step1 .radio-wrapper .question-tooltip {
+  border-radius: 0 !important;
+}
+
+/* ----- prázdný košík ----- */
+body.gp-cart .cart-inner.cart-empty {
+  padding: 48px 0 40px !important;
+  text-align: center;
+}
+body.gp-cart .gp-empty-eyebrow {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gp-cta, #a3336f);
+}
+body.gp-cart .cart-empty h1.cart-heading {
+  margin: 10px 0 12px !important;
+  font-size: clamp(30px, 5vw, 48px) !important;
+  font-weight: 300 !important;
+  line-height: 1.08 !important;
+  text-transform: uppercase;
+  text-align: center;
+}
+body.gp-cart .gp-empty-sub {
+  max-width: 380px;
+  margin: 0 auto 20px !important;
+  font-size: 14px;
+  color: var(--gp-ink-soft, #6b6b6b);
+}
+body.gp-cart .gp-empty-cta {
+  display: inline-flex;
+}
+body.gp-cart .gp-empty-cats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 4px;
+  max-width: 900px;
+  margin: 34px auto 0;
+}
+body.gp-cart .gp-empty-cat {
+  display: block;
+  padding: 24px 8px 18px;
+  overflow: hidden;
+  background: var(--gp-header-bg, #efdde9);
+  color: var(--gp-ink, #1a1a1a);
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+body.gp-cart .gp-empty-cat__icon {
+  display: block;
+  margin: 0 auto 10px;
+}
+body.gp-cart .gp-empty-cat__icon svg {
+  display: block;
+  margin: 0 auto;
+}
+body.gp-cart .gp-empty-cat__name {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+body.gp-cart .gp-empty-cat:hover {
+  background: var(--gp-cta, #a3336f);
+  color: #fff;
+}
+body.gp-cart .gp-empty-cat:hover svg {
+  stroke: #fff;
+}
+body.gp-cart .gp-empty-boxes > .col-md-6:first-child {
+  display: none !important;
+}
+body.gp-cart .gp-empty-boxes > .col-md-6 {
+  float: none !important;
+  width: 100% !important;
+  max-width: 420px;
+  margin: 28px auto 0;
+  padding: 0 !important;
+}
+body.gp-cart .gp-empty-boxes h3 {
+  margin: 0 0 8px !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+body.gp-cart .gp-empty-boxes .search-form input.query-input,
+body.gp-cart .gp-empty-boxes .search-form input.form-control {
+  height: 44px !important;
+  border: 1px solid #cfccc6 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+body.gp-cart .gp-empty-boxes .search-form button.btn {
+  height: 44px;
+  border: 2px solid var(--gp-ink, #1a1a1a) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+body.gp-cart:has(.cart-empty) {
+  padding-bottom: 0 !important;
+}
+
+/* ----- tablet a telefon ----- */
+@media (max-width: 991px) {
+  body.gp-cart .gp-cart-ship__bar {
+    flex-basis: 70px;
+  }
+}
+@media (max-width: 767px) {
+  body.gp-cart table.cart-table tr {
+    grid-template-columns: 72px minmax(0, 1fr) 32px;
+    grid-template-areas:
+      "img name x"
+      "img qty total";
+    align-items: start;
+    column-gap: 14px;
+    row-gap: 10px;
+    padding: 16px 0;
+  }
+  body.gp-cart table.cart-table td.p-price {
+    display: none !important;
+  }
+  body.gp-cart table.cart-table td.cart-p-image {
+    grid-row: 1 / span 2;
+  }
+  body.gp-cart table.cart-table td.p-quantity,
+  body.gp-cart table.cart-table td.p-total > strong.price-final {
+    align-self: end;
+  }
+  body.gp-cart table.cart-table td.p-total > strong.price-final {
+    min-width: 0;
+    grid-column: 3;
+    grid-row: 2;
+    text-align: right;
+  }
+  /* kupón: sbalený na „Mám slevový kód +“ */
+  body.gp-cart .summary > .col-md-6:first-child h2.h4 {
+    display: none !important;
+  }
+  body.gp-cart .gp-coupon-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 48px;
+    padding: 0 14px;
+    border: 1px solid #cfccc6;
+    border-radius: 0;
+    background: #fff;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--gp-ink, #1a1a1a);
+    cursor: pointer;
+  }
+  body.gp-cart .gp-coupon-toggle::after {
+    content: "+";
+    font-size: 18px;
+    line-height: 1;
+  }
+  body.gp-cart .gp-coupon-toggle.is-open::after {
+    content: "−";
+  }
+  body.gp-cart .discounts-wrap {
+    display: none;
+    margin-top: 8px;
+  }
+  body.gp-cart .discounts-wrap.is-open {
+    display: block;
+  }
+  body.gp-cart .gp-empty-cats {
+    grid-template-columns: 1fr 1fr;
+  }
+  body.gp-step1 .radio-wrapper > label {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
 }
