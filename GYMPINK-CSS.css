@@ -6104,3 +6104,75 @@ body.gp-cart .cart-inner > .summary.row {
 body.gp-cart table.cart-table td.p-total > form {
   justify-self: end;
 }
+
+/* doladění 2 po testu: okraje, poslední dlaždice, šipka vyhledávání, mezery, text tlačítek */
+@media (max-width: 991px) {
+  body.gp-order ol.cart-header {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+  }
+  body.gp-cart .cart-inner.cart-empty {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+}
+@media (max-width: 767px) {
+  body.gp-cart .gp-empty-cats > .gp-empty-cat:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+  body.gp-cart .summary > .price-wrap {
+    margin-top: 12px;
+  }
+}
+body.gp-cart .gp-empty-boxes .search-form fieldset {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+body.gp-cart .gp-empty-boxes .search-form input.query-input,
+body.gp-cart .gp-empty-boxes .search-form input.form-control {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+body.gp-cart .gp-empty-boxes .search-form button.btn-arrow-right {
+  position: relative;
+  flex: 0 0 44px;
+  width: 44px;
+  padding: 0 !important;
+  font-size: 0;
+}
+body.gp-cart .gp-empty-boxes .search-form button.btn-arrow-right::before {
+  content: none !important;
+}
+body.gp-cart .gp-empty-boxes .search-form button.btn-arrow-right::after {
+  content: "\2192" !important;
+  position: static !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 100% !important;
+  height: 100% !important;
+  border: 0 !important;
+  background: none !important;
+  transform: none !important;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--gp-ink, #1a1a1a);
+}
+body.gp-step1 #checkoutContent .co-delivery-method,
+body.gp-step1 #checkoutContent .co-payment-method {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+body.gp-cart .price-wrap .next-step .btn-conversion,
+body.gp-cart .price-wrap .next-step .btn-conversion *,
+body.gp-step1 .order-summary .next-step .btn-conversion,
+body.gp-step1 .order-summary .next-step .btn-conversion * {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em !important;
+  line-height: 1.3 !important;
+  text-transform: uppercase !important;
+}
