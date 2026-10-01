@@ -5148,10 +5148,10 @@ body.gp-order .gp-addr-card__edit {
   color: var(--gp-cta, #a3336f);
   cursor: pointer;
 }
-body.gp-order .gp-addr-card-on .gp-addr-field {
+body.gp-order #checkoutContent .gp-addr-card-on .gp-addr-field {
   display: none !important;
 }
-body.gp-order .gp-addr-card-on.is-open .gp-addr-field {
+body.gp-order #checkoutContent .gp-addr-card-on.is-open .gp-addr-field {
   display: block !important;
 }
 body.gp-order .gp-addr-card-on.is-open .gp-addr-card {

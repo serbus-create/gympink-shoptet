@@ -2229,7 +2229,7 @@
           if (regSk) regSk.classList.add('gp-account-card');
 
           // ----- 5) Spodní lišta na mobilu: částka + „Objednat“ (klik jde na nativní tlačítko) -----
-          var nativniTlacitko = find('.next-step-fini', obsah);
+          var nativniTlacitko = find('.next-step-finish', obsah) || find('.next-step .btn-conversion', obsah);
           var cenaEl = function () {
             return find('.order-summary-item.price strong.price-primary', obsah) || find('strong.price-primary', obsah);
           };
