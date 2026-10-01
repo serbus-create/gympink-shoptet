@@ -5307,3 +5307,21 @@ body.gp-order #checkoutContent .order-summary .next-step .btn-conversion small {
   display: inline !important;
   margin-left: 0.35em;
 }
+
+/* doladění 2: nativní „|“ v ol.cart-header a text tlačítka */
+body.gp-order ol.cart-header::before,
+body.gp-order ol.cart-header::after {
+  display: none !important;
+  content: none !important;
+}
+body.gp-order #checkoutContent .order-summary .next-step .btn-conversion .order-button-text,
+body.gp-order #checkoutContent .order-summary .next-step .btn-conversion .order-button-suffix {
+  display: inline !important;
+  font-size: 11px !important;
+}
+body.gp-order #checkoutContent .order-summary .next-step .btn-conversion .order-button-suffix {
+  margin-left: 0.35em;
+}
+body.gp-order #checkoutContent .co-billing-address {
+  border-bottom: 0 !important;
+}
