@@ -5611,9 +5611,36 @@ body.gp-cart span.quantity button.decrease {
 }
 body.gp-cart span.quantity button.decrease { order: 1; }
 body.gp-cart span.quantity button.increase { order: 3; }
-body.gp-cart span.quantity button::before,
-body.gp-cart span.quantity button::after {
+body.gp-cart span.quantity button::before {
   content: none !important;
+}
+body.gp-cart span.quantity button .increase__sign,
+body.gp-cart span.quantity button .decrease__sign {
+  display: none !important;
+}
+body.gp-cart span.quantity button.increase::after {
+  content: "+" !important;
+  position: static !important;
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  border: 0 !important;
+  background: none !important;
+  transform: none !important;
+  font-size: 16px;
+  color: var(--gp-ink, #1a1a1a);
+}
+body.gp-cart span.quantity button.decrease::after {
+  content: "\2212" !important;
+  position: static !important;
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  border: 0 !important;
+  background: none !important;
+  transform: none !important;
+  font-size: 16px;
+  color: var(--gp-ink, #1a1a1a);
 }
 
 /* odstranění položky: křížek */
@@ -5995,7 +6022,7 @@ body.gp-cart:has(.cart-empty) {
 }
 @media (max-width: 767px) {
   body.gp-cart table.cart-table tr {
-    grid-template-columns: 72px minmax(0, 1fr) 32px;
+    grid-template-columns: 72px minmax(0, 1fr) auto;
     grid-template-areas:
       "img name x"
       "img qty total";
@@ -6061,4 +6088,19 @@ body.gp-cart:has(.cart-empty) {
     flex-wrap: wrap;
     row-gap: 6px;
   }
+}
+
+
+/* doladění po testu na živé stránce */
+@media (max-width: 991px) {
+  body.gp-cart .cart-inner:not(.cart-empty) {
+    padding: 0 10px !important;
+  }
+}
+body.gp-cart .cart-inner > .summary.row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+body.gp-cart table.cart-table td.p-total > form {
+  justify-self: end;
 }
