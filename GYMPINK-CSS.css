@@ -4855,3 +4855,426 @@ body.gp-klient .gp-klient-item:hover small {
     margin-right: -14px !important;
   }
 }
+
+
+
+/* ===================================================================
+   3.63  OBJEDNÁVKA — krok 2 (Informace o vás), ostré rohy
+   Diagnostika (živý web): #checkoutContent (v form#order-form) má děti:
+   fieldset.co-contact-information, div.co-billing-address, div#shipping-address,
+   div.co-box-additional, div.order-summary, div.consents, div.next-step.
+   Nativně je to jeden sloupec 753 px, popisky vlevo, souhrn až dole.
+   JS (krok „Objednávka krok 2“) přidá pruh účtu, přesune souhlasy a tlačítka
+   do karty souhrnu, na přihlášeném staví kartu adresy a na mobilu spodní lištu.
+   Vše pod body.gp-order (jen /objednavka/krok-2/).
+   =================================================================== */
+
+/* ----- široký obsah a dvousloupcové rozložení ----- */
+body.gp-order main#content {
+  max-width: 1120px !important;
+}
+body.gp-order #checkoutContent {
+  counter-reset: gp-sec;
+}
+@media (min-width: 992px) {
+  body.gp-order #checkoutContent {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    column-gap: 40px;
+    align-items: start;
+  }
+  body.gp-order #checkoutContent > * {
+    grid-column: 1;
+  }
+  body.gp-order #checkoutContent > .order-summary {
+    grid-column: 2;
+    grid-row: 1 / span 8;
+    position: sticky;
+    top: 24px;
+  }
+}
+
+/* ----- stepper: tři ostré kroky ----- */
+body.gp-order ol.cart-header {
+  display: flex !important;
+  gap: 4px !important;
+  margin: 0 0 24px !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+body.gp-order ol.cart-header li {
+  flex: 1 1 0;
+  margin: 0 !important;
+  padding: 10px 0 0 !important;
+  border-top: 3px solid var(--gp-line, #e6e3de);
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left !important;
+}
+body.gp-order ol.cart-header li::before,
+body.gp-order ol.cart-header li::after {
+  display: none !important;
+  content: none !important;
+}
+body.gp-order ol.cart-header li.completed {
+  border-top-color: var(--gp-ink, #1a1a1a);
+}
+body.gp-order ol.cart-header li.active {
+  border-top-color: var(--gp-cta, #a3336f);
+}
+body.gp-order ol.cart-header li a,
+body.gp-order ol.cart-header li strong {
+  color: var(--gp-ink, #1a1a1a) !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+}
+
+/* ----- pruh účtu ----- */
+body.gp-order .gp-order-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 6px;
+  padding: 16px 20px;
+  border-radius: 0;
+}
+body.gp-order .gp-order-banner.is-guest {
+  background: var(--gp-header-bg, #efdde9);
+  color: var(--gp-ink, #1a1a1a);
+}
+body.gp-order .gp-order-banner.is-user {
+  background: var(--gp-ink, #1a1a1a);
+  color: #fff;
+}
+body.gp-order .gp-order-banner__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+body.gp-order .gp-order-banner strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+body.gp-order .gp-order-banner__label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gp-header-bg, #efdde9);
+}
+body.gp-order .gp-order-banner__sub {
+  font-size: 13px;
+}
+body.gp-order .gp-order-banner.is-guest .gp-order-banner__sub {
+  color: #72243e;
+}
+body.gp-order .gp-order-banner.is-user .gp-order-banner__sub {
+  color: #d9c9d3;
+}
+
+/* ----- tlačítka: ostrá, jako „Otevřít filtr“ / „Do košíku“ ----- */
+body.gp-order .gp-order-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 0 22px;
+  border: 2px solid var(--gp-ink, #1a1a1a);
+  border-radius: 0;
+  background: transparent;
+  color: var(--gp-ink, #1a1a1a);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+}
+body.gp-order .gp-order-btn.is-light {
+  border-color: #fff;
+  color: #fff;
+}
+body.gp-order .gp-order-btn.is-primary {
+  background: var(--gp-cta, #a3336f);
+  border-color: var(--gp-cta, #a3336f);
+  color: #fff;
+}
+
+/* ----- sekce: číslo, čára nad nadpisem ----- */
+body.gp-order #checkoutContent .co-box h2 {
+  counter-increment: gp-sec;
+  display: flex;
+  align-items: baseline;
+  margin: 26px 0 4px !important;
+  padding: 14px 0 0 !important;
+  border: 0 !important;
+  border-top: 1px solid var(--gp-ink, #1a1a1a) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+}
+body.gp-order #checkoutContent .co-box h2::before {
+  content: counter(gp-sec);
+  margin-right: 12px;
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: 0;
+  color: var(--gp-cta, #a3336f);
+}
+body.gp-order #checkoutContent .order-summary h2 {
+  counter-increment: none;
+  margin: 0 0 8px !important;
+  padding: 0 !important;
+  border-top: 0 !important;
+}
+body.gp-order #checkoutContent .order-summary h2::before {
+  content: none;
+}
+body.gp-order #checkoutContent .co-box {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* ----- pole: štítek nad polem, ostré hrany, 44 px ----- */
+body.gp-order #checkoutContent .form-group {
+  display: block !important;
+  margin: 12px 0 0 !important;
+}
+body.gp-order #checkoutContent .form-group > label {
+  position: static !important;
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 0 5px !important;
+  transform: none !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.1em !important;
+  line-height: 1.3 !important;
+  text-transform: uppercase !important;
+  color: var(--gp-ink-soft, #6b6b6b) !important;
+}
+body.gp-order #checkoutContent .form-group .form-control-wrapper {
+  width: 100% !important;
+  max-width: none !important;
+}
+body.gp-order #checkoutContent input.form-control,
+body.gp-order #checkoutContent select.form-control,
+body.gp-order #checkoutContent textarea.form-control {
+  width: 100% !important;
+  max-width: none !important;
+  height: 44px !important;
+  padding: 0 12px !important;
+  border: 1px solid #cfccc6 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  font-size: 14px !important;
+  color: var(--gp-ink, #1a1a1a) !important;
+}
+body.gp-order #checkoutContent textarea.form-control {
+  height: auto !important;
+  min-height: 96px;
+  padding: 10px 12px !important;
+}
+body.gp-order #checkoutContent .form-group.populated input.form-control {
+  background: #faf5f9 !important;
+  border-color: #e2cbd9 !important;
+}
+body.gp-order #checkoutContent input.form-control:focus,
+body.gp-order #checkoutContent select.form-control:focus,
+body.gp-order #checkoutContent textarea.form-control:focus {
+  border-color: var(--gp-cta, #a3336f) !important;
+  box-shadow: inset 0 0 0 1px var(--gp-cta, #a3336f) !important;
+  outline: 0 !important;
+}
+body.gp-order #checkoutContent .phone-combined-input {
+  display: flex !important;
+  width: 100% !important;
+}
+body.gp-order #checkoutContent .phone-combined-input input.form-control {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* ----- karta adresy (přihlášený) ----- */
+body.gp-order .gp-addr-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0 0;
+  padding: 14px 16px;
+  border: 2px solid var(--gp-ink, #1a1a1a);
+  border-radius: 0;
+  background: #fff;
+}
+body.gp-order .gp-addr-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+body.gp-order .gp-addr-card__text strong {
+  font-weight: 600;
+}
+body.gp-order .gp-addr-card__text small {
+  font-size: 12px;
+  color: var(--gp-ink-soft, #6b6b6b);
+}
+body.gp-order .gp-addr-card__edit {
+  flex: 0 0 auto;
+  padding: 6px 0;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gp-cta, #a3336f);
+  cursor: pointer;
+}
+body.gp-order .gp-addr-card-on .gp-addr-field {
+  display: none !important;
+}
+body.gp-order .gp-addr-card-on.is-open .gp-addr-field {
+  display: block !important;
+}
+body.gp-order .gp-addr-card-on.is-open .gp-addr-card {
+  display: none;
+}
+
+/* ----- nabídka účtu (nativní registrace, pokud je zapnutá) ----- */
+body.gp-order .gp-account-card {
+  padding: 14px 16px !important;
+  border: 2px solid var(--gp-cta, #a3336f);
+  border-radius: 0;
+}
+
+/* ----- karta souhrnu ----- */
+body.gp-order #checkoutContent .order-summary {
+  padding: 20px !important;
+  background: #fff !important;
+  border: 1px solid var(--gp-line, #e6e3de) !important;
+  border-radius: 0 !important;
+}
+body.gp-order #checkoutContent .order-summary .consents {
+  margin: 16px 0 0 !important;
+  font-size: 12px;
+}
+body.gp-order #checkoutContent .order-summary .next-step {
+  display: flex !important;
+  flex-direction: column-reverse;
+  gap: 10px;
+  margin: 14px 0 0 !important;
+  padding: 0 !important;
+}
+body.gp-order #checkoutContent .order-summary .next-step .btn-conversion {
+  width: 100% !important;
+  min-height: 52px;
+  padding: 0 16px !important;
+  border: 2px solid var(--gp-cta, #a3336f) !important;
+  border-radius: 0 !important;
+  background: var(--gp-cta, #a3336f) !important;
+  color: #fff !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  box-shadow: none !important;
+}
+body.gp-order #checkoutContent .order-summary .next-step .btn-conversion:hover {
+  background: #8a2a5e !important;
+  border-color: #8a2a5e !important;
+}
+body.gp-order #checkoutContent .order-summary .next-step .next-step-back {
+  width: 100% !important;
+  padding: 6px 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  text-align: center;
+  text-decoration: underline;
+  color: var(--gp-ink-soft, #6b6b6b) !important;
+}
+
+/* ----- spodní lišta (jen tablet a telefon) ----- */
+body.gp-order .gp-order-bar {
+  display: none;
+}
+@media (max-width: 991px) {
+  body.gp-order {
+    padding-bottom: 84px;
+  }
+  body.gp-order .gp-order-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: #fff;
+    border-top: 1px solid var(--gp-ink, #1a1a1a);
+  }
+  body.gp-order .gp-order-bar.is-hidden {
+    display: none;
+  }
+  body.gp-order .gp-order-bar__sum {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    font-size: 11px;
+    color: var(--gp-ink-soft, #6b6b6b);
+  }
+  body.gp-order .gp-order-bar__sum strong {
+    font-size: 18px;
+    font-weight: 300;
+    white-space: nowrap;
+    color: var(--gp-ink, #1a1a1a);
+  }
+  body.gp-order .gp-order-bar .gp-order-btn {
+    flex: 1 1 auto;
+    min-height: 48px;
+  }
+  body.gp-order #checkoutContent {
+    display: block;
+  }
+}
+
+/* telefon: pruh účtu do sloupce, tlačítko přes celou šířku */
+@media (max-width: 575px) {
+  body.gp-order .gp-order-banner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 16px;
+  }
+  body.gp-order .gp-order-banner .gp-order-btn {
+    width: 100%;
+  }
+  body.gp-order ol.cart-header li {
+    font-size: 10px !important;
+    letter-spacing: 0.06em;
+  }
+}

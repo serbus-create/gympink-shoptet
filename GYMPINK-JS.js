@@ -2125,6 +2125,154 @@
       }
     },
 
+    {
+      nazev: 'Objednávka krok 2 — banner účtu, souhrn vpravo, karta adresy, spodní lišta na mobilu',
+      spustit: function () {
+        if (!document.body.classList.contains('in-krok-2')) return;
+        document.body.classList.add('gp-order');
+
+        var el = function (tag, trida, text) {
+          var e = document.createElement(tag);
+          if (trida) e.className = trida;
+          if (text) e.textContent = text;
+          return e;
+        };
+
+        // Přihlášený zákazník (Shoptet: dataLayer → shoptet.customer.registered)
+        var zakaznik = null;
+        try {
+          (window.dataLayer || []).forEach(function (e) {
+            if (e && e.shoptet && e.shoptet.customer) zakaznik = e.shoptet.customer;
+          });
+        } catch (chyba) { /* bez dataLayer = host */ }
+        var prihlasen = !!(zakaznik && zakaznik.registered);
+
+        var sestav = function () {
+          var obsah = find('#checkoutContent');
+          if (!obsah) return false;
+          if (obsah.classList.contains('gp-order-ready')) return true;
+          obsah.classList.add('gp-order-ready');
+
+          // ----- 1) Pruh nahoře: host → přihlášení, přihlášený → „údaje z účtu“ -----
+          var jmeno = (zakaznik && zakaznik.fullName) || (find('#billFullName') || {}).value || '';
+          var pruh = el('div', 'gp-order-banner ' + (prihlasen ? 'is-user' : 'is-guest'));
+          var text = el('div', 'gp-order-banner__text');
+          var tlacitko;
+          if (prihlasen) {
+            text.appendChild(el('span', 'gp-order-banner__label', 'Přihlášený účet'));
+            if (jmeno) text.appendChild(el('strong', '', jmeno));
+            text.appendChild(el('span', 'gp-order-banner__sub', 'Údaje jsme vyplnili z tvého účtu.'));
+            tlacitko = el('a', 'gp-order-btn is-light', 'Změnit v účtu');
+            tlacitko.href = '/klient/nastaveni/';
+          } else {
+            text.appendChild(el('strong', '', 'Už u nás nakupuješ?'));
+            text.appendChild(el('span', 'gp-order-banner__sub', 'Přihlas se a údaje se vyplní samy.'));
+            tlacitko = el('a', 'gp-order-btn', 'Přihlásit se');
+            tlacitko.href = '/login/?backTo=' + encodeURIComponent('/objednavka/krok-2/');
+          }
+          pruh.appendChild(text);
+          pruh.appendChild(tlacitko);
+          obsah.insertBefore(pruh, obsah.firstChild);
+
+          // ----- 2) Souhlasy a tlačítka do karty souhrnu (zůstávají uvnitř formuláře) -----
+          var souhrn = find('.order-summary', obsah);
+          var souhlas = find('.consents', obsah);
+          var dalsi = find('.next-step', obsah);
+          if (souhrn) {
+            if (souhlas) souhrn.appendChild(souhlas);
+            if (dalsi) souhrn.appendChild(dalsi);
+          }
+
+          // ----- 3) Karta adresy (jen přihlášený s kompletní adresou) -----
+          var fakt = find('.co-billing-address', obsah);
+          if (prihlasen && fakt) {
+            var hodnota = function (id) {
+              var e = find('#' + id, fakt);
+              if (!e) return '';
+              if (e.tagName === 'SELECT') return ((e.options[e.selectedIndex] || {}).text || '').trim();
+              return (e.value || '').trim();
+            };
+            var ulice = hodnota('billStreet');
+            var mesto = hodnota('billCity');
+            var psc = hodnota('billZip');
+            var zeme = hodnota('billCountryId');
+            if (ulice && mesto && psc) {
+              ['billStreet', 'billCity', 'billZip', 'billCountryId'].forEach(function (id) {
+                var e = find('#' + id, fakt);
+                var sk = e && e.closest('.form-group');
+                if (sk) sk.classList.add('gp-addr-field');
+              });
+              var prvni = find('.gp-addr-field', fakt);
+              if (prvni) {
+                var karta = el('div', 'gp-addr-card');
+                var radky = el('div', 'gp-addr-card__text');
+                if (jmeno) radky.appendChild(el('strong', '', jmeno));
+                radky.appendChild(el('span', '', ulice));
+                radky.appendChild(el('span', '', psc + ' ' + mesto));
+                if (zeme) radky.appendChild(el('small', '', zeme));
+                var upravit = el('button', 'gp-addr-card__edit', 'Upravit');
+                upravit.type = 'button';
+                upravit.addEventListener('click', function () {
+                  fakt.classList.add('is-open');
+                });
+                karta.appendChild(radky);
+                karta.appendChild(upravit);
+                prvni.parentNode.insertBefore(karta, prvni);
+                fakt.classList.add('gp-addr-card-on');
+              }
+            }
+          }
+
+          // ----- 4) Nabídka účtu (jen když Shoptet registraci v objednávce nabízí) -----
+          var reg = find('input[type="password"], input[name*="egist"], input[id*="egist"]', obsah);
+          var regSk = reg && reg.closest('.form-group');
+          if (regSk) regSk.classList.add('gp-account-card');
+
+          // ----- 5) Spodní lišta na mobilu: částka + „Objednat“ (klik jde na nativní tlačítko) -----
+          var nativniTlacitko = find('.next-step-fini', obsah);
+          var cenaEl = function () {
+            return find('.order-summary-item.price strong.price-primary', obsah) || find('strong.price-primary', obsah);
+          };
+          if (nativniTlacitko && dalsi) {
+            var lista = el('div', 'gp-order-bar');
+            var soucet = el('div', 'gp-order-bar__sum');
+            soucet.appendChild(el('span', '', 'Celkem'));
+            var castka = el('strong', '', '');
+            soucet.appendChild(castka);
+            var objednat = el('button', 'gp-order-btn is-primary', 'Objednat');
+            objednat.type = 'button';
+            objednat.addEventListener('click', function () { nativniTlacitko.click(); });
+            lista.appendChild(soucet);
+            lista.appendChild(objednat);
+            document.body.appendChild(lista);
+            var obnovCastku = function () {
+              var c = cenaEl();
+              castka.textContent = c ? c.textContent.replace(/\s+/g, ' ').trim() : '';
+            };
+            obnovCastku();
+            if (souhrn) {
+              new MutationObserver(obnovCastku).observe(souhrn, { childList: true, subtree: true, characterData: true });
+            }
+            // lištu schováme, když je nativní tlačítko vidět (ať nejsou dvě)
+            if ('IntersectionObserver' in window) {
+              new IntersectionObserver(function (zaznamy) {
+                lista.classList.toggle('is-hidden', zaznamy[0].isIntersecting);
+              }).observe(dalsi);
+            }
+          }
+          return true;
+        };
+
+        if (!sestav()) {
+          var pozorovatel = new MutationObserver(function () {
+            if (sestav()) pozorovatel.disconnect();
+          });
+          pozorovatel.observe(document.body, { childList: true, subtree: true });
+          setTimeout(function () { pozorovatel.disconnect(); }, 8000);
+        }
+      }
+    },
+
   ];
 
 
